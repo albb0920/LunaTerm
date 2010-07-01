@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="protocals">
+		<item>Telnet</item>
+		<!-- 
+        <item>SSH</item>
+         -->
+	</string-array>
+	<string-array name="encodings">
+		<item>GBK</item>
+		<item>Big5</item>
+	</string-array>
+	<string-array name="languages">
+		<item>"English"</item>
+		<item>"Simplified Chinese"</item>
+		<item>"Traditional Chinese"</item>
+	</string-array>
+	<string-array name="languages_value">
+		<item>"en"</item>
+		<item>"zh_CN"</item>
+		<item>"zh_TW"</item>
+	</string-array>
+	<string-array name="gestures_key">
+		<item>U</item>
+		<item>D</item>
+		<item>L</item>
+		<item>R</item>
+		<item>R,U</item>
+		<item>R,D</item>
+		<item>D,L</item>
+		<item>D,R,U</item>
+		<item>R,D,R</item>
+		<item>R,L,R</item>
+	</string-array>
+	<string-array name="gestures_desc">
+		<item>Up</item>
+		<item>Down</item>
+		<item>Left</item>
+		<item>Right</item>
+		<item>Page Up</item>
+		<item>Page Down</item>
+		<item>Enter</item>
+		<item>Space</item>
+		<item>Input Helper</item>
+		<item>Input Helper</item>
+	</string-array>
+	<string-array name="function_buttons_key">
+		<item>^p</item>
+		<item>^x</item>
+		<item>^p测试灌水^M^m测试灌水，哈哈^x^m</item>
+	</string-array>
+	<string-array name="function_buttons_desc">
+		<item>Ctrl+p</item>
+		<item>Ctrl+x</item>
+		<item>测试灌水</item>
+	</string-array>
+</resources>

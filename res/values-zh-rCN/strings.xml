@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">rTerm</string>
+	<string name="ok">确定</string>
+	<string name="cancel">取消</string>
+
+	<string name="addressbook_empty">地址簿中没有任何站点</string>
+	<string name="addressbook_help">帮助</string>
+	<string name="addressbook_settings">设置</string>
+	<string name="addressbook_add_host">新增站点</string>
+	<string name="addressbook_connect_host">连接</string>
+	<string name="addressbook_edit_host">修改</string>
+	<string name="addressbook_delete_host">删除</string>
+
+	<string name="addressbook_locale_chooser">选择预设语言及站台</string>
+	<string name="addressbook_locale_chooser_desc">您希望使用哪种语言站台？</string>
+	
+	<string name="locale_en">英文</string>
+    <string name="locale_zh_cn">简体中文</string>
+    <string name="locale_zh_tw">繁体中文</string>
+    
+	<string name="edithost_done">保存</string>
+	<string name="edithost_revert">放弃修改</string>
+	<string name="edithost_name">站点名称</string>
+	<string name="edithost_name_summary">站点的名称，便于区别不同的站点</string>
+	<string name="edithost_host">站点地址</string>
+	<string name="edithost_host_summary">站点的访问地址，可以是域名地址或者IP地址</string>
+	<string name="edithost_protocal">连接方式</string>
+	<string name="edithost_protocal_summary">站点的连接方式，是使用Telnet协议还是SSH协议</string>
+	<string name="edithost_port">站点端口</string>
+	<string name="edithost_port_summary">站点的访问端口，一般Telnet的端口是23，SSH的端口是22</string>
+	<string name="edithost_encoding">站点编码</string>
+	<string name="edithost_encoding_summary">简体中文的网站选择GBK，繁体中文的网站请选择Big5</string>
+	<string name="edithost_setting_autologin">自动登录设置</string>
+	<string name="edithost_user">用户</string>
+	<string name="edithost_user_summary">用于自动登录的用户</string>
+	<string name="edithost_pass">密码</string>
+	<string name="edithost_pass_summary">用于自动登录的用户的密码</string>
+
+	<string name="functionbtn_empty">还没有定义任何功能按钮</string>
+	<string name="editfunctionbtn_add">新增功能按钮</string>
+	<string name="editfunctionbtn_done">保存</string>
+	<string name="editfunctionbtn_revert">放弃修改</string>
+	<string name="editfunctionbtn_delete">删除</string>
+	<string name="editfunctionbtn_edit">修改</string>
+	<string name="editfunctionbtn_name">功能按钮名称</string>
+	<string name="editfunctionbtn_name_summary">功能按钮的名称，此文本将会显示在按钮上</string>
+	<string name="editfunctionbtn_keys">按键</string>
+	<string name="editfunctionbtn_keys_summary">功能按钮所对应的批处理按键，用^代表ctrl键，目前还不支持上下左右键</string>
+	<string name="editfunctionbtn_sortnumber">排序数值</string>
+	<string name="editfunctionbtn_sortnumber_summary">用来定义功能按钮的显示顺序，数值小的显示在前面</string>
+
+
+	<string name="terminal_disconnect">强制断开连接</string>
+	<string name="terminal_connectclose">连接已经断开</string>
+	<string name="terminal_error_unknownhost">找不到站点“%s”，请检查网络是否正常，或者站点地址是否拼写错误</string>
+	<string name="terminal_error_connect">无法连接到站点“%s”，请检查网络是否正常，或者或站点目前无法连接</string>
+	<string name="terminal_inputhelper">文本输入助手</string>
+
+	<string name="settings_language">界面语言</string>
+	<string name="settings_language_summary">设置界面显示语言，下次启动时生效</string>
+	<string name="settings_show_statusbar">显示状态栏</string>
+	<string name="settings_show_statusbar_summary">设置在Terminal状态下是否显示状态栏</string>
+	<string name="settings_function_button">功能按钮</string>
+	<string name="settings_function_button_summary">为了便于操作，可以将一些常用的操作定义为功能按钮，例如：发表文章等</string>
+    <string name="settings_highresolution">高清模式</string>
+	<string name="settings_highresolution_summary">使用高清模式显示(如: MileStone, Nexus One)</string>
+	
+	<string name="gesture">手势</string>
+	<string name="title_openurl">"用浏览器开启连结"</string>
+</resources>

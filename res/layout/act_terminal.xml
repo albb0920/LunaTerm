@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	<ViewFlipper android:id="@+id/terminal_flipper"
+		android:layout_width="fill_parent" android:layout_height="fill_parent" />
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
+		<com.roiding.rterm.GestureView
+			android:id="@+id/gestureView" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" android:layout_weight="1.0" />
+		<com.roiding.rterm.ButtonGallery
+			android:id="@+id/functionKeyGallery" android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:spacing="0dp"
+			android:gravity="center" android:visibility="invisible" />
+	</LinearLayout>
+</FrameLayout>

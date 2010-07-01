@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">rTerm Mod</string>
+	<string name="ok">OK</string>
+	<string name="cancel">Cancel</string>
+
+	<string name="addressbook_empty">No site found, please add site first</string>
+	<string name="addressbook_help">Help</string>
+	<string name="addressbook_settings">Settings</string>
+
+	<string name="addressbook_add_host">Add Site</string>
+	<string name="addressbook_connect_host">Connect</string>
+	<string name="addressbook_edit_host">Modify</string>
+	<string name="addressbook_delete_host">Delete</string>
+
+	<string name="addressbook_locale_chooser">Language Chooser</string>
+	<string name="addressbook_locale_chooser_desc">What language do you prefer to use?</string>
+
+	<string name="addressbook_site_lilacbbs">紫丁香社区</string>
+	<string name="addressbook_site_newsmth">水木社区</string>
+	<string name="addressbook_site_lqqm">两全其美</string>
+	<string name="addressbook_site_ptt">批踢踢</string>
+	<string name="addressbook_site_ptt2">批踢踢兔</string>
+
+	<string name="locale_en">English</string>
+	<string name="locale_zh_cn">Simplified Chinese</string>
+	<string name="locale_zh_tw">Traditional Chinese</string>
+
+	<string name="edithost_done">Done</string>
+	<string name="edithost_revert">Revert</string>
+	<string name="edithost_name">Name</string>
+	<string name="edithost_name_summary">The name of this site, easy to distinguish between
+		different sites</string>
+	<string name="edithost_host">Address</string>
+	<string name="edithost_host_summary">The address of this site, IP or domain name
+	</string>
+	<string name="edithost_protocal">Connection type</string>
+	<string name="edithost_protocal_summary">The protocal, Telnet or SSH</string>
+	<string name="edithost_encoding">Encoding</string>
+	<string name="edithost_encoding_summary">GBK for Simplified Chinese , Big5 for Traditional
+		Chinese</string>
+	<string name="edithost_port">Port</string>
+	<string name="edithost_port_summary">the default Telnet port is 23, SSH port is 22
+	</string>
+	<string name="edithost_setting_autologin">Auto Login settings</string>
+	<string name="edithost_user">User</string>
+	<string name="edithost_user_summary">The username Used to auto login</string>
+	<string name="edithost_pass">Password</string>
+	<string name="edithost_pass_summary">The password of auto login user</string>
+
+	<string name="functionbtn_empty">No function button found, please add first</string>
+	<string name="editfunctionbtn_add">Add</string>
+	<string name="editfunctionbtn_done">Done</string>
+	<string name="editfunctionbtn_revert">Revert</string>
+	<string name="editfunctionbtn_delete">Delete</string>
+	<string name="editfunctionbtn_edit">Modify</string>
+	<string name="editfunctionbtn_name">Name</string>
+	<string name="editfunctionbtn_name_summary">The name of this function button, will be
+		displayed on the button</string>
+	<string name="editfunctionbtn_keys">Keys</string>
+	<string name="editfunctionbtn_keys_summary">The batch keys for this button</string>
+	<string name="editfunctionbtn_sortnumber">Sort Number</string>
+	<string name="editfunctionbtn_sortnumber_summary">Used to define the display order of buttons,small first
+	</string>
+
+	<string name="terminal_disconnect">Forced disconnect</string>
+	<string name="terminal_connectclose">Connection is closed</string>
+	<string name="terminal_error_unknownhost">"Can't find site “%s”，please check the networking
+		and site address"</string>
+	<string name="terminal_error_connect">"Can't connect to '%s'，please check the
+		networking，or the site is can't connected now"</string>
+	<string name="terminal_inputhelper">Input Helper</string>
+
+	<string name="settings_language">Language</string>
+	<string name="settings_language_summary">Select the your default language, restart needed
+	</string>
+	<string name="settings_show_statusbar">Show statusbar</string>
+	<string name="settings_show_statusbar_summary">Show statusbar on Terminal mode</string>
+	<string name="settings_function_button">Function Buttons</string>
+	<string name="settings_function_button_summary">Function Buttons</string>
+    <string name="settings_highresolution">High Resolution Mode</string>
+	<string name="settings_highresolution_summary">Display in high resolution mode (ex: MileStone)</string>
+	
+	<string name="gesture">Gesture</string>
+	<string name="title_openurl">"Open url in browser"</string>
+
+
+</resources>
+

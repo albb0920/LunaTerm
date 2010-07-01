@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">rTerm</string>
+	<string name="ok">OK</string>
+	<string name="cancel">Cancel</string>
+
+	<string name="addressbook_empty">列表中沒有任何站台</string>
+	<string name="addressbook_help">說明</string>
+	<string name="addressbook_settings">設定</string>
+	<string name="addressbook_add_host">新增站台</string>
+	<string name="addressbook_connect_host">連接</string>
+	<string name="addressbook_edit_host">修改</string>
+	<string name="addressbook_delete_host">刪除</string> 
+
+	<string name="addressbook_locale_chooser">選擇預設語言及站台</string>
+	<string name="addressbook_locale_chooser_desc">您希望使用哪種語言站台？</string>
+
+	<string name="locale_en">英文</string>
+    <string name="locale_zh_cn">簡體中文</string>
+    <string name="locale_zh_tw">正體中文</string>
+    
+	<string name="addressbook_site_lilacbbs">紫丁香社區</string>
+	<string name="addressbook_site_newsmth">水木社區</string>
+	<string name="addressbook_site_lqqm">兩全其美</string>
+	<string name="addressbook_site_ptt">批踢踢</string>
+	<string name="addressbook_site_ptt2">批踢踢兔</string>
+
+	<string name="edithost_done">保存</string>
+	<string name="edithost_revert">放棄修改</string>
+	<string name="edithost_name">站台名稱</string>
+	<string name="edithost_name_summary">站台的名稱，便於區別不同的站台</string>
+	<string name="edithost_host">站台地址</string>
+	<string name="edithost_host_summary">站台的訪問地址，可以是域名地址或者IP地址</string>
+	<string name="edithost_protocal">連接方式</string>
+	<string name="edithost_protocal_summary">站台的連接方式，是使用Telnet協定還是SSH協定</string>
+	<string name="edithost_port">端口</string>
+	<string name="edithost_port_summary">站台的訪問端口，一般Telnet的端口是23，SSH的端口是22</string>
+	<string name="edithost_encoding">編碼</string>
+	<string name="edithost_encoding_summary">簡體中文的網站選擇GBK，正體中文的網站請選擇Big5</string>
+	<string name="edithost_setting_autologin">自動登錄設定</string>
+	<string name="edithost_user">帳號</string>
+	<string name="edithost_user_summary">用於自動登錄的帳號</string>
+	<string name="edithost_pass">密碼</string>
+	<string name="edithost_pass_summary">用於自動登錄的帳號的密碼</string>
+
+	<string name="functionbtn_empty">還沒有定義任何功能按鈕</string>
+	<string name="editfunctionbtn_add">新增功能按鈕</string>
+	<string name="editfunctionbtn_done">保存</string>
+	<string name="editfunctionbtn_revert">放棄修改</string>
+	<string name="editfunctionbtn_delete">删除</string>
+	<string name="editfunctionbtn_edit">修改</string>
+	<string name="editfunctionbtn_name">功能按鈕名稱</string>
+	<string name="editfunctionbtn_name_summary">功能按鈕的名稱，此文本將會顯示在按鈕上</string>
+	<string name="editfunctionbtn_keys">按鍵</string>
+	<string name="editfunctionbtn_keys_summary">功能按鈕所對應的批處理按鍵，用^代表ctrl</string>
+	<string name="editfunctionbtn_sortnumber">排序數值</string>
+	<string name="editfunctionbtn_sortnumber_summary">用來定義功能按鈕的顯示順序，數值小的顯示在前面</string>
+
+	<string name="terminal_disconnect">強制斷開連線</string>
+	<string name="terminal_connectclose">連線已經斷開</string>
+	<string name="terminal_error_unknownhost">找不到站台“%s”，請檢查網路是否正常，或者站台地址是否拼寫錯誤</string>
+	<string name="terminal_error_connect">無法連接到站台“%s”，請檢查網路是否正常，或者或站台目前無法連接</string>
+	<string name="terminal_inputhelper">文本輸入助手</string>
+
+	<string name="settings_language">語言</string>
+	<string name="settings_language_summary">設定語言，下次啓動時生效</string>
+	<string name="settings_show_statusbar">顯示狀態欄</string>
+	<string name="settings_show_statusbar_summary">設定在Term狀態下是否顯示狀態欄</string>
+	<string name="settings_function_button">功能按鈕</string>
+	<string name="settings_function_button_summary">為了便於操作，可以將一些常用的操作定義為功能按鈕，例如：發表文章等</string>
+    <string name="settings_highresolution">高解析度模式</string>
+	<string name="settings_highresolution_summary">使用高解析度模式顯示(如: MileStone, Nexus One)</string>
+
+	<string name="gesture">手勢</string> 
+	<string name="title_openurl">"用瀏覽器開啟連結"</string>
+</resources>

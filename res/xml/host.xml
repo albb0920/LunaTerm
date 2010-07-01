@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<EditTextPreference android:key="name"
+		android:title="@string/edithost_name" android:summary="@string/edithost_name_summary"
+		android:singleLine="true" />
+	<EditTextPreference android:key="host"
+		android:title="@string/edithost_host" android:summary="@string/edithost_host_summary"
+		android:singleLine="true" />
+	<EditTextPreference android:key="port"
+		android:title="@string/edithost_port" android:summary="@string/edithost_port_summary"
+		android:singleLine="true" android:defaultValue="23" />
+	<ListPreference android:key="protocal" android:title="@string/edithost_protocal"
+		android:summary="@string/edithost_protocal_summary" android:entries="@array/protocals"
+		android:entryValues="@array/protocals" android:defaultValue="telnet" />
+	<ListPreference android:key="encoding" android:title="@string/edithost_encoding"
+		android:summary="@string/edithost_encoding_summary" android:entries="@array/encodings"
+		android:entryValues="@array/encodings" android:defaultValue="GBK" />
+
+	<PreferenceCategory android:title="@string/edithost_setting_autologin">
+		<EditTextPreference android:key="user"
+			android:title="@string/edithost_user" android:summary="@string/edithost_user_summary"
+			android:singleLine="true" />
+		<EditTextPreference android:key="pass"
+			android:title="@string/edithost_pass" android:summary="@string/edithost_pass_summary"
+			android:singleLine="true" />
+	</PreferenceCategory>
+
+</PreferenceScreen>

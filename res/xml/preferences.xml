@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<ListPreference android:key="settings_language"
+		android:title="@string/settings_language" android:summary="@string/settings_language_summary"
+		android:entries="@array/languages" android:entryValues="@array/languages_value"
+		android:defaultValue="Daily" />
+
+	<CheckBoxPreference android:key="settings_show_statusbar"
+		android:title="@string/settings_show_statusbar" android:summary="@string/settings_show_statusbar_summary"
+		android:defaultValue="false" />
+
+    <CheckBoxPreference android:key="settings_highresolution"
+		android:title="@string/settings_highresolution" android:summary="@string/settings_highresolution_summary"
+		android:defaultValue="false" />
+		
+	<PreferenceScreen android:key="settings_function_button"
+		android:title="@string/settings_function_button" android:summary="@string/settings_function_button_summary">
+	</PreferenceScreen>
+
+</PreferenceScreen>
