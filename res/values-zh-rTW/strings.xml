@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">rTerm</string>
+	<string name="app_name">LunaTerm</string>
 	<string name="ok">OK</string>
 	<string name="cancel">Cancel</string>
 
@@ -18,6 +18,12 @@
 	<string name="locale_en">英文</string>
     <string name="locale_zh_cn">簡體中文</string>
     <string name="locale_zh_tw">正體中文</string>
+    
+    
+    <string name="addressbook_quick_connect">如: ptt 或 ptt2.cc:23 </string>
+	<string name="addressbook_quick_connect_button">快速連線</string>
+    
+  
     
 	<string name="addressbook_site_lilacbbs">紫丁香社區</string>
 	<string name="addressbook_site_newsmth">水木社區</string>

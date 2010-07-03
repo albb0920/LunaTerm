@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">rTerm Mod</string>
+	<string name="app_name">LunaTerm</string>
 	<string name="ok">OK</string>
 	<string name="cancel">Cancel</string>
 
@@ -14,8 +14,9 @@
 	<string name="addressbook_delete_host">Delete</string>
 
 	<string name="addressbook_locale_chooser">Language Chooser</string>
-	<string name="addressbook_locale_chooser_desc">What language do you prefer to use?</string>
-
+	<string name="addressbook_locale_chooser_desc">What language do you prefer to u	se?</string>
+	<string name="addressbook_quick_connect">( twbbs prefix / host )[:port]</string>
+	<string name="addressbook_quick_connect_button">Connect</string>
 	<string name="addressbook_site_lilacbbs">紫丁香社区</string>
 	<string name="addressbook_site_newsmth">水木社区</string>
 	<string name="addressbook_site_lqqm">两全其美</string>

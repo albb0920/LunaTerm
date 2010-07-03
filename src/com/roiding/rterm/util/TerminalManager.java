@@ -3,10 +3,11 @@ package com.roiding.rterm.util;
 import java.io.IOException;
 import java.util.HashMap;
 
+import tw.loli.lunaTerm.TerminalView;
+
 import android.os.Handler;
 import android.os.Message;
 
-import com.roiding.rterm.TerminalView;
 
 public class TerminalManager {
 	private static long anti_idle_delay = 1000 * 60 * 3;
