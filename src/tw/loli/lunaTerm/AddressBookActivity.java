@@ -8,6 +8,7 @@ import java.util.Map;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.inputmethod.InputMethodManager;
 import 	android.view.KeyEvent;
 import android.widget.AdapterView;
 import android.widget.RadioGroup;
@@ -98,6 +100,8 @@ public class AddressBookActivity extends ListActivity {
 	}
 	private void quickConnect(){
 		String hostname = ((TextView)findViewById(R.id.quickConnect)).getText().toString();
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(((TextView)findViewById(R.id.quickConnect)).getWindowToken(), 0);
 		int port = 23,pos;
 		if((pos = hostname.indexOf(":"))!=-1){ //extract port number
 			port = Integer.parseInt(hostname.substring(pos+1));
