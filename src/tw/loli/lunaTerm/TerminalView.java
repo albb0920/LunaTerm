@@ -17,6 +17,7 @@ import android.graphics.Typeface;
 import android.graphics.Bitmap.Config;
 import android.graphics.Region.Op;
 import android.os.SystemClock;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyCharacterMap;
@@ -216,17 +217,25 @@ public class TerminalView extends View implements VDUDisplay {
 
 	}
 
-	@Override
-	public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-		InputConnection ic = new TermInputConnection(this);
-		return ic;
-	}
-
 	/**
 	 * Chinese InputMethod
 	 * 
 	 * @author Chen slepher (slepheric@gmail.com)
 	 */
+	
+	
+	@Override
+	public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+		outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI;
+		outAttrs.inputType = InputType.TYPE_CLASS_TEXT; //albb0920.100706: Without this, HTC_CIME's Chewing KB refuse to work
+		InputConnection ic = new TermInputConnection(this);
+		return ic;
+	}
+	@Override
+	public boolean onCheckIsTextEditor(){
+		return true;		
+	}
+	
 	private class TermInputConnection extends BaseInputConnection {
 
 		public TermInputConnection(View targetView) {
