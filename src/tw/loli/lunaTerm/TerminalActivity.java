@@ -277,7 +277,7 @@ public class TerminalActivity extends Activity {
 				.getView(currentViewId);
 		
 		if (view == null) {
-			view = new TerminalView(this, null, this, pref.getBoolean("settings_highresolution", false));
+			view = new TerminalView(this, null);
 			view.terminalActivity = this;
 			view.startConnection(host);
 			TerminalManager.getInstance().putView(view);
