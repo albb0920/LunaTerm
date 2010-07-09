@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.Bitmap.Config;
@@ -41,20 +42,20 @@ import de.mud.terminal.vt320;
 
 public class TerminalView extends View implements VDUDisplay {
 	final String TAG = "TerminalView";
-
+	
+	private ArrayList<Url>[] urls;
+	
 	private static final int TERM_WIDTH = 80;
 	private static final int TERM_HEIGHT = 24;
 
-	private ArrayList<Url>[] urls;
-
 	public float CHAR_WIDTH;
 	public float CHAR_HEIGHT;
-	public int SCREEN_WIDTH;
-	public int SCREEN_HEIGHT;
+	private float CHAR_POS_FIX;  
 	
-	private float fontSize;
-
-	private static final int SCROLLBACK = 0;
+	private int SCREEN_WIDTH;   
+	private int SCREEN_HEIGHT;	
+	
+	private static final int SCROLLBACK = 0;	
 	private static final int DEFAULT_FG_COLOR = 7;
 	private static final int DEFAULT_BG_COLOR = 0;
 	
@@ -79,19 +80,21 @@ public class TerminalView extends View implements VDUDisplay {
 	public TerminalActivity terminalActivity;
 	public Host host;
 
-
-	public TerminalView(TerminalActivity context, AttributeSet attrs) {
+	public boolean debug = false;
+	
+	public TerminalView(TerminalActivity context, AttributeSet attrs) {		
 		super(context, attrs);
 		this.terminalActivity = context;
 		setFocusable(true);
 		setFocusableInTouchMode(true);
 		init();
+		
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	public void init() {
 		resetColors();
-
+		
 		buffer = new vt320() {
 			public void beep() {
 				Log.i(TAG, "beep");
@@ -110,10 +113,8 @@ public class TerminalView extends View implements VDUDisplay {
 		buffer.setDisplay(this);
 		buffer.setScreenSize(TERM_WIDTH, TERM_HEIGHT, true);
 
-		defaultPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
+		defaultPaint.setFlags(Paint.ANTI_ALIAS_FLAG /*| Paint.SUBPIXEL_TEXT_FLAG*/);
 		defaultPaint.setTypeface(Typeface.MONOSPACE);				
-		
-		setVScreenSize(getWidth(),getHeight());
 		
 		// Workaround to create array of ArrayList generic type.
 		urls = (ArrayList<Url>[]) Array.newInstance(ArrayList.class, TERM_HEIGHT);
@@ -127,7 +128,8 @@ public class TerminalView extends View implements VDUDisplay {
 	 * @param w width 
 	 * @param h height
 	 */
-	public void setVScreenSize(int w, int h){				
+	public void setVScreenSize(int w, int h){
+		Log.d(TAG,"Set VScreen to ("+w+","+h+")");
 		// Prepare bitmap and canvas for us to draw on
 		bitmap = Bitmap.createBitmap(w, h,Config.ARGB_8888);
 		canvas.setBitmap(bitmap);
@@ -137,7 +139,14 @@ public class TerminalView extends View implements VDUDisplay {
 		//Calculate char size
 		CHAR_WIDTH = (float) SCREEN_WIDTH / TERM_WIDTH;     
 		CHAR_HEIGHT = (float) SCREEN_HEIGHT / TERM_HEIGHT;
+		
 		defaultPaint.setTextSize(CHAR_HEIGHT);
+		defaultPaint.setTextScaleX(CHAR_WIDTH*2/CHAR_HEIGHT);
+		// Because canvas.drawText() use baseline to position
+		// Calculate the distance between baseline and top line for convenience
+		Rect bound = new Rect();
+		defaultPaint.getTextBounds("é¾œ", 0, 1,bound); // I know this is dirty, anyone have a better solution?
+		CHAR_POS_FIX = CHAR_HEIGHT - bound.bottom;		
 		
 		// Draw
 		fullRedraw = true;
@@ -146,13 +155,19 @@ public class TerminalView extends View implements VDUDisplay {
 		terminalActivity.refreshView();
 	}
 		
-	@Override protected void onSizeChanged (int w, int h, int oldw, int oldh){
+	@Override protected void onSizeChanged (int w, int h, int oldw, int oldh){		
 		SCREEN_HEIGHT = h;
-		SCREEN_WIDTH = w;		
+		SCREEN_WIDTH = w;
+		
+		//This is when android start us. use this w/h as base size unless user zoom
+		if(oldw == 0){ 
+			setVScreenSize(w,h);						
+		}
 	}
 	
 	@Override
 	public void onDraw(Canvas canvas) {
+		Log.v(TAG,"onDraw()");
 		// draw
 		if (this.bitmap != null) {
 			canvas.drawBitmap(this.bitmap, 0, 0, defaultPaint);
@@ -502,16 +517,16 @@ public class TerminalView extends View implements VDUDisplay {
 		// if black-on-black, try correcting to grey
 		// if(fg == Color.BLACK && bg == Color.BLACK) fg = Color.GRAY;
 
-		// correctly set bold and underlined attributes if requested
-		// defaultPaint.setFakeBoldText((currAttr & VDUBuffer.BOLD)!=0);
 		defaultPaint
 				.setUnderlineText((currAttr & VDUBuffer.UNDERLINE) != 0);
 
 		return new int[] {fg,bg};
 	}
 	public void redraw() {
+		Log.v(TAG,"redraw()");
+		
 		boolean entireDirty = buffer.update[0] || fullRedraw;
-
+		
 		// walk through all lines in the buffer
 		for (int l = 0; l < buffer.height; l++) {
 
@@ -560,7 +575,7 @@ public class TerminalView extends View implements VDUDisplay {
 							defaultPaint.setUnderlineText(true);  // Underline the url
 							
 							current = String.valueOf(
-									buffer.charArray[buffer.windowBase + l], c, addr); // ¤W­±ªº while °j°é·|¦h +1©Ò¥H¤£¥² addr+1
+									buffer.charArray[buffer.windowBase + l], c, addr); // ï¿½Wï¿½ï¿½ï¿½ï¿½ while ï¿½jï¿½ï¿½|ï¿½h +1ï¿½Ò¥Hï¿½ï¿½ï¿½ï¿½ addr+1
 									Url url = new Url(c, c+addr, l, current);
 									urls[l].add(url);
 									break;
@@ -582,10 +597,15 @@ public class TerminalView extends View implements VDUDisplay {
 
 				// clear this dirty area with background color
 				defaultPaint.setColor(color[1]);
-				canvas.drawRect(c * CHAR_WIDTH, l * CHAR_HEIGHT,
+				
+				/* TODO: We should replace float rects with int ones to get better render
+				canvas.drawRect(new Rect((int)(c * CHAR_WIDTH),(int)( l * CHAR_HEIGHT),
+						(int)((c + addr) * CHAR_WIDTH),(int)( (l + 1) * CHAR_HEIGHT)), defaultPaint);
+				*/								
+				canvas.drawRect(c * CHAR_WIDTH,(int) l * CHAR_HEIGHT,
 						(c + addr) * CHAR_WIDTH, (l + 1) * CHAR_HEIGHT,
 						defaultPaint);
-
+				
 				// write the text string starting at 'c' for 'addr' number of
 				// characters
 				if ((currAttr & VDUBuffer.INVISIBLE) == 0) {
@@ -606,8 +626,7 @@ public class TerminalView extends View implements VDUDisplay {
 
 						canvas.drawText(String.valueOf(_c),
 								(c + asciiCharCount) * CHAR_WIDTH,
-								((l + 1) * CHAR_HEIGHT) - 4, defaultPaint);
-
+								l * CHAR_HEIGHT + CHAR_POS_FIX, defaultPaint);
 						if ((int) _c < 128)
 							asciiCharCount++;
 						else
@@ -625,8 +644,9 @@ public class TerminalView extends View implements VDUDisplay {
 						defaultPaint.setColor(lastColor[0]);
 						canvas.drawText(String.valueOf(string.charAt(string.length()-1)),
 								(c + asciiCharCount-2) * CHAR_WIDTH,
-								((l + 1) * CHAR_HEIGHT) - 4, defaultPaint);
-						canvas.clipRect(0,0,canvas.getWidth(),canvas.getHeight(),Op.REPLACE);
+								l * CHAR_HEIGHT + CHAR_POS_FIX , defaultPaint);
+
+						canvas.clipRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,Op.REPLACE);
 					}
 						
 				}
@@ -639,12 +659,19 @@ public class TerminalView extends View implements VDUDisplay {
 
 		// reset entire-buffer flags
 		buffer.update[0] = false;
-		fullRedraw = false;
-
-		postInvalidate();
+		fullRedraw = false;		
+		
+		postInvalidate(); /* TODO: Maybe we should only report changed area */
 
 	}
-
+	public void dbg_CLEAN(){
+		defaultPaint.setColor(Color.BLACK);
+		canvas.drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, defaultPaint);
+		postInvalidate();		
+	}
+	
+	
+	
 	public void setVDUBuffer(VDUBuffer buffer) {
 		this.buffer = buffer;
 	}
@@ -705,7 +732,6 @@ public class TerminalView extends View implements VDUDisplay {
 							((vt320) buffer).putString(fullString, host
 									.getEncoding());
 							// long end1 = System.currentTimeMillis();
-							redraw();
 							// long end2 = System.currentTimeMillis();
 							// Log.i(TAG, (end1 - start) + "," + (end2 - end1));
 						} else if (n < 0) {

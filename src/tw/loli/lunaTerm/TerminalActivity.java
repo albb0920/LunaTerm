@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -270,7 +271,6 @@ public class TerminalActivity extends Activity {
 
 		currentViewId = host.getId();
 
-		// scroll = (ScrollView) findViewById(R.id.terminal_scroll);
 		vflipper = (ViewFlipper) findViewById(R.id.terminal_flipper);
 
 		TerminalView view = TerminalManager.getInstance()
@@ -300,7 +300,8 @@ public class TerminalActivity extends Activity {
 			view.terminalActivity = this;
 
 			vflipper.removeAllViews();
-			vflipper.addView(view, view.SCREEN_WIDTH, view.SCREEN_HEIGHT);
+			vflipper.addView(view,LayoutParams.FILL_PARENT);
+
 
 			currentViewId = id;
 
@@ -310,7 +311,7 @@ public class TerminalActivity extends Activity {
 					android.R.anim.slide_out_right));
 
 			vflipper.showNext();
-
+			
 			view.requestFocus();
 		}
 	}
@@ -373,7 +374,7 @@ public class TerminalActivity extends Activity {
 			public boolean onMenuItemClick(MenuItem item) {
 				Intent intent = new Intent();
 				intent.setClass(TerminalActivity.this, HelpActivity.class);
-				TerminalActivity.this.startActivityForResult(intent, 0);
+				TerminalActivity.this.startActivityForResult(intent, 0);				
 				return true;
 			}
 		});
