@@ -113,7 +113,7 @@ public class TerminalView extends View implements VDUDisplay {
 		buffer.setDisplay(this);
 		buffer.setScreenSize(TERM_WIDTH, TERM_HEIGHT, true);
 
-		defaultPaint.setFlags(Paint.ANTI_ALIAS_FLAG /*| Paint.SUBPIXEL_TEXT_FLAG*/);
+		defaultPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
 		defaultPaint.setTypeface(Typeface.MONOSPACE);				
 		
 		// Workaround to create array of ArrayList generic type.
