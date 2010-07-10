@@ -79,8 +79,6 @@
 	<string name="settings_show_statusbar_summary">Show statusbar on Terminal mode</string>
 	<string name="settings_function_button">Function Buttons</string>
 	<string name="settings_function_button_summary">Function Buttons</string>
-    <string name="settings_highresolution">High Resolution Mode</string>
-	<string name="settings_highresolution_summary">Display in high resolution mode (ex: MileStone)</string>
 	
 	<string name="gesture">Gesture</string>
 	<string name="title_openurl">"Open url in browser"</string>

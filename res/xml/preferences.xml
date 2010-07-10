@@ -10,10 +10,6 @@
 	<CheckBoxPreference android:key="settings_show_statusbar"
 		android:title="@string/settings_show_statusbar" android:summary="@string/settings_show_statusbar_summary"
 		android:defaultValue="false" />
-
-    <CheckBoxPreference android:key="settings_highresolution"
-		android:title="@string/settings_highresolution" android:summary="@string/settings_highresolution_summary"
-		android:defaultValue="false" />
 		
 	<PreferenceScreen android:key="settings_function_button"
 		android:title="@string/settings_function_button" android:summary="@string/settings_function_button_summary">

@@ -74,8 +74,8 @@
 	<string name="settings_show_statusbar_summary">設定在Term狀態下是否顯示狀態欄</string>
 	<string name="settings_function_button">功能按鈕</string>
 	<string name="settings_function_button_summary">為了便於操作，可以將一些常用的操作定義為功能按鈕，例如：發表文章等</string>
-    <string name="settings_highresolution">高解析度模式</string>
-	<string name="settings_highresolution_summary">使用高解析度模式顯示(如: MileStone, Nexus One)</string>
+    
+	
 
 	<string name="gesture">手勢</string> 
 	<string name="title_openurl">"用瀏覽器開啟連結"</string>
