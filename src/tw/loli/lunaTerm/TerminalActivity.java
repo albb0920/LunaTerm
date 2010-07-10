@@ -39,7 +39,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
+import android.widget.FrameLayout;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.roiding.rterm.GestureView;
@@ -52,15 +52,15 @@ import com.roiding.rterm.util.TerminalManager;
 
 public class TerminalActivity extends Activity {
 
-	private static final String TAG = "rterm.act";
+	private static final String TAG = "TerminalActivity";
 	protected static final int DIALOG_INPUT_HELP = 0;
-	private ViewFlipper vflipper;
 	private DBUtils dbUtils;
 	private Gallery functionKeyGallery;
 	private Map<String, Gesture> gestureMap = new HashMap<String, Gesture>();
 	private List<FunctionButton> functionBtnList;
 	protected PowerManager.WakeLock m_wake_lock;
 	private SharedPreferences pref;
+	
 	
 	class Gesture {
 		public Gesture(String type, String desc) {
@@ -271,8 +271,6 @@ public class TerminalActivity extends Activity {
 
 		currentViewId = host.getId();
 
-		vflipper = (ViewFlipper) findViewById(R.id.terminal_flipper);
-
 		TerminalView view = TerminalManager.getInstance()
 				.getView(currentViewId);
 		
@@ -298,21 +296,16 @@ public class TerminalActivity extends Activity {
 		TerminalView view = TerminalManager.getInstance().getView(id);
 		if (view != null) {
 			view.terminalActivity = this;
-
-			vflipper.removeAllViews();
-			vflipper.addView(view,LayoutParams.FILL_PARENT);
-
-
-			currentViewId = id;
-
-			vflipper.setInAnimation(AnimationUtils.loadAnimation(this,
-					android.R.anim.slide_in_left));
-			vflipper.setOutAnimation(AnimationUtils.loadAnimation(this,
-					android.R.anim.slide_out_right));
-
-			vflipper.showNext();
 			
-			view.requestFocus();
+			FrameLayout terminalFrame = (FrameLayout) findViewById(R.id.terminalFrame);					
+			View osd = findViewById(R.id.terminalOSD);
+			
+			terminalFrame.removeAllViews();			
+			terminalFrame.addView(view,LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
+			terminalFrame.addView(osd);
+			
+			currentViewId = id;
+			
 		}
 	}
 
@@ -514,7 +507,6 @@ public class TerminalActivity extends Activity {
 	@Override
 	public void onStop() {
 		super.onStop();
-		vflipper.removeAllViews();
 
 		if (dbUtils != null) {
 			dbUtils.close();

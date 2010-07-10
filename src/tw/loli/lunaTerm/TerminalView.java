@@ -166,12 +166,153 @@ public class TerminalView extends View implements VDUDisplay {
 	}
 	
 	@Override
-	public void onDraw(Canvas canvas) {
+	public void onDraw(Canvas viewCanvas) {
 		Log.v(TAG,"onDraw()");
 		// draw
-		if (this.bitmap != null) {
-			canvas.drawBitmap(this.bitmap, 0, 0, defaultPaint);
+		if (this.bitmap == null)
+			return;
+		boolean entireDirty = buffer.update[0] || fullRedraw;
+		
+		// walk through all lines in the buffer
+		for (int l = 0; l < buffer.height; l++) {
+
+			// check if this line needs redraw.
+			if (!entireDirty && !buffer.update[l + 1])
+				continue;
+
+			// reset dirty flag for this line
+			buffer.update[l + 1] = false;
+
+			// reset urls for this line
+			if (urls != null)
+				urls[l] = new ArrayList<Url>();
+			
+			// walk through all characters in this line
+			for (int c = 0; c < buffer.width; c++) {
+				int addr = 0;
+				int currAttr = buffer.charAttributes[buffer.windowBase + l][c];
+
+				int color[] = getColor(currAttr);
+				
+				boolean stateHigh = false; //albb0920: record DBCS state
+				// find whole string with sane colors
+				while (c + addr < buffer.width
+						&& buffer.charAttributes[buffer.windowBase + l][c
+								+ addr] == currAttr) {
+					if(!stateHigh && buffer.getChar(c + addr, l) >= 128)   //getChar actually returns a byte, so just treat it as byte
+							stateHigh = true;
+					else
+						stateHigh = false;
+					if (buffer.getChar(c + addr, l) == '/') {  // Detect url
+						String current = String.valueOf(
+								buffer.charArray[buffer.windowBase + l], c, addr + 1);
+						if (current.startsWith("http://") ||
+								current.startsWith("https://")) {  // We have entered url
+							while (c + addr < buffer.width) {  // Read in rest of url
+								char url_char = buffer.getChar(c + addr, l);
+								if (Character.isLetterOrDigit(url_char)) {
+									addr++;
+								} else if ("./@?&=-_;%#!~".contains(Character.toString(url_char))) {
+									addr++;
+								} else {
+									break;
+								}
+							}
+							defaultPaint.setUnderlineText(true);  // Underline the url
+							
+							current = String.valueOf(
+									buffer.charArray[buffer.windowBase + l], c, addr); // �W���� while �j��|�h +1�ҥH���� addr+1
+									Url url = new Url(c, c+addr, l, current);
+									urls[l].add(url);
+									break;
+						} else if (current.endsWith("http://")) {
+							// Reached a url at end of read buffer. Leave the chars in buffer
+							// and handle them next time we get around.
+							addr -= "http://".length() - 1;
+							break;
+						} else if (current.endsWith("https://")) {
+							addr -= "https://".length() - 1;
+							break;
+						}
+					}
+					addr++;
+				}
+				//albb0920.100615: We must include the full DBCS Char
+				if(c + addr < buffer.width && stateHigh == true)
+					addr++;
+
+				// clear this dirty area with background color
+				defaultPaint.setColor(color[1]);
+				
+				/* TODO: We should replace float rects with int ones to get better render
+				canvas.drawRect(new Rect((int)(c * CHAR_WIDTH),(int)( l * CHAR_HEIGHT),
+						(int)((c + addr) * CHAR_WIDTH),(int)( (l + 1) * CHAR_HEIGHT)), defaultPaint);
+				*/								
+				canvas.drawRect(c * CHAR_WIDTH,(int) l * CHAR_HEIGHT,
+						(c + addr) * CHAR_WIDTH, (l + 1) * CHAR_HEIGHT,
+						defaultPaint);
+				
+				// write the text string starting at 'c' for 'addr' number of
+				// characters
+				if ((currAttr & VDUBuffer.INVISIBLE) == 0) {
+					defaultPaint.setColor(color[0]);
+
+					char[] chars = new char[addr];
+					System.arraycopy(buffer.charArray[buffer.windowBase + l],
+							c, chars, 0, addr);
+
+					String encoding = "Big5";
+					if (host != null)
+						encoding = host.getEncoding();
+					String string = ChineseUtils.decode(chars, encoding,this.getResources());
+					
+					if(string.length()==0){ // Conversion failed
+						c += addr - 1;
+						continue;
+					}
+					
+					int asciiCharCount = 0;
+					for (int i = 0; i < string.length(); i++) {
+						char _c = string.charAt(i);
+
+						canvas.drawText(String.valueOf(_c),
+								(c + asciiCharCount) * CHAR_WIDTH,
+								l * CHAR_HEIGHT + CHAR_POS_FIX, defaultPaint);
+						if ((int) _c < 128)
+							asciiCharCount++;
+						else
+							asciiCharCount = asciiCharCount + 2;
+					}
+					//albb0920.100617: Check if is dual color char, must be in last char
+					int lastColor[] = getColor(buffer.charAttributes[buffer.windowBase + l][c+addr-1]);
+					if(!Arrays.equals(color,lastColor)){ 
+						defaultPaint.setColor(lastColor[1]);
+						RectF halfChar = new RectF((c+asciiCharCount-1)*CHAR_WIDTH, 
+								l * CHAR_HEIGHT -1 ,
+								(c+asciiCharCount)*CHAR_WIDTH, (l + 1) * CHAR_HEIGHT);
+						canvas.drawRect(halfChar, defaultPaint);
+						canvas.clipRect(halfChar,Op.REPLACE);
+						defaultPaint.setColor(lastColor[0]);
+						canvas.drawText(String.valueOf(string.charAt(string.length()-1)),
+								(c + asciiCharCount-2) * CHAR_WIDTH,
+								l * CHAR_HEIGHT + CHAR_POS_FIX , defaultPaint);
+
+						canvas.clipRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,Op.REPLACE);
+					}
+						
+				}
+
+				// advance to the next text block with different
+				// characteristics
+				c += addr - 1;
+			}
 		}
+
+		// reset entire-buffer flags
+		buffer.update[0] = false;
+		fullRedraw = false;		
+			
+		viewCanvas.drawBitmap(this.bitmap, 0, 0, defaultPaint);		
 
 		// draw cursor
 		if (this.buffer.isCursorVisible()) {
@@ -179,7 +320,7 @@ public class TerminalView extends View implements VDUDisplay {
 			float x = this.buffer.getCursorColumn() * CHAR_WIDTH;
 			float y = (this.buffer.getCursorRow() + this.buffer.screenBase - this.buffer.windowBase)
 					* CHAR_HEIGHT;
-			canvas.drawRect(x, y, x + CHAR_WIDTH, y + CHAR_HEIGHT, cursorPaint);
+			viewCanvas.drawRect(x, y, x + CHAR_WIDTH, y + CHAR_HEIGHT, cursorPaint);
 
 			// terminalActivity.scroll((int) x, (int) y);
 
@@ -525,150 +666,9 @@ public class TerminalView extends View implements VDUDisplay {
 	public void redraw() {
 		Log.v(TAG,"redraw()");
 		
-		boolean entireDirty = buffer.update[0] || fullRedraw;
-		
-		// walk through all lines in the buffer
-		for (int l = 0; l < buffer.height; l++) {
-
-			// check if this line needs redraw.
-			if (!entireDirty && !buffer.update[l + 1])
-				continue;
-
-			// reset dirty flag for this line
-			buffer.update[l + 1] = false;
-
-			// reset urls for this line
-			if (urls != null)
-				urls[l] = new ArrayList<Url>();
-			
-			// walk through all characters in this line
-			for (int c = 0; c < buffer.width; c++) {
-				int addr = 0;
-				int currAttr = buffer.charAttributes[buffer.windowBase + l][c];
-
-				int color[] = getColor(currAttr);
-				
-				boolean stateHigh = false; //albb0920: record DBCS state
-				// find whole string with sane colors
-				while (c + addr < buffer.width
-						&& buffer.charAttributes[buffer.windowBase + l][c
-								+ addr] == currAttr) {
-					if(!stateHigh && buffer.getChar(c + addr, l) >= 128)   //getChar actually returns a byte, so just treat it as byte
-							stateHigh = true;
-					else
-						stateHigh = false;
-					if (buffer.getChar(c + addr, l) == '/') {  // Detect url
-						String current = String.valueOf(
-								buffer.charArray[buffer.windowBase + l], c, addr + 1);
-						if (current.startsWith("http://") ||
-								current.startsWith("https://")) {  // We have entered url
-							while (c + addr < buffer.width) {  // Read in rest of url
-								char url_char = buffer.getChar(c + addr, l);
-								if (Character.isLetterOrDigit(url_char)) {
-									addr++;
-								} else if ("./@?&=-_;%#!~".contains(Character.toString(url_char))) {
-									addr++;
-								} else {
-									break;
-								}
-							}
-							defaultPaint.setUnderlineText(true);  // Underline the url
-							
-							current = String.valueOf(
-									buffer.charArray[buffer.windowBase + l], c, addr); // �W���� while �j��|�h +1�ҥH���� addr+1
-									Url url = new Url(c, c+addr, l, current);
-									urls[l].add(url);
-									break;
-						} else if (current.endsWith("http://")) {
-							// Reached a url at end of read buffer. Leave the chars in buffer
-							// and handle them next time we get around.
-							addr -= "http://".length() - 1;
-							break;
-						} else if (current.endsWith("https://")) {
-							addr -= "https://".length() - 1;
-							break;
-						}
-					}
-					addr++;
-				}
-				//albb0920.100615: We must include the full DBCS Char
-				if(c + addr < buffer.width && stateHigh == true)
-					addr++;
-
-				// clear this dirty area with background color
-				defaultPaint.setColor(color[1]);
-				
-				/* TODO: We should replace float rects with int ones to get better render
-				canvas.drawRect(new Rect((int)(c * CHAR_WIDTH),(int)( l * CHAR_HEIGHT),
-						(int)((c + addr) * CHAR_WIDTH),(int)( (l + 1) * CHAR_HEIGHT)), defaultPaint);
-				*/								
-				canvas.drawRect(c * CHAR_WIDTH,(int) l * CHAR_HEIGHT,
-						(c + addr) * CHAR_WIDTH, (l + 1) * CHAR_HEIGHT,
-						defaultPaint);
-				
-				// write the text string starting at 'c' for 'addr' number of
-				// characters
-				if ((currAttr & VDUBuffer.INVISIBLE) == 0) {
-					defaultPaint.setColor(color[0]);
-
-					char[] chars = new char[addr];
-					System.arraycopy(buffer.charArray[buffer.windowBase + l],
-							c, chars, 0, addr);
-
-					String encoding = "Big5";
-					if (host != null)
-						encoding = host.getEncoding();
-					String string = ChineseUtils.decode(chars, encoding,this.getResources());
-					
-					int asciiCharCount = 0;
-					for (int i = 0; i < string.length(); i++) {
-						char _c = string.charAt(i);
-
-						canvas.drawText(String.valueOf(_c),
-								(c + asciiCharCount) * CHAR_WIDTH,
-								l * CHAR_HEIGHT + CHAR_POS_FIX, defaultPaint);
-						if ((int) _c < 128)
-							asciiCharCount++;
-						else
-							asciiCharCount = asciiCharCount + 2;
-					}
-					//albb0920.100617: Check if is dual color char, must be in last char
-					int lastColor[] = getColor(buffer.charAttributes[buffer.windowBase + l][c+addr-1]);
-					if(!Arrays.equals(color,lastColor)){ 
-						defaultPaint.setColor(lastColor[1]);
-						RectF halfChar = new RectF((c+asciiCharCount-1)*CHAR_WIDTH, 
-								l * CHAR_HEIGHT -1 ,
-								(c+asciiCharCount)*CHAR_WIDTH, (l + 1) * CHAR_HEIGHT);
-						canvas.drawRect(halfChar, defaultPaint);
-						canvas.clipRect(halfChar,Op.REPLACE);
-						defaultPaint.setColor(lastColor[0]);
-						canvas.drawText(String.valueOf(string.charAt(string.length()-1)),
-								(c + asciiCharCount-2) * CHAR_WIDTH,
-								l * CHAR_HEIGHT + CHAR_POS_FIX , defaultPaint);
-
-						canvas.clipRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,Op.REPLACE);
-					}
-						
-				}
-
-				// advance to the next text block with different
-				// characteristics
-				c += addr - 1;
-			}
-		}
-
-		// reset entire-buffer flags
-		buffer.update[0] = false;
-		fullRedraw = false;		
-		
-		postInvalidate(); /* TODO: Maybe we should only report changed area */
-
+		postInvalidate(); /* render should always be done in onDraw() */
 	}
-	public void dbg_CLEAN(){
-		defaultPaint.setColor(Color.BLACK);
-		canvas.drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, defaultPaint);
-		postInvalidate();		
-	}
+
 	
 	
 	
