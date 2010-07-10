@@ -59,6 +59,7 @@ public class TerminalActivity extends Activity {
 	private Map<String, Gesture> gestureMap = new HashMap<String, Gesture>();
 	private List<FunctionButton> functionBtnList;
 	protected PowerManager.WakeLock m_wake_lock;
+	private FrameLayout terminalFrame;
 	private SharedPreferences pref;
 	
 	
@@ -105,7 +106,8 @@ public class TerminalActivity extends Activity {
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.act_terminal);
-
+		terminalFrame = (FrameLayout) findViewById(R.id.terminalFrame);		
+		
 		final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		this.m_wake_lock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK|PowerManager.ON_AFTER_RELEASE, "rTerm");
 		this.m_wake_lock.acquire();
@@ -295,9 +297,7 @@ public class TerminalActivity extends Activity {
 	public void showView(long id) {
 		TerminalView view = TerminalManager.getInstance().getView(id);
 		if (view != null) {
-			view.terminalActivity = this;
-			
-			FrameLayout terminalFrame = (FrameLayout) findViewById(R.id.terminalFrame);					
+			view.terminalActivity = this;			
 			View osd = findViewById(R.id.terminalOSD);
 			
 			terminalFrame.removeAllViews();			
@@ -507,7 +507,9 @@ public class TerminalActivity extends Activity {
 	@Override
 	public void onStop() {
 		super.onStop();
-
+		
+		terminalFrame.removeAllViews();
+		
 		if (dbUtils != null) {
 			dbUtils.close();
 			dbUtils = null;
