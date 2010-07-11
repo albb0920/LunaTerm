@@ -587,6 +587,21 @@ public class TerminalView extends View implements VDUDisplay {
 	public VDUBuffer getVDUBuffer() {
 		return buffer;
 	}
+	
+	/* 
+	 * albb0920:
+	 *   This method is here to make OS knows the correct position to pan.
+	 *   Although the method name seems to make sense, 
+	 *   the API document didn's mention they'll pan based on this. Orz
+	*/
+	public void   getFocusedRect(Rect r){   
+		// Just report cursor line.
+		r.top = (int) (this.buffer.getCursorRow() * CHAR_HEIGHT);
+		r.bottom = r.top + (int)CHAR_HEIGHT;
+		r.left = 0;
+		r.right = SCREEN_HEIGHT;		
+	}
+	
 	private int[] getColor(int currAttr){
 		int fg,bg;
 		// reset default colors
