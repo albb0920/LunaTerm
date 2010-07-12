@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -165,6 +166,141 @@ public class TerminalView extends View implements VDUDisplay {
 		}
 	}
 	
+	/**
+	 * Render magnifier.
+	 * 
+	 * @param canvas
+	 * @param drawArea
+	 * @param Focus
+	 */
+	 /* I can't come up with good way to write magnifier.
+	 * So.. just do it the worst say. */
+	public void renderMagnifier(Canvas c,Rect drawArea,RectF focus){   
+		// Create a bitmap that can cover canvas all text
+		Rect renderRegion = new Rect(
+				(int)(focus.left / CHAR_WIDTH),
+				(int)(focus.top / CHAR_HEIGHT),
+				(int)Math.ceil(focus.right / CHAR_WIDTH),				
+				(int)Math.ceil(focus.bottom / CHAR_HEIGHT)		
+		);
+		float ratioX = drawArea.width() / focus.width();
+		float ratioY = drawArea.height() / focus.height();
+		Bitmap magBitmap = Bitmap.createBitmap((int)(renderRegion.width()*CHAR_WIDTH*ratioX),(int)(renderRegion.height()*CHAR_HEIGHT*ratioY), Config.ARGB_8888);
+		Canvas magedCanvas = new Canvas(magBitmap);
+		Paint paint = new Paint(defaultPaint);
+		paint.setTextSize(CHAR_HEIGHT*ratioY);
+		paint.setTextScaleX(paint.getTextScaleX()*ratioY/ratioX);
+
+		renderText(magedCanvas,new Rect(0,0,magedCanvas.getWidth(),magedCanvas.getHeight()),paint,renderRegion.top,renderRegion.left);
+		c.clipRect(drawArea);
+		c.drawBitmap(magBitmap, 
+				drawArea.left - (focus.left - renderRegion.left * CHAR_WIDTH)*ratioX ,
+				drawArea.top - (focus.top - renderRegion.top * CHAR_HEIGHT)*ratioY
+				, new Paint());
+	}
+	
+	public void renderText(Canvas canvas,Rect drawArea,Paint paint,int row, int col){
+		/////////////////////////////
+		Paint testPaint = new Paint();
+		testPaint.setColor(Color.WHITE);
+		testPaint.setStrokeWidth(1);
+		/////////////////////////////	
+		
+		canvas.clipRect(drawArea,Op.REPLACE);
+		float charWidth = paint.getTextSize() / 2 * paint.getTextScaleX();
+		float charHeight = paint.getTextSize();
+		
+
+		
+		Rect bound = new Rect();
+		paint.getTextBounds("龜", 0, 1,bound); // I know this is dirty, anyone have a better solution?
+		float decent_fix = charHeight - bound.bottom;
+				
+		int toRow = row + (int)Math.ceil(drawArea.height()/charHeight);
+		int toCol = col + (int)Math.ceil(drawArea.width()/charWidth);
+		if(toRow >= buffer.getRows())
+			toRow = buffer.getRows() -1;
+		if(toCol >= buffer.getColumns())
+			toCol = buffer.getColumns() -1;
+
+		for(int r=row; r <= toRow ;r++){
+			int c;
+			boolean stateHigh = false;
+			RectF localRect = new RectF(
+					drawArea.left,
+					drawArea.top + (r-row) * charHeight,
+					drawArea.right,
+					drawArea.top + (r-row+1) * charHeight);
+
+			for(c=0; c<col; c++) //We should move charset decode to terminal class
+				stateHigh = (!stateHigh && buffer.getChar(c, r) >= 128);
+			if(stateHigh){
+				c--;
+				stateHigh = false;
+				localRect.left -= charWidth;
+			}
+			
+			for(;c <= toCol; c++){
+				int ptr = 0;
+				int currAttr = buffer.charAttributes[buffer.windowBase + r][c];
+				
+				while(c+ptr <= toCol && currAttr == buffer.charAttributes[buffer.windowBase + r][c+ptr]){					
+					stateHigh = (!stateHigh && buffer.getChar(c+ptr, r) >= 128);
+					ptr++;
+				}
+				if(stateHigh)
+					ptr++;
+							
+				int color[] = getColor(currAttr);
+				
+				paint.setColor(color[1]);
+				localRect.right = localRect.left + ptr*charWidth;
+				canvas.drawRect(localRect,paint);
+
+				char[] chars = new char[ptr];
+				System.arraycopy(buffer.charArray[buffer.windowBase + r],
+				c, chars, 0, ptr);
+				
+				String encoding = (host != null)? host.getEncoding():"Big5";
+				String string = ChineseUtils.decode(chars, encoding,this.getResources());		
+				paint.setColor(color[0]);
+				
+				// Since Android's MONOFACE is not really MONOFACE..... We have to postion by our self
+				int colCount = 0;
+				for(int pos = 0; pos < string.length(); pos++){
+					char ch = string.charAt(pos);
+					canvas.drawText(
+						String.valueOf(ch),
+						localRect.left + colCount*charWidth,
+						localRect.top+decent_fix,
+						paint);					
+					if(ch > 128)
+						colCount++;
+					colCount++;					
+				}
+				int lastColor[] = getColor(buffer.charAttributes[buffer.windowBase + r][c+ptr-1]);
+				if(!Arrays.equals(color,lastColor)){ 
+					localRect.left = localRect.right - charWidth; 
+					color = getColor( buffer.charAttributes[buffer.windowBase + r][c+ptr-1]);
+					canvas.clipRect(localRect, Op.REPLACE);
+					paint.setColor(color[1]);
+					canvas.drawRect(localRect, paint);
+					paint.setColor(color[0]);
+					canvas.drawText(String.valueOf(string.charAt(string.length()-1)) , localRect.left-charWidth, localRect.top+decent_fix, paint);
+				}
+				
+				
+				c+= ptr -1;
+				canvas.clipRect(drawArea,Op.REPLACE);
+				
+				localRect.left = localRect.right;				
+			}					
+		}
+
+		
+	}
+	
+	
 	@Override
 	public void onDraw(Canvas viewCanvas) {
 		Log.v(TAG,"onDraw()");
@@ -221,7 +357,7 @@ public class TerminalView extends View implements VDUDisplay {
 							defaultPaint.setUnderlineText(true);  // Underline the url
 							
 							current = String.valueOf(
-									buffer.charArray[buffer.windowBase + l], c, addr); // �W���� while �j��|�h +1�ҥH���� addr+1
+									buffer.charArray[buffer.windowBase + l], c, addr); 
 									Url url = new Url(c, c+addr, l, current);
 									urls[l].add(url);
 									break;
@@ -254,7 +390,7 @@ public class TerminalView extends View implements VDUDisplay {
 				
 				// write the text string starting at 'c' for 'addr' number of
 				// characters
-				if ((currAttr & VDUBuffer.INVISIBLE) == 0) {
+
 					defaultPaint.setColor(color[0]);
 
 					char[] chars = new char[addr];
@@ -284,6 +420,7 @@ public class TerminalView extends View implements VDUDisplay {
 							asciiCharCount = asciiCharCount + 2;
 					}
 					//albb0920.100617: Check if is dual color char, must be in last char
+
 					int lastColor[] = getColor(buffer.charAttributes[buffer.windowBase + l][c+addr-1]);
 					if(!Arrays.equals(color,lastColor)){ 
 						defaultPaint.setColor(lastColor[1]);
@@ -300,7 +437,7 @@ public class TerminalView extends View implements VDUDisplay {
 						canvas.clipRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,Op.REPLACE);
 					}
 						
-				}
+				
 
 				// advance to the next text block with different
 				// characteristics
@@ -602,6 +739,11 @@ public class TerminalView extends View implements VDUDisplay {
 		r.right = SCREEN_HEIGHT;		
 	}
 	
+	/**
+	 * Return color set of currAttr
+	 * @param currAttr
+	 * @return array(foreground,background)
+	 */
 	private int[] getColor(int currAttr){
 		int fg,bg;
 		// reset default colors

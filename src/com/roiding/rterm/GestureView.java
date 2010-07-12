@@ -9,7 +9,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -109,6 +111,17 @@ public class GestureView extends View implements View.OnLongClickListener{
 			magnifier.bottom = magnifier.top + MAGNIFIER_HEIGHT;
 			mPaint.setColor(Color.WHITE);
 			canvas.drawRect(magnifier.left - 1, magnifier.top -1, magnifier.right+1, magnifier.bottom +1, mPaint); //Draw border
+			mPaint.setColor(Color.BLACK);
+			canvas.drawRect(magnifier, mPaint);
+			RectF focus = new RectF(	lastTouchedPoint.x -  MAGNIFIER_FOCUS_WIDTH/2,
+										lastTouchedPoint.y - MAGNIFIER_FOCUS_HEIGHT/2,0,0);
+			if(focus.top<0) focus.top =0; if(focus.left<0) focus.left =0;
+			focus.right = focus.left + MAGNIFIER_FOCUS_WIDTH; focus.bottom = focus.top + MAGNIFIER_FOCUS_HEIGHT;
+			
+			Paint testPaint = new Paint();testPaint.setStyle(Style.STROKE); testPaint.setColor(Color.BLUE);
+			canvas.drawRect(focus, testPaint);
+			TerminalView view = terminalActivity.getCurrentTerminalView();
+			view.renderMagnifier(canvas, magnifier, focus);
 		}else{
 			canvas.drawBitmap(footprintBitmap, 0, 0, null);
 			canvas.drawBitmap(textBitmap, 0, 0, null);
