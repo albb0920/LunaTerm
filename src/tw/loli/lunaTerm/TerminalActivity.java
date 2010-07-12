@@ -272,7 +272,6 @@ public class TerminalActivity extends Activity {
 		Host host = (Host) getIntent().getExtras().getSerializable("host");
 
 		currentViewId = host.getId();
-
 		TerminalView view = TerminalManager.getInstance()
 				.getView(currentViewId);
 		
@@ -508,8 +507,10 @@ public class TerminalActivity extends Activity {
 	public void onStop() {
 		super.onStop();
 		
-		terminalFrame.removeAllViews();
-		
+		View view = getCurrentTerminalView();
+		if(view != null)
+			terminalFrame.removeView(view);
+
 		if (dbUtils != null) {
 			dbUtils.close();
 			dbUtils = null;
