@@ -13,7 +13,7 @@ public class Host implements Serializable {
 	private long id;
 	private String name;
 	private String protocal;
-
+	
 	public String getEncoding() {
 		return encoding;
 	}

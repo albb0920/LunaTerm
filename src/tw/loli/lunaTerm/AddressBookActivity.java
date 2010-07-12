@@ -43,9 +43,10 @@ import com.roiding.rterm.util.TerminalManager;
 public class AddressBookActivity extends ListActivity {
 	private static final String TAG = "AddressBook";
 	private static List<Host> hosts;
+	private static List<Host> quickConnectHosts;
 	private DBUtils dbUtils;
 	private SharedPreferences prefs;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Log.i(TAG, "onCreate");
@@ -83,6 +84,8 @@ public class AddressBookActivity extends ListActivity {
 		setContentView(R.layout.act_addressbook);
 		
 		//Quick connect
+		quickConnectHosts = new ArrayList<Host>();
+		
 		((TextView)findViewById(R.id.quickConnect)).setOnEditorActionListener(
 				new OnEditorActionListener(){
 					public boolean onEditorAction(TextView v, int actionId, KeyEvent event){
@@ -115,7 +118,9 @@ public class AddressBookActivity extends ListActivity {
 		host.setPort(port);
 		host.setEncoding("Big5"); //TODO:make this determine by preference
 		host.setProtocal("Telnet");
-		host.setName(hostname+":"+port);
+		host.setName("("+hostname+":"+port+")");
+		host.setId(-1*(quickConnectHosts.size()+1)); // use negative id to cheat DBtools
+		quickConnectHosts.add(host);
 		connect(host);
 	}
 	/*
@@ -229,6 +234,21 @@ public class AddressBookActivity extends ListActivity {
 		dbUtils.hostDelegate.insert(h5);
 	}
 
+	/**
+	 * This is a temporary workaround to make quick connected host appear in the list,
+	 * without messing up host variable. 
+	 * 
+	 * @param position position in list
+	 * @return the host object of the position
+	 */
+	private Host getRealHost(int position){
+		//TODO: This is just so ugly, rewrite quick connection hosts someday. 
+		if(position < quickConnectHosts.size())
+			return quickConnectHosts.get(position);
+		else	
+			return hosts.get(position-quickConnectHosts.size());		
+	}
+	
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -247,9 +267,8 @@ public class AddressBookActivity extends ListActivity {
 
 		this.getListView().setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-
-				Host host = hosts.get(position);
+					int position, long id) {				
+				Host host = getRealHost(position);
 				Log.i(TAG, host.getHost());
 				connect(host);
 			}
@@ -265,7 +284,7 @@ public class AddressBookActivity extends ListActivity {
 		Intent intent = new Intent();
 		intent.setClass(AddressBookActivity.this, TerminalActivity.class);
 		intent.putExtra("host", host);
-
+		Log.v(TAG,""+host.getId());
 		Toast.makeText(AddressBookActivity.this, host.getName(),
 				Toast.LENGTH_SHORT).show();
 
@@ -327,7 +346,7 @@ public class AddressBookActivity extends ListActivity {
 			ContextMenu.ContextMenuInfo menuInfo) {
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-		final Host host = hosts.get(info.position);
+		final Host host = getRealHost(info.position);
 
 		menu.setHeaderTitle(host.getName());
 
@@ -339,27 +358,28 @@ public class AddressBookActivity extends ListActivity {
 			}
 		});
 
-		MenuItem edit = menu.add(R.string.addressbook_edit_host);
-		edit.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			public boolean onMenuItemClick(MenuItem item) {
-				Intent intent = new Intent();
-				intent.setClass(AddressBookActivity.this,
-						EditHostActivity.class);
-				intent.putExtra("host", host);
-				AddressBookActivity.this.startActivityForResult(intent, 0);
-				return true;
-			}
-		});
-
-		MenuItem delete = menu.add(R.string.addressbook_delete_host);
-		delete.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			public boolean onMenuItemClick(MenuItem item) {
-				dbUtils.hostDelegate.delete(host);
-				AddressBookActivity.this.update();
-				return true;
-			}
-		});
-
+		if(hosts.indexOf(host)!=-1){ // not implemented for quick connect
+			MenuItem edit = menu.add(R.string.addressbook_edit_host);
+			edit.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+				public boolean onMenuItemClick(MenuItem item) {
+					Intent intent = new Intent();
+					intent.setClass(AddressBookActivity.this,
+							EditHostActivity.class);
+					intent.putExtra("host", host);
+					AddressBookActivity.this.startActivityForResult(intent, 0);
+					return true;
+				}
+			});
+	
+			MenuItem delete = menu.add(R.string.addressbook_delete_host);
+			delete.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+				public boolean onMenuItemClick(MenuItem item) {
+					dbUtils.hostDelegate.delete(host);
+					AddressBookActivity.this.update();
+					return true;
+				}
+			});
+		}
 	}
 
 	protected void update() {
@@ -378,8 +398,11 @@ public class AddressBookActivity extends ListActivity {
 	}
 
 	private List<Map<String, String>> getList(List<Host> list) {
+		ArrayList<Host> all = new ArrayList<Host>(quickConnectHosts);
+		all.addAll(list);				
 		ArrayList<Map<String, String>> hostList = new ArrayList<Map<String, String>>();
-		for (Host h : list) {
+		
+		for (Host h : all) {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("name", h.getName());
 			String uri = h.getProtocal() + "://" + h.getHost();
@@ -387,11 +410,15 @@ public class AddressBookActivity extends ListActivity {
 				uri = uri + ":" + h.getPort();
 			map.put("uri", uri);
 
-			if (TerminalManager.getInstance().getView(h.getId()) == null)
-				map.put("icon", String.valueOf(R.drawable.offline));
-			else
+			if (TerminalManager.getInstance().getView(h.getId()) != null)
 				map.put("icon", String.valueOf(R.drawable.online));
-
+			else if(list.indexOf(h)!=-1)
+				map.put("icon", String.valueOf(R.drawable.offline));
+			else{
+				quickConnectHosts.remove(h);
+				continue;
+			}
+			
 			hostList.add(map);
 		}
 		return hostList;
