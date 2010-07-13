@@ -248,9 +248,10 @@ public class TerminalView extends View implements VDUDisplay {
 					stateHigh = (!stateHigh && buffer.getChar(c+ptr, r) >= 128);
 					ptr++;
 				}
-				if(stateHigh)
+				if(stateHigh){
 					ptr++;
-							
+					stateHigh = false;
+				}			
 				int color[] = getColor(currAttr);
 				
 				paint.setColor(color[1]);

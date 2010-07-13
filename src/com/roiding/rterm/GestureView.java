@@ -42,10 +42,10 @@ public class GestureView extends View implements View.OnLongClickListener{
 	
 	private boolean magnifierOn = false;
 	private static final int MAGNIFIER_HEIGHT = 100;
-	private static final int MAGNIFIER_WIDTH = 100;
-	private static final int MAGNIFIER_MARGIN = 30;
+	private static final int MAGNIFIER_WIDTH = 200;
+	private static final int MAGNIFIER_MARGIN = 50;
 	private static final int MAGNIFIER_FOCUS_HEIGHT = 50;
-	private static final int MAGNIFIER_FOCUS_WIDTH = 50;
+	private static final int MAGNIFIER_FOCUS_WIDTH = 100;
 	
 	private TerminalActivity terminalActivity;
 
@@ -97,18 +97,29 @@ public class GestureView extends View implements View.OnLongClickListener{
 		if(magnifierOn){
 			Rect magnifier = new Rect();
 			Paint mPaint = new Paint();
-			if(lastTouchedPoint.y + MAGNIFIER_MARGIN + MAGNIFIER_HEIGHT > getHeight())
-				magnifier.top = lastTouchedPoint.y - MAGNIFIER_HEIGHT - MAGNIFIER_MARGIN;
-			else
-				magnifier.top = lastTouchedPoint.y + MAGNIFIER_MARGIN;
-			
-			if(lastTouchedPoint.x + MAGNIFIER_MARGIN + MAGNIFIER_WIDTH > getWidth())
-				magnifier.left = lastTouchedPoint.x - MAGNIFIER_WIDTH - MAGNIFIER_MARGIN;
-			else
+			/* Place magnifier on top on finger if possible */
+			magnifier.top = lastTouchedPoint.y - MAGNIFIER_HEIGHT - MAGNIFIER_MARGIN;
+			magnifier.left = lastTouchedPoint.x - MAGNIFIER_WIDTH/2;
+		
+			if(magnifier.top<0){
+				/* if no space left on top, place it right */
+				magnifier.top = lastTouchedPoint.y - MAGNIFIER_HEIGHT/2;
+				if(magnifier.top<0)
+					magnifier.top = 0;
 				magnifier.left = lastTouchedPoint.x + MAGNIFIER_MARGIN;
+				/* if no place at right, put it left */
+				if(magnifier.left+MAGNIFIER_WIDTH>getWidth())
+					magnifier.left = lastTouchedPoint.x - MAGNIFIER_WIDTH - MAGNIFIER_MARGIN;				 
+			}
+			if(magnifier.left < 0)
+				magnifier.left = 0;	
 			
 			magnifier.right = magnifier.left + MAGNIFIER_WIDTH;
 			magnifier.bottom = magnifier.top + MAGNIFIER_HEIGHT;
+			
+			if(magnifier.right > getWidth())
+				magnifier.right = getWidth();			
+				
 			mPaint.setColor(Color.WHITE);
 			canvas.drawRect(magnifier.left - 1, magnifier.top -1, magnifier.right+1, magnifier.bottom +1, mPaint); //Draw border
 			mPaint.setColor(Color.BLACK);
@@ -118,8 +129,12 @@ public class GestureView extends View implements View.OnLongClickListener{
 			if(focus.top<0) focus.top =0; if(focus.left<0) focus.left =0;
 			focus.right = focus.left + MAGNIFIER_FOCUS_WIDTH; focus.bottom = focus.top + MAGNIFIER_FOCUS_HEIGHT;
 			
-			Paint testPaint = new Paint();testPaint.setStyle(Style.STROKE); testPaint.setColor(Color.BLUE);
-			canvas.drawRect(focus, testPaint);
+			///////////////////////////
+			// Uncomment these to debug focus area
+			// Paint testPaint = new Paint();testPaint.setStyle(Style.STROKE); testPaint.setColor(Color.BLUE);
+			// canvas.drawRect(focus, testPaint);
+			///////////////////////////
+			
 			TerminalView view = terminalActivity.getCurrentTerminalView();
 			view.renderMagnifier(canvas, magnifier, focus);
 		}else{
@@ -129,14 +144,11 @@ public class GestureView extends View implements View.OnLongClickListener{
 	}
 	
 	public boolean onLongClick(View  v){
-		magnifierOn = true;
-		
-		//Abandon gesture
-		currentGesture = "";
-		footprintBitmap.eraseColor(0);
-		textBitmap.eraseColor(0);
-		
-		Log.i(TAG,"Magnifier activated.");
+		// only activate if no gesture inputed
+		if(currentGesture.length()==0)
+			footprintBitmap.eraseColor(0);
+			textBitmap.eraseColor(0);
+			magnifierOn = true;		
 		return true;
 	}
 	
@@ -220,8 +232,11 @@ public class GestureView extends View implements View.OnLongClickListener{
 		Point evPoint = new Point((int) ev.getX(),(int) ev.getY());
 		
 		if(magnifierOn){
-			if (ev.getAction() == MotionEvent.ACTION_UP) 
-				magnifierOn = false;
+			if (ev.getAction() == MotionEvent.ACTION_UP){
+				footprintBitmap.eraseColor(0);
+				textBitmap.eraseColor(0);
+				magnifierOn = false;				
+			}
 			invalidate(); //we will paint magnifier in onDraw
 		}else {	
 			//Perform gesture
