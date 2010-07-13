@@ -145,10 +145,11 @@ public class GestureView extends View implements View.OnLongClickListener{
 	
 	public boolean onLongClick(View  v){
 		// only activate if no gesture inputed
-		if(currentGesture.length()==0)
+		if(currentGesture.length()==0){
 			footprintBitmap.eraseColor(0);
 			textBitmap.eraseColor(0);
-			magnifierOn = true;		
+			magnifierOn = true;	
+		}
 		return true;
 	}
 	
