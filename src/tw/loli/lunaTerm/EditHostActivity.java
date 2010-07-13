@@ -32,7 +32,7 @@ public class EditHostActivity extends PreferenceActivity {
 		valuesMap.put("host", "");
 		valuesMap.put("port", "23");
 		valuesMap.put("protocal", "Telnet");
-		valuesMap.put("encoding", "GBK");
+		valuesMap.put("encoding", "BIG5");
 		valuesMap.put("user", "");
 		valuesMap.put("pass", "");
 
