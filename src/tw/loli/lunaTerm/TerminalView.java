@@ -455,13 +455,15 @@ public class TerminalView extends View implements VDUDisplay {
 		// draw cursor
 		if (this.buffer.isCursorVisible()) {
 			cursorPaint.setColor(color[DEFAULT_FG_COLOR]);
-			float x = this.buffer.getCursorColumn() * CHAR_WIDTH;
-			float y = (this.buffer.getCursorRow() + this.buffer.screenBase - this.buffer.windowBase)
-					* CHAR_HEIGHT;
-			viewCanvas.drawRect(x, y, x + CHAR_WIDTH, y + CHAR_HEIGHT, cursorPaint);
-
-			// terminalActivity.scroll((int) x, (int) y);
-
+			Rect cursor = new Rect();
+			cursor.left= (int)Math.ceil(this.buffer.getCursorColumn() * CHAR_WIDTH);
+			cursor.top = (int)Math.ceil((this.buffer.getCursorRow() + this.buffer.screenBase - this.buffer.windowBase)* CHAR_HEIGHT);		
+			cursor.right = cursor.left + (int)CHAR_WIDTH;
+			cursor.bottom = cursor.top + (int)CHAR_HEIGHT;
+			viewCanvas.drawRect(cursor, cursorPaint);
+			
+			//albb0920: request system consider a scroll for pan. (Maybe we should filter softKB state)
+			requestRectangleOnScreen(cursor,false); 
 		}
 	}
 
@@ -597,8 +599,6 @@ public class TerminalView extends View implements VDUDisplay {
 						.getSystemService(Context.INPUT_METHOD_SERVICE);
 				inputMethodManager.toggleSoftInput(
 						InputMethodManager.SHOW_FORCED, 0);
-				// inputMethodManager.hideSoftInputFromWindow(this
-				// .getWindowToken(), 0);
 				return true;
 			}
 
