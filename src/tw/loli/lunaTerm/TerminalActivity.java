@@ -32,7 +32,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -125,7 +124,9 @@ public class TerminalActivity extends Activity {
 		GestureView mGestureView = (GestureView) findViewById(R.id.gestureView);
 		mGestureView.setTerminalActivity(this);
 		mGestureView.setOnGestureListener(new OnGestureListener() {
-
+			
+			
+			//TODO: We should make user define this
 			public void onGestureEvent(String gesture) {
 				if (gesture == null || gesture.length() == 0)
 					return;
@@ -148,6 +149,12 @@ public class TerminalActivity extends Activity {
 				} else if (gesture.equals("R,D")) {
 					// page down
 					pressKey(new byte[] { 27, 91, 54, 126 });
+				} else if (gesture.equals("L,U")) {
+					//HOME
+					pressKey(new byte[] { 27, '[','1','~'});
+				} else if (gesture.equals("L,D")) {
+					//END
+					pressKey(new byte[] { 27, '[','4','~'});					
 				} else if (gesture.equals("R,D,R") || gesture.equals("R,L,R")) {
 					// input helper
 					LayoutInflater factory = LayoutInflater
@@ -358,18 +365,6 @@ public class TerminalActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-
-		MenuItem help = menu.add(R.string.addressbook_help).setIcon(
-				android.R.drawable.ic_menu_help);
-
-		help.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			public boolean onMenuItemClick(MenuItem item) {
-				Intent intent = new Intent();
-				intent.setClass(TerminalActivity.this, HelpActivity.class);
-				TerminalActivity.this.startActivityForResult(intent, 0);				
-				return true;
-			}
-		});
 		
 		MenuItem disconnect = menu.add(R.string.terminal_disconnect).setIcon(
 				android.R.drawable.ic_menu_close_clear_cancel);

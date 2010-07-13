@@ -29,6 +29,8 @@
 		<item>R,D</item>
 		<item>D,L</item>
 		<item>D,R,U</item>
+		<item>L,U</item>
+		<item>L,D</item>
 		<item>R,D,R</item>
 		<item>R,L,R</item>
 	</string-array>
@@ -41,17 +43,23 @@
 		<item>Page Down</item>
 		<item>Enter</item>
 		<item>Space</item>
+		<item>HOME</item>
+		<item>END</item>
 		<item>Input Helper</item>
 		<item>Input Helper</item>
 	</string-array>
 	<string-array name="function_buttons_key">
 		<item>^p</item>
 		<item>^x</item>
-		<item>^p测试灌水^M^m测试灌水，哈哈^x^m</item>
+		<item>%</item>
+		<item>/</item>
+		<item>s</item>
 	</string-array>
 	<string-array name="function_buttons_desc">
-		<item>Ctrl+p</item>
-		<item>Ctrl+x</item>
-		<item>测试灌水</item>
+		<item>Ctrl+P 發文</item>
+		<item>Ctrl+X 儲存</item>
+		<item>% 推文</item>
+		<item>/ 搜尋</item>
+		<item>s 移到看板</item>
 	</string-array>
 </resources>
