@@ -1,55 +1,191 @@
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-</head>
-<body bgcolor="#000000" text="#FFFFFF" >
-<h2><b>rTerm</b> v1.1.2</h2>
-<p>rTerm网站：<a href="http://www.roiding.com/index.php/rterm">http://www.roiding.com/index.php/rterm</a></p>
-
-<p>
-rTerm是<a href="http://www.roiding.com">螺钉工作室(Roiding Studio)</a>开发的一款运行于Android平台的BBS Terminal软件。
-在螺钉工作室看来，使用Term方式连接BBS才是BBS的精髓，而使用Web方式，则丢失了BBS的大部分乐趣。
-</p>
-<p>
-<ul>
-<li>目前只支持Telnet方式，在未来的版本中将会支持SSH方式
-<li>支持自动登录，在设置自动登录的用户和密码后即自动登录</li>
-<li>支持URL识别，点击Url即可打开</li>
-<li>支持简体中文(GB)与繁体中文(Big5)编码</li>
-<li>支持手势，目前支持的手势有：
-<ul>
-  <li>U 即Up，向上</li>
-  <li>D 即Down，向下</li>
-  <li>L 即Left，向左</li>
-  <li>R 即Right，向右</li>
-  <li>R,U 即Page Up，向上翻页</li>
-  <li>R,D 即Page Down，向下翻页</li>
-  <li>D,L 即Enter，回车</li>
-  <li>D,R,U 即Space，空格</li>
-  <li>R,D,R 或这 R,L,R 调出文本输入助手</li>
-</ul>
-</li>
-<li>因为Android的键盘没有Ctrl键，在这里使用轨迹球键作为Ctrl键</li>
-<li>支持自定义快捷功能按钮，在Term状态下，按“增大音量”键可以调出快捷按钮界面，再按一次隐藏此界面</li>
-<li>支持呼叫输入法，在Term状态下，按“减小音量”键可以调出输入法，再按一次隐藏输入法</li>
-<li>内置“防止发呆”功能，但是如果在待机状态下，Android会自动关闭wifi的连接，所以会导致连接断线。</li>
-</ul>
-</p>
-<p>
-rTerm遵循通用公共许可证V3(GNU General Public V3 License)。
-你可以在<a href="http://www.gnu.org/licenses/gpl-3.0.txt">这里</a>了解通用公共许可证V3。
-目前，你可以在螺钉工作室(Roiding Studio)的<a href="http://www.roiding.com/index.php/rterm">网站</a>获得rTerm的源代码。
-如果以后有更方便的源代码发布方式，会在此网站上和新版本的软件中通知。
-</p>
-<p>
-rTerm基于 <a href="http://www.javassh.org">JTA Telnet/SSH client</a>(作者：Matthias L. Jugel，Marcus Meiner)，在此之上进行了一些修改和扩展。
-另外，rTerm参考了<a href="http://code.google.com/p/connectbot/">ConnectBot</a>(作者：Kenny Root，Jeffrey Sharkey)的代码结构。向这两款优秀的软件致敬！
-</p>
-
-<div align="right">
-猪头小队长@螺钉工作室<br>
-panhaidong@gmail.com<br>
-公元贰零零玖年壹月
-</div>
-</body>
-</html>
+<!doctype html> 
+<html> 
+    <head> 
+	<title>LunaTerm 說明</title> 
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+	<style> 
+	    h1{
+		padding:0px;
+		margin:5px;
+		border-bottom:1px solid gray;
+		font-weight:600;
+	    }
+	    h1 img{
+		vertical-align:bottom;
+	    }
+	    div#index a{
+		display:block;
+		border:1px solid gray;
+		background-color:rgb(230,230,230);
+		border-radius: 10px;
+		font-size: 14pt;
+		padding:10px 0px 10px 15px;
+		color:black;
+		margin-bottom:1.5%;
+	    }
+	    a{
+		text-decoration:none;
+	    }
+	    p{
+		text-indent:8%;
+		margin:5px 0px 5px 0px;
+	    }
+	    .block-title{
+		border-bottom:1px solid gray;
+	    }
+	    .block-content{
+		margin:5px 0px 0px 0px;
+	    }
+	    ul{
+		padding:0px 0px 0px 27px;
+		margin:0px 0px 0px 0px;
+	    }
+	    li{
+		padding-bottom:2px;
+	    }
+	    table{
+		width:100%;
+		border-collapse:collapse;
+	    }
+	    th{
+		background-color:rgb(180,220,255);
+	    }
+	    th,td{
+		text-align:center;
+		border:1px solid gray;
+	    }
+	    .block{
+		margin-bottom:7px;
+	    }
+	</style> 
+    </head> 
+    <body> 
+	<h1> 
+	<img src="data:image/png;base64,
+	    iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAEw0lEQVR4Xu3aW2xURRzH8e/spdvLtnSL
+	    rbQFpTTQ0EqxgEpjlBBjJBoQxBAk4aJtYtQ3EC/EFwMSQhQTND4YQYgEMHiJqFES0GgUqSBSsJZbW0pa
+	    2cSwBfba3XNmNJucZHPSbXfLaU+JfpJ5mIfN7C/z/89s9hyhlOJW5sBe/wdwkZl7gVlAOSMvCpwDvgeu
+	    MTjPUAGagLVALfbYCWwCuhhYv4OB5QAfAx8AtdjnGeAPYHm2JfQV8LAxCUUlv3dq+PskkX7FSHE5BePy
+	    BTUTnUytMIqDfGAfSezPJMBbqV/+YEuMAz/HiGuC0TStwsHzj+ZRXuJKLacWczmZ74FaoM2Y7Doc5usT
+	    cexSmAebVxUywWeEYAfQPNgOrDImp7viHDwWRQiBXa6H4N2DITatLk49VF4ErqXbgZNAA8Ab+/s4cSFB
+	    OjMmu2mc7uHOMhcOh8Af0DlzKc53rTGs9mZTMdUVOcZ0KfBZugAxwAOwYoufcD8Deu6xIhbMyWcgpzr6
+	    2f7Fda4GJVZpfsTLwrleY/oysDVdCXkwti+iD1g+y+d50355gLurPTz7b8CNewNYJRiVpPBmdBMrqVAo
+	    zBbNLcDQE1V0x0GX4HNAXSHJcrqvJpfZ1TkcPx/DClIqUsiMAkgpMZs+KYeifCcAwbjiyw7QlEBLgNsN
+	    WqmiYQJJtXe4aTkbwQqmMmfYAYq9DgxXghC4IdB1kjQJHQ6MAJQUOpFS2hhAl5iplFDGrgoBSiUHqR+R
+	    SiF1iwLIYQTQpY6ZVDKrbdeljhWkktaUkJKKLBLYVULpA0ilsll0TPZAdgF0GwPoN7sDgD7mSkjaVkIW
+	    NbGSt1AT67oFPaBbeQ/YfwrZ38TSniaWthyjUiH1MdfE2eyA4tWVkxlKXzBBW2eIH071jcZNLMnUkgdv
+	    JxutF27w+s6LtHWFrOoBPaNQBgH4fAzbzKlFvLe+jic3/IY/0G8KIK3qAUU6bhcc64Sy8Qo9QUacAnIV
+	    VBeA2ymYUOJh1YJKtnx00byu9T0gAPMx7/UKjnaSFU2HSbmKJdNImj97PJt3nx+ZHvBfjWIoK4BIVOHx
+	    CJwOUApC4eTIiiYhoGEEoNTnMda2/tfoybN9RPt18jxOfHmC+lKNX3uduF0CIRgWqWCSVwJOAMIRzVjb
+	    +otMl7D30GWaFlUBsKLBRVVxgpO9CQJhSUJXZEPIBBNLcllc78Fw9MxVY+2bu8icDkVCU5ht3NFO44zx
+	    1FYVAdBY5U4Oq+z5pttcQuS4RMYBrgDlAFMq8mi/FMQsHNV56rVf2L6ugXmzyrDSS++0cvT035hVVxaQ
+	    wj9YgBZgMcDieZW0dfzJQHr8YZ5Y/xPz55SxoLGc2inj8BW6yZYQgr4bcU60B9h3qJtz3UHMxnldyXVS
+	    HB/s7/XVwC6AcDTBA82H6forjJ3eXtvAmoXVxvQMUJ8ugOE0MAOgszfI0vU/0tFrRwjFhqfreGXNXeZH
+	    Th8OFeAh4LAxicQSvP/pBT45cpmOnhDBiDaSj5iS98D9M0t5YVkN99TdRooDwDKA9AHMpTR2fAs8DsQz
+	    PUZ3Az3ANqAee20D1g3nSf0RYCawEvgcuMLoiAGtwFagDlh3s0/q9yTH6HAA8lZ+V0L+5172+AceD3xN
+	    p2PIcgAAAABJRU5ErkJggg=="> 
+	    LunaTerm 1.0</h1> 
+	<div id="index"> 
+	    <a href="#changelog">更新摘要</a> 
+	    <a href="#quick-guide">快速上手</a> 
+	    <a href="#faq">常見問題</a> 
+	    <a href="#about">關於</a> 
+	    <a href="http://github.com/albb0920/LunaTerm">專案網站</a> 
+	</div> 
+ 
+<div id="changelog" class="block"> 
+    <div class="block-title">更新摘要</div> 
+    <div class="block-content"> 
+	<ul> 
+	    <li>v1.0<br> 
+	    <ol> 
+		    <li>修正 亮色字不亮，套用 PCMan/Windows 色盤</li> 
+		    <li>修正 一些小問題</li> 
+		    <li>改善 軟體鍵盤遮住畫面問題</li> 
+		    <li>改善 快速連線，會顯示在列表中</li> 
+		    <li>新增 HOME、END 手勢</li> 
+		    <li>(理論上) 支援所有解析度，不需要設定 "高解析度"</li> 
+		    <li>新增 放大鏡 功能</li> 
+	    </ol> 
+	    <li>(第二次釋出)<br> 
+		<ol> 
+		    <li>修正 無法輸入中文</li> 
+		    <li>新增 快速連線</li> 
+		    <li>改名為 LunaTerm</li> 
+		</ol> 
+	    </li> 
+	    <li>(第一次釋出)<br> 
+		<ol> 
+		    <li>新增 雙色字支援</li> 
+		    <li>新增 單向 UAO 支援</li> 
+		    <li>修正 URL 判定 Bug</li> 
+		</ol>		
+	    </li> 
+	</ul> 
+    </div> 
+</div> 
+<div id="quick-guide" class="block"> 
+    <div class="block-title">快速上手</div> 
+    <div class="block-content"> 
+    <ul> 
+	<li>Ctrl 組合鍵:<br> 
+	    按一下壓軌跡球 (某些手機為 OK 健) 再按下鍵盤按鍵	    
+	</li> 
+	<li>可自訂功能按鈕:<br> 
+	    連線時按下 音量升高鍵 叫出，可在設定中增加
+	</li> 
+	<li>軟體鍵盤: 連線時按下 音量降低鍵 可以顯示或關閉</li> 
+	<li>快速切換連線: 連線時按 MENU 選擇</li> 
+	<li>放大鏡: 長壓畫面</li> 
+	<li>操作手勢: U-上 D-下 L-左 R-右<br> 
+	    <table> 
+		<tr><th>操作</th><th>手勢</th></tr>		
+		<tr><td>方向鍵 上</td><td>U</td></tr> 
+		<tr><td>方向鍵 下</td><td>D</td></tr> 
+		<tr><td>方向鍵 左</td><td>L</td></tr> 
+		<tr><td>方向鍵 右</td><td>R</td></tr> 
+		<tr><td>Page Up</td><td>RU</td></tr> 
+		<tr><td>Page Down</td><td>RD</td></tr> 
+		<tr><td>Enter</td><td>DL</td></tr> 
+		<tr><td>Space</td><td>DRU</td></tr> 
+		<tr><td>HOME</td><td>LU</td></tr> 
+		<tr><td>END</td><td>LD</td></tr> 
+		<tr><td>輸入助手</td><td>RDR or<br>RLR</td></tr> 
+	    </table> 
+	</li> 
+    </ul> 
+    </div> 
+</div> 
+<div id="faq" class="block"> 
+    <div class="block-title">常見問題</div> 
+    <div class="block-content"> 
+	Q: 使用 Wi-Fi 時，閒置會自動中斷<br> 
+	A: 請檢查 Wi-Fi 閒置設定
+    </div> 
+</div> 
+<div id="about" class="block"> 
+    <div class="block-title">關於</div> 
+    <div class="block-content"> 
+	<p> 
+	LunaTerm 是一個應台灣 BBS 使用者使用習慣誕生的開源專案，原始碼以 <a href="http://code.google.com/p/rterm/">rTerm</a> 為基礎。<br></p> 
+	<p>本程式原始碼使用 GPLv3 授權，可以在 <a href="http://www.gnu.org/licenses/gpl-3.0.txt">這裡</a> 找到授權條款，本專案原始碼可在 <a href="http://github.com/albb0920/LunaTerm">專案網站</a> 中找到。</p> 
+	<p> 
+	本專案一共使用的原始碼如下:<br> 
+	<div style="margin-left:8%;"> 
+	<ul> 
+	    <li> 
+	    <a href="http://code.google.com/p/rterm/">rTerm</a>: 本專案的基礎<br>授權方式: GPLv3</a> 
+	    </li> 
+	    <li> 
+	    <a href="http://code.google.com/p/connectbot/">ConnectBot</a>: 另一個 Android 上的 Terminal，rTerm 參考之一<br>授權方式: Apache License 2.0<br> 
+	    </li> 
+	    <li> 
+		<a href="http://www.javassh.org">JTA Telnet/SSH client</a>: JAVA 的 SSH/Telnet 函式庫，rTerm 與 ConnectBot 的基礎<br> 
+	    授權方式: GPLv2</a> 
+	</li> 
+	</div> 
+	</p> 
+    </div> 
+</div> 
+</body> 
+</html> 
