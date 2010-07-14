@@ -103,8 +103,6 @@ public class AddressBookActivity extends ListActivity {
 	}
 	private void quickConnect(){
 		String hostname = ((TextView)findViewById(R.id.quickConnect)).getText().toString();
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(((TextView)findViewById(R.id.quickConnect)).getWindowToken(), 0);
 		int port = 23,pos;
 		if((pos = hostname.indexOf(":"))!=-1){ //extract port number
 			port = Integer.parseInt(hostname.substring(pos+1));
@@ -281,6 +279,9 @@ public class AddressBookActivity extends ListActivity {
 	}
 
 	private void connect(Host host) {
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(((TextView)findViewById(R.id.quickConnect)).getWindowToken(), 0);
+		
 		Intent intent = new Intent();
 		intent.setClass(AddressBookActivity.this, TerminalActivity.class);
 		intent.putExtra("host", host);
