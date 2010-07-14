@@ -16,7 +16,6 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -67,20 +66,10 @@ public class AddressBookActivity extends ListActivity {
 		Locale.setDefault(locale);
 		Configuration config = new Configuration();
 		config.locale = locale;
+		
+		//FIXME: albb0920.100714: Why is this line comment out?
 //		getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
-		
-		//Auto High-resolution Detection
-		DisplayMetrics dm = new DisplayMetrics(); 
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		if(dm.density >= 1.5)
-		{
-			pref.edit().putBoolean("settings_highresolution",true);
-			pref.edit().commit();
-		}else{
-			pref.edit().putBoolean("settings_highresolution",false);
-			pref.edit().commit();
-		}
-		
+				
 		setContentView(R.layout.act_addressbook);
 		
 		//Quick connect

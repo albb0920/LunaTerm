@@ -449,18 +449,37 @@ public class TerminalView extends View implements VDUDisplay {
 		// reset entire-buffer flags
 		buffer.update[0] = false;
 		fullRedraw = false;		
-			
-		viewCanvas.drawBitmap(this.bitmap, 0, 0, defaultPaint);		
+		
+		// Calculate cursor
+		int curCol = this.buffer.getCursorColumn(), 
+			curRow = (this.buffer.getCursorRow() + this.buffer.screenBase - this.buffer.windowBase);
+		float	cursorX = curCol * CHAR_WIDTH,
+				cursorY = curRow  * CHAR_HEIGHT;
+        
+        float scroll = 0;
+        
+		// albb0920: Manually scroll, requestRectangleOnScreen(cursor,true) doesn't seems to work well
+        //            Rewrite this if we can get requestRectangleOnScreen work well.
+
+			int viewPos[] = new int[2];
+			getLocationOnScreen(viewPos);
+			Log.v(TAG,"On Screen Pos"+viewPos);
+			if(cursorY+viewPos[1]<0){ // ime is up and we were blocked.
+				
+				scroll = -1 * (cursorY+viewPos[1]) + (SCREEN_HEIGHT + viewPos[1] - CHAR_HEIGHT)/2;
+				if(scroll > -1 *viewPos[1])
+					scroll = -1 *viewPos[1];
+				
+				//scroll = -1 * (cursorY+viewPos[1]);
+				Log.v(TAG,"SCROLL FIX"+scroll);
+			}						
+				
+		viewCanvas.drawBitmap(this.bitmap, 0, 0+scroll, defaultPaint);		
 
 		// draw cursor
 		if (this.buffer.isCursorVisible()) {
 			cursorPaint.setColor(color[DEFAULT_FG_COLOR]);
-			Rect cursor = new Rect();
-			getFocusedRect(cursor);
-			viewCanvas.drawRect(cursor, cursorPaint);
-			
-			//albb0920: request system consider a scroll for pan. (Maybe we should filter softKB state)
-			requestRectangleOnScreen(cursor,true); 
+			viewCanvas.drawRect(cursorX, cursorY+scroll, cursorX + CHAR_WIDTH, cursorY + CHAR_HEIGHT + scroll, cursorPaint);						
 		}
 	}
 
@@ -725,18 +744,24 @@ public class TerminalView extends View implements VDUDisplay {
 		return buffer;
 	}
 	
+	
+	
+	
 	/* 
 	 * albb0920:
-	 *   This method is here to make OS knows the correct position to pan.
-	 *   Although the method name seems to make sense, 
-	 *   the API document didn's mention they'll pan based on this. Orz
-	*/
+	 *   This was used to tell OS where to pan.
+	 *   Unfortunately, the method requestFocusRect() seems to be broken with HTC CIME
+	 *   (If you request a rect that is in the middle of the screen, It will be broken, blame HTC)
+	 *   And I can't find a good way to get IME height.
+	 *   So we lie we are in that last line to force system scroll our whole view above IME.
+	 *   And we manually scroll it back. WTF
+	 */
 	public void   getFocusedRect(Rect cursor){   
-		// Just report cursor line.
-		cursor.left= (int)Math.ceil(this.buffer.getCursorColumn() * CHAR_WIDTH);
-		cursor.top = (int)Math.ceil((this.buffer.getCursorRow() + this.buffer.screenBase - this.buffer.windowBase)* CHAR_HEIGHT);		
-		cursor.right = cursor.left + (int)CHAR_WIDTH;
-		cursor.bottom = cursor.top + (int)CHAR_HEIGHT;
+		// Report the last line
+		cursor.bottom = SCREEN_HEIGHT;
+		cursor.top = (int) (cursor.bottom - CHAR_HEIGHT);
+		cursor.left = 0;
+		cursor.right = SCREEN_HEIGHT;
 	}
 	
 	/**
