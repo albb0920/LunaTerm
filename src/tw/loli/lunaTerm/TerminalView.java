@@ -456,14 +456,11 @@ public class TerminalView extends View implements VDUDisplay {
 		if (this.buffer.isCursorVisible()) {
 			cursorPaint.setColor(color[DEFAULT_FG_COLOR]);
 			Rect cursor = new Rect();
-			cursor.left= (int)Math.ceil(this.buffer.getCursorColumn() * CHAR_WIDTH);
-			cursor.top = (int)Math.ceil((this.buffer.getCursorRow() + this.buffer.screenBase - this.buffer.windowBase)* CHAR_HEIGHT);		
-			cursor.right = cursor.left + (int)CHAR_WIDTH;
-			cursor.bottom = cursor.top + (int)CHAR_HEIGHT;
+			getFocusedRect(cursor);
 			viewCanvas.drawRect(cursor, cursorPaint);
 			
 			//albb0920: request system consider a scroll for pan. (Maybe we should filter softKB state)
-			requestRectangleOnScreen(cursor,false); 
+			requestRectangleOnScreen(cursor,true); 
 		}
 	}
 
@@ -681,9 +678,11 @@ public class TerminalView extends View implements VDUDisplay {
 			return true;
 		case KeyEvent.KEYCODE_DPAD_UP:
 			((vt320) buffer).keyPressed(vt320.KEY_UP, ' ', metaState);
+			invalidate();
 			return true;
 		case KeyEvent.KEYCODE_DPAD_DOWN:
 			((vt320) buffer).keyPressed(vt320.KEY_DOWN, ' ', metaState);
+			invalidate();
 			return true;
 		case KeyEvent.KEYCODE_DPAD_RIGHT:
 			((vt320) buffer).keyPressed(vt320.KEY_RIGHT, ' ', metaState);
@@ -732,12 +731,12 @@ public class TerminalView extends View implements VDUDisplay {
 	 *   Although the method name seems to make sense, 
 	 *   the API document didn's mention they'll pan based on this. Orz
 	*/
-	public void   getFocusedRect(Rect r){   
+	public void   getFocusedRect(Rect cursor){   
 		// Just report cursor line.
-		r.top = (int) (this.buffer.getCursorRow() * CHAR_HEIGHT);
-		r.bottom = r.top + (int)CHAR_HEIGHT;
-		r.left = 0;
-		r.right = SCREEN_HEIGHT;		
+		cursor.left= (int)Math.ceil(this.buffer.getCursorColumn() * CHAR_WIDTH);
+		cursor.top = (int)Math.ceil((this.buffer.getCursorRow() + this.buffer.screenBase - this.buffer.windowBase)* CHAR_HEIGHT);		
+		cursor.right = cursor.left + (int)CHAR_WIDTH;
+		cursor.bottom = cursor.top + (int)CHAR_HEIGHT;
 	}
 	
 	/**
