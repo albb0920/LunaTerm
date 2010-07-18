@@ -23,6 +23,7 @@
 			android:singleLine="true" />
 		<EditTextPreference android:key="pass"
 			android:title="@string/edithost_pass" android:summary="@string/edithost_pass_summary"
+			android:password="true"
 			android:singleLine="true" />
 	</PreferenceCategory>
 
