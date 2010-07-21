@@ -56,9 +56,10 @@ public class TerminalView extends View implements VDUDisplay {
 	private int SCREEN_WIDTH;   
 	private int SCREEN_HEIGHT;	
 	
+	
 	private static final int SCROLLBACK = 0;	
 	private static final int DEFAULT_FG_COLOR = 7;
-	private static final int DEFAULT_BG_COLOR = 0;
+	private static final int DEFAULT_BG_COLOR = 0;	
 	
 	public static final KeyCharacterMap DEFAULT_KEYMAP = KeyCharacterMap
 			.load(KeyCharacterMap.BUILT_IN_KEYBOARD);
@@ -71,8 +72,11 @@ public class TerminalView extends View implements VDUDisplay {
 
 	private final Paint defaultPaint = new Paint();
 	private final Paint cursorPaint = new Paint();
+	
+	private Typeface specialTypeface;
+	private float specialDecent; 
+	
 	private final Canvas canvas = new Canvas();
-
 	private boolean ctrlPressed;
 	private boolean altPressed;
 	private boolean shiftPressed;
@@ -88,8 +92,7 @@ public class TerminalView extends View implements VDUDisplay {
 		this.terminalActivity = context;
 		setFocusable(true);
 		setFocusableInTouchMode(true);
-		init();
-		
+		init();		
 	}
 
 	
@@ -117,6 +120,8 @@ public class TerminalView extends View implements VDUDisplay {
 		defaultPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
 		defaultPaint.setTypeface(Typeface.MONOSPACE);				
 		
+		specialTypeface = Typeface.createFromAsset(this.getResources().getAssets(), "SpecialChar.ttf");
+		
 		// Workaround to create array of ArrayList generic type.
 		urls = (ArrayList<Url>[]) Array.newInstance(ArrayList.class, TERM_HEIGHT);
 	}
@@ -138,16 +143,23 @@ public class TerminalView extends View implements VDUDisplay {
 		canvas.drawRect(0, 0, w, h, defaultPaint);
 		
 		//Calculate char size
-		CHAR_WIDTH = (float) SCREEN_WIDTH / TERM_WIDTH;     
-		CHAR_HEIGHT = (float) SCREEN_HEIGHT / TERM_HEIGHT;
+		CHAR_WIDTH = (float) w / TERM_WIDTH;     
+		CHAR_HEIGHT = (float) h / TERM_HEIGHT;
 		
 		defaultPaint.setTextSize(CHAR_HEIGHT);
 		defaultPaint.setTextScaleX(CHAR_WIDTH*2/CHAR_HEIGHT);
+		
 		// Because canvas.drawText() use baseline to position
 		// Calculate the distance between baseline and top line for convenience
+		// I think we have to make a private method for decent measure? 
 		Rect bound = new Rect();
 		defaultPaint.getTextBounds("龜", 0, 1,bound); // I know this is dirty, anyone have a better solution?
 		CHAR_POS_FIX = CHAR_HEIGHT - bound.bottom;		
+		
+		Paint specialPaint = new Paint(defaultPaint);
+		specialPaint.setTypeface(specialTypeface);
+		specialPaint.getTextBounds("▇", 0, 1,bound);
+		specialDecent = CHAR_HEIGHT - bound.bottom;			
 		
 		// Draw
 		fullRedraw = true;
@@ -191,7 +203,7 @@ public class TerminalView extends View implements VDUDisplay {
 		paint.setTextSize(CHAR_HEIGHT*ratioY);
 		paint.setTextScaleX(paint.getTextScaleX()*ratioY/ratioX);
 
-		renderText(magedCanvas,new Rect(0,0,magedCanvas.getWidth(),magedCanvas.getHeight()),paint,renderRegion.top,renderRegion.left);
+		renderText(magedCanvas,new RectF(0,0,magedCanvas.getWidth(),magedCanvas.getHeight()),paint,renderRegion.top,renderRegion.left);
 		c.clipRect(drawArea);
 		c.drawBitmap(magBitmap, 
 				drawArea.left - (focus.left - renderRegion.left * CHAR_WIDTH)*ratioX ,
@@ -199,23 +211,31 @@ public class TerminalView extends View implements VDUDisplay {
 				, new Paint());
 	}
 	
-	public void renderText(Canvas canvas,Rect drawArea,Paint paint,int row, int col){
-		/////////////////////////////
-		Paint testPaint = new Paint();
-		testPaint.setColor(Color.WHITE);
-		testPaint.setStrokeWidth(1);
-		/////////////////////////////	
+	public void renderText(Canvas canvas,int row){
+		RectF r = new RectF(0,row*CHAR_HEIGHT,CHAR_WIDTH * TERM_WIDTH,(row+1)*CHAR_HEIGHT);
+		renderText(canvas,r,null,row,0);
+	}
+	
+	public void renderText(Canvas canvas,RectF drawArea,Paint paint,int row, int col){
 		
 		canvas.clipRect(drawArea,Op.REPLACE);
-		float charWidth = paint.getTextSize() / 2 * paint.getTextScaleX();
-		float charHeight = paint.getTextSize();
 		
-
+		float decent = CHAR_POS_FIX, sp_decent = specialDecent, charWidth = CHAR_WIDTH, charHeight = CHAR_HEIGHT;
+		if(paint == null){
+			paint = defaultPaint;				
+		}else{
+			charWidth = paint.getTextSize() / 2 * paint.getTextScaleX();
+			charHeight = paint.getTextSize();
+			Rect bound = new Rect();
+			paint.getTextBounds("龜", 0, 1,bound); 
+			decent = charHeight - bound.bottom;
+			
+			Paint sPaint = new Paint(paint);
+			sPaint.setTypeface(specialTypeface);
+			sPaint.getTextBounds("▇", 0, 1,bound); 
+			sp_decent = charHeight - bound.bottom;
+		}	
 		
-		Rect bound = new Rect();
-		paint.getTextBounds("龜", 0, 1,bound); // I know this is dirty, anyone have a better solution?
-		float decent_fix = charHeight - bound.bottom;
-				
 		int toRow = row + (int)Math.ceil(drawArea.height()/charHeight);
 		int toCol = col + (int)Math.ceil(drawArea.width()/charWidth);
 		if(toRow >= buffer.getRows())
@@ -268,13 +288,28 @@ public class TerminalView extends View implements VDUDisplay {
 				
 				// Since Android's MONOFACE is not really MONOFACE..... We have to postion by our self
 				int colCount = 0;
+				char ch;
+				Paint chPaint = paint,specialPaint = new Paint(paint);
+				specialPaint.setTypeface(specialTypeface);
+				float chDecent = decent;
 				for(int pos = 0; pos < string.length(); pos++){
-					char ch = string.charAt(pos);
+					ch = string.charAt(pos);
+					chPaint = paint;
+					chDecent = decent;
+					if( colCount+1 < ptr && ((chars[colCount] == 0xA1 && chars[colCount+1] >= 0x41) || 
+						(chars[colCount] == 0xA2 && (
+							  chars[colCount+1] < 0x49 ||
+							 (chars[colCount+1] > 0x62 && chars[colCount+1]< 0xAE))))){
+						chPaint = specialPaint;
+						chDecent = sp_decent;
+					}
+					
+					
 					canvas.drawText(
 						String.valueOf(ch),
 						localRect.left + colCount*charWidth,
-						localRect.top+decent_fix,
-						paint);					
+						localRect.top+chDecent,
+						chPaint);					
 					if(ch > 128)
 						colCount++;
 					colCount++;					
@@ -284,10 +319,10 @@ public class TerminalView extends View implements VDUDisplay {
 					localRect.left = localRect.right - charWidth; 
 					color = getColor( buffer.charAttributes[buffer.windowBase + r][c+ptr-1]);
 					canvas.clipRect(localRect, Op.REPLACE);
-					paint.setColor(color[1]);
-					canvas.drawRect(localRect, paint);
-					paint.setColor(color[0]);
-					canvas.drawText(String.valueOf(string.charAt(string.length()-1)) , localRect.left-charWidth, localRect.top+decent_fix, paint);
+					chPaint.setColor(color[1]);
+					canvas.drawRect(localRect, chPaint);
+					chPaint.setColor(color[0]);
+					canvas.drawText(String.valueOf(string.charAt(string.length()-1)) , localRect.left-charWidth, localRect.top+chDecent, chPaint);
 				}
 				
 				
@@ -296,14 +331,13 @@ public class TerminalView extends View implements VDUDisplay {
 				
 				localRect.left = localRect.right;				
 			}					
-		}
-
-		
+		}		
 	}
 	
 	
 	@Override
 	public void onDraw(Canvas viewCanvas) {
+		
 		Log.v(TAG,"onDraw()");
 		// draw
 		if (this.bitmap == null)
@@ -319,133 +353,45 @@ public class TerminalView extends View implements VDUDisplay {
 
 			// reset dirty flag for this line
 			buffer.update[l + 1] = false;
-
+			
+			// redraw
+			renderText(canvas,l);
+			
 			// reset urls for this line
 			if (urls != null)
 				urls[l] = new ArrayList<Url>();
 			
-			// walk through all characters in this line
-			for (int c = 0; c < buffer.width; c++) {
-				int addr = 0;
-				int currAttr = buffer.charAttributes[buffer.windowBase + l][c];
-
-				int color[] = getColor(currAttr);
+			// look for url
+			int pos = 0, addr;
+			String current = String.valueOf(buffer.charArray[buffer.windowBase + l]);
+			while( (pos = current.indexOf("://",pos)) != -1){
+				// substring's returns a string contains [start,end-1]    
+				if(pos >= 4 && current.substring(pos-4, pos).equalsIgnoreCase("http"))
+					addr = 4;
+				else if(pos >= 5 && current.substring(pos-5, pos).equalsIgnoreCase("https"))
+					addr = 5;
+				else
+					break;
 				
-				boolean stateHigh = false; //albb0920: record DBCS state
-				// find whole string with sane colors
-				while (c + addr < buffer.width
-						&& buffer.charAttributes[buffer.windowBase + l][c
-								+ addr] == currAttr) {
-					if(!stateHigh && buffer.getChar(c + addr, l) >= 128)   //getChar actually returns a byte, so just treat it as byte
-							stateHigh = true;
-					else
-						stateHigh = false;
-					if (buffer.getChar(c + addr, l) == '/') {  // Detect url
-						String current = String.valueOf(
-								buffer.charArray[buffer.windowBase + l], c, addr + 1);
-						if (current.startsWith("http://") ||
-								current.startsWith("https://")) {  // We have entered url
-							while (c + addr < buffer.width) {  // Read in rest of url
-								char url_char = buffer.getChar(c + addr, l);
-								if (Character.isLetterOrDigit(url_char)) {
-									addr++;
-								} else if ("./@?&=-_;%#!~".contains(Character.toString(url_char))) {
-									addr++;
-								} else {
-									break;
-								}
-							}
-							defaultPaint.setUnderlineText(true);  // Underline the url
-							
-							current = String.valueOf(
-									buffer.charArray[buffer.windowBase + l], c, addr); 
-									Url url = new Url(c, c+addr, l, current);
-									urls[l].add(url);
-									break;
-						} else if (current.endsWith("http://")) {
-							// Reached a url at end of read buffer. Leave the chars in buffer
-							// and handle them next time we get around.
-							addr -= "http://".length() - 1;
-							break;
-						} else if (current.endsWith("https://")) {
-							addr -= "https://".length() - 1;
-							break;
-						}
-					}
+				pos -= addr;
+				addr += 3;
+				Log.v(TAG,"URL START AT"+pos);
+				while(pos+addr+1<current.length()){
+					char thisChar = current.charAt(pos+addr+1);				
+					if(!Character.isLetterOrDigit(thisChar) &&  
+						! "./@?&=-_;%#!~".contains(Character.toString(thisChar)) )
+						break;
 					addr++;
 				}
-				//albb0920.100615: We must include the full DBCS Char
-				if(c + addr < buffer.width && stateHigh == true)
-					addr++;
-
-				// clear this dirty area with background color
-				defaultPaint.setColor(color[1]);
 				
-				/* TODO: We should replace float rects with int ones to get better render
-				canvas.drawRect(new Rect((int)(c * CHAR_WIDTH),(int)( l * CHAR_HEIGHT),
-						(int)((c + addr) * CHAR_WIDTH),(int)( (l + 1) * CHAR_HEIGHT)), defaultPaint);
-				*/								
-				canvas.drawRect(c * CHAR_WIDTH,(int) l * CHAR_HEIGHT,
-						(c + addr) * CHAR_WIDTH, (l + 1) * CHAR_HEIGHT,
-						defaultPaint);
-				
-				// write the text string starting at 'c' for 'addr' number of
-				// characters
-
-					defaultPaint.setColor(color[0]);
-
-					char[] chars = new char[addr];
-					System.arraycopy(buffer.charArray[buffer.windowBase + l],
-							c, chars, 0, addr);
-
-					String encoding = "Big5";
-					if (host != null)
-						encoding = host.getEncoding();
-					String string = ChineseUtils.decode(chars, encoding,this.getResources());
-					
-					if(string.length()==0){ // Conversion failed
-						c += addr - 1;
-						continue;
-					}
-					
-					int asciiCharCount = 0;
-					for (int i = 0; i < string.length(); i++) {
-						char _c = string.charAt(i);
-
-						canvas.drawText(String.valueOf(_c),
-								(c + asciiCharCount) * CHAR_WIDTH,
-								l * CHAR_HEIGHT + CHAR_POS_FIX, defaultPaint);
-						if ((int) _c < 128)
-							asciiCharCount++;
-						else
-							asciiCharCount = asciiCharCount + 2;
-					}
-					//albb0920.100617: Check if is dual color char, must be in last char
-
-					int lastColor[] = getColor(buffer.charAttributes[buffer.windowBase + l][c+addr-1]);
-					if(!Arrays.equals(color,lastColor)){ 
-						defaultPaint.setColor(lastColor[1]);
-						RectF halfChar = new RectF((c+asciiCharCount-1)*CHAR_WIDTH, 
-								l * CHAR_HEIGHT -1 ,
-								(c+asciiCharCount)*CHAR_WIDTH, (l + 1) * CHAR_HEIGHT);
-						canvas.drawRect(halfChar, defaultPaint);
-						canvas.clipRect(halfChar,Op.REPLACE);
-						defaultPaint.setColor(lastColor[0]);
-						canvas.drawText(String.valueOf(string.charAt(string.length()-1)),
-								(c + asciiCharCount-2) * CHAR_WIDTH,
-								l * CHAR_HEIGHT + CHAR_POS_FIX , defaultPaint);
-
-						canvas.clipRect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,Op.REPLACE);
-					}
-						
-				
-
-				// advance to the next text block with different
-				// characteristics
-				c += addr - 1;
+				String url = current.substring(pos,pos+addr+1);
+				Log.v(TAG,"URL is:"+url);
+				urls[l].add(new Url(pos,pos+addr,l,url));
+				defaultPaint.setColor(Color.BLUE);
+				canvas.drawLine(pos*CHAR_WIDTH, (l+1)*CHAR_HEIGHT -1, (pos+addr+1)*CHAR_WIDTH, (l+1)*CHAR_HEIGHT-1, defaultPaint);
+				pos+=addr+1;
 			}
 		}
-
 		// reset entire-buffer flags
 		buffer.update[0] = false;
 		fullRedraw = false;		
