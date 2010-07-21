@@ -478,7 +478,7 @@ public class TerminalView extends View implements VDUDisplay {
 
 		// draw cursor
 		if (this.buffer.isCursorVisible()) {
-			cursorPaint.setColor(color[DEFAULT_FG_COLOR]);
+			cursorPaint.setColor(Color.argb(128, 0, 255, 0));
 			viewCanvas.drawRect(cursorX, cursorY+scroll, cursorX + CHAR_WIDTH, cursorY + CHAR_HEIGHT + scroll, cursorPaint);						
 		}
 	}
