@@ -264,14 +264,17 @@ public class TerminalView extends View implements VDUDisplay {
 				int ptr = 0;
 				int currAttr = buffer.charAttributes[buffer.windowBase + r][c];
 				
+				// ptr is the "length" of same attr char
+				
 				while(c+ptr <= toCol && currAttr == buffer.charAttributes[buffer.windowBase + r][c+ptr]){					
 					stateHigh = (!stateHigh && buffer.getChar(c+ptr, r) >= 128);
 					ptr++;
 				}
-				if(stateHigh){
+				if(stateHigh && c+ptr+1 < TERM_WIDTH - 1){ 
 					ptr++;
 					stateHigh = false;
-				}			
+				}		
+
 				int color[] = getColor(currAttr);
 				
 				paint.setColor(color[1]);
@@ -288,29 +291,32 @@ public class TerminalView extends View implements VDUDisplay {
 				
 				// Since Android's MONOFACE is not really MONOFACE..... We have to postion by our self
 				int colCount = 0;
-				char ch;
-				Paint chPaint = paint,specialPaint = new Paint(paint);
-				specialPaint.setTypeface(specialTypeface);
+				String ch = null;
+				//Paint chPaint = paint,specialPaint = new Paint(paint);
+				//specialPaint.setTypeface(specialTypeface);
 				float chDecent = decent;
 				for(int pos = 0; pos < string.length(); pos++){
-					ch = string.charAt(pos);
-					chPaint = paint;
+					ch = string.substring(pos, pos+1);
+					//ch = string.charAt(pos);
+					//chPaint = paint;
 					chDecent = decent;
 					if( colCount+1 < ptr && ((chars[colCount] == 0xA1 && chars[colCount+1] >= 0x41) || 
 						(chars[colCount] == 0xA2 && (
 							  chars[colCount+1] < 0x49 ||
 							 (chars[colCount+1] > 0x62 && chars[colCount+1]< 0xAE))))){
-						chPaint = specialPaint;
+						paint.setTypeface(specialTypeface);
 						chDecent = sp_decent;
+					}else{
+						paint.setTypeface(Typeface.MONOSPACE);
 					}
 					
 					
 					canvas.drawText(
-						String.valueOf(ch),
+						ch,
 						localRect.left + colCount*charWidth,
 						localRect.top+chDecent,
-						chPaint);					
-					if(ch > 128)
+						paint);					
+					if(ch.charAt(0) > 128)
 						colCount++;
 					colCount++;					
 				}
@@ -319,10 +325,10 @@ public class TerminalView extends View implements VDUDisplay {
 					localRect.left = localRect.right - charWidth; 
 					color = getColor( buffer.charAttributes[buffer.windowBase + r][c+ptr-1]);
 					canvas.clipRect(localRect, Op.REPLACE);
-					chPaint.setColor(color[1]);
-					canvas.drawRect(localRect, chPaint);
-					chPaint.setColor(color[0]);
-					canvas.drawText(String.valueOf(string.charAt(string.length()-1)) , localRect.left-charWidth, localRect.top+chDecent, chPaint);
+					paint.setColor(color[1]);
+					canvas.drawRect(localRect, paint);
+					paint.setColor(color[0]);
+					canvas.drawText(ch , localRect.left-charWidth, localRect.top+chDecent, paint);
 				}
 				
 				

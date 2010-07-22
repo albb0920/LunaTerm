@@ -58,7 +58,8 @@ public class ChineseUtils {
 	}
 	
 	public static String decode(char[] cl, String encoding,Resources res){
-		String s = "";
+		
+		StringBuffer buf = new StringBuffer();
 		if(!encoding.equalsIgnoreCase("big5"))
 			return decode( cl,  encoding);
 		/* UAO Patch
@@ -70,17 +71,17 @@ public class ChineseUtils {
 				loadUAO(res);
 			for (int i = 0; i < cl.length; i++) {
 				if(cl[i] >= 0x81 && cl[i] <= 0xfe 
-					&& i < cl.length -1 && cl[i+1] >= 0x40 && cl[i+1] <= 0xfe ){ // Big5 Range
-						s += big5_to_ucs[(cl[i]<<8|cl[i+1])-Big5TPAD];
+					&& i < cl.length -1 && cl[i+1] >= 0x40 && cl[i+1] <= 0xfe ){ // Big5 Range						
+						buf.append(big5_to_ucs[(cl[i]<<8|cl[i+1])-Big5TPAD]);
 						i++;
 					}
 				else
-					s += cl[i];
+					buf.append(cl[i]);
 			}
 		}catch(Exception e){
 			return decode( cl,  encoding); //Give up UAO
 		}
-		return s;
+		return buf.toString();
 	}
 
 
@@ -101,12 +102,6 @@ public class ChineseUtils {
 		try {
 			s = new String(b, encoding);
 		} catch (UnsupportedEncodingException e) {
-		}
-		/* check for UAO Characters....  super ugly way */
-		s.getChars(0, s.length()-1, cm, 0);
-		for(int i=0;i<cm.length ;i++){
-			
-			
 		}
 		
 		return s;
