@@ -1,7 +1,6 @@
-package com.roiding.rterm;
+package tw.loli.lunaTerm;
 
-import tw.loli.lunaTerm.TerminalActivity;
-import tw.loli.lunaTerm.TerminalView;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

@@ -41,8 +41,6 @@ import android.widget.Toast;
 import android.widget.FrameLayout;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.roiding.rterm.GestureView;
-import com.roiding.rterm.OnGestureListener;
 import com.roiding.rterm.bean.FunctionButton;
 import com.roiding.rterm.bean.Host;
 import com.roiding.rterm.util.Constants;

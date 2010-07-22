@@ -33,6 +33,8 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView.OnEditorActionListener;
 
+import com.roiding.rterm.EditHostActivity;
+import com.roiding.rterm.SettingsActivity;
 import com.roiding.rterm.bean.FunctionButton;
 import com.roiding.rterm.bean.Host;
 import com.roiding.rterm.util.Constants;

@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.SimpleAdapter;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.roiding.rterm.EditFunctionButtonActivity;
 import com.roiding.rterm.bean.FunctionButton;
 import com.roiding.rterm.util.DBUtils;
 

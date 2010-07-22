@@ -12,10 +12,10 @@
 		<activity android:name=".TerminalActivity"
 			android:screenOrientation="landscape" android:configChanges="keyboardHidden|orientation"
 			android:windowSoftInputMode="stateVisible|adjustPan" />
-		<activity android:name=".EditHostActivity" />
-		<activity android:name=".SettingsActivity" />
+		<activity android:name="com.roiding.rterm.EditHostActivity" />
+		<activity android:name="com.roiding.rterm.SettingsActivity" />
 		<activity android:name=".FunctionButtonActivity" />
-		<activity android:name=".EditFunctionButtonActivity" />
+		<activity android:name="com.roiding.rterm.EditFunctionButtonActivity" />
 		<activity android:name=".HelpActivity" android:label="@string/addressbook_help" />
 	</application>
 	

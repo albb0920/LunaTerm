@@ -1,5 +1,8 @@
-package tw.loli.lunaTerm;
+package com.roiding.rterm;
 
+import tw.loli.lunaTerm.FunctionButtonActivity;
+import tw.loli.lunaTerm.R;
+import tw.loli.lunaTerm.R.xml;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;

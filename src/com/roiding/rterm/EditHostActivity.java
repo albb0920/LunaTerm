@@ -1,7 +1,11 @@
-package tw.loli.lunaTerm;
+package com.roiding.rterm;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import tw.loli.lunaTerm.R;
+import tw.loli.lunaTerm.R.string;
+import tw.loli.lunaTerm.R.xml;
 
 import android.os.Bundle;
 import android.preference.EditTextPreference;
