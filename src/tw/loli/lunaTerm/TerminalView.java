@@ -6,13 +6,11 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -23,7 +21,7 @@ import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyCharacterMap;
-import android.view.KeyEvent;	
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.BaseInputConnection;
@@ -215,8 +213,18 @@ public class TerminalView extends View implements VDUDisplay {
 		RectF r = new RectF(0,row*CHAR_HEIGHT,CHAR_WIDTH * TERM_WIDTH,(row+1)*CHAR_HEIGHT);
 		renderText(canvas,r,null,row,0);
 	}
+		
+	private static int round(float x) {
+		/* I got this from com.android.internal.util.FastMath. */
+		/* I don't think it well make us any faster, but can help us type less code */
+        long lx = (long)(x * (65536 * 256f));
+        return (int)((lx + 0x800000) >> 24);
+	}
 	
 	public void renderText(Canvas canvas,RectF drawArea,Paint paint,int row, int col){
+		// We round floats ourself because the direct use RectF to paint cause dirty lines.		
+		// TODO: The better approach: mix the color if a pixel is shared.
+		// TODO: Draw rect chars our self.
 		
 		canvas.clipRect(drawArea,Op.REPLACE);
 		
@@ -279,7 +287,12 @@ public class TerminalView extends View implements VDUDisplay {
 				
 				paint.setColor(color[1]);
 				localRect.right = localRect.left + ptr*charWidth;
-				canvas.drawRect(localRect,paint);
+
+				canvas.drawRect(round(localRect.left),
+								round(localRect.top),
+								round(localRect.right),
+								round(localRect.bottom),						
+								paint);
 
 				char[] chars = new char[ptr];
 				System.arraycopy(buffer.charArray[buffer.windowBase + r],
@@ -292,13 +305,9 @@ public class TerminalView extends View implements VDUDisplay {
 				// Since Android's MONOFACE is not really MONOFACE..... We have to postion by our self
 				int colCount = 0;
 				String ch = null;
-				//Paint chPaint = paint,specialPaint = new Paint(paint);
-				//specialPaint.setTypeface(specialTypeface);
 				float chDecent = decent;
 				for(int pos = 0; pos < string.length(); pos++){
 					ch = string.substring(pos, pos+1);
-					//ch = string.charAt(pos);
-					//chPaint = paint;
 					chDecent = decent;
 					if( colCount+1 < ptr && ((chars[colCount] == 0xA1 && chars[colCount+1] >= 0x41) || 
 						(chars[colCount] == 0xA2 && (
@@ -309,7 +318,7 @@ public class TerminalView extends View implements VDUDisplay {
 					}else{
 						paint.setTypeface(Typeface.MONOSPACE);
 					}
-					
+						
 					
 					canvas.drawText(
 						ch,
@@ -326,7 +335,11 @@ public class TerminalView extends View implements VDUDisplay {
 					color = getColor( buffer.charAttributes[buffer.windowBase + r][c+ptr-1]);
 					canvas.clipRect(localRect, Op.REPLACE);
 					paint.setColor(color[1]);
-					canvas.drawRect(localRect, paint);
+					canvas.drawRect(round(localRect.left),
+							round(localRect.top),
+							round(localRect.right),
+							round(localRect.bottom),						
+							paint);
 					paint.setColor(color[0]);
 					canvas.drawText(ch , localRect.left-charWidth, localRect.top+chDecent, paint);
 				}
@@ -415,14 +428,13 @@ public class TerminalView extends View implements VDUDisplay {
 
 			int viewPos[] = new int[2];
 			getLocationOnScreen(viewPos);
-			Log.v(TAG,"On Screen Pos"+viewPos);
+			//Log.v(TAG,"On Screen Pos: "+viewPos[0]+","+viewPos[1]);
 			if(cursorY+viewPos[1]<0){ // ime is up and we were blocked.
 				
 				scroll = -1 * (cursorY+viewPos[1]) + (SCREEN_HEIGHT + viewPos[1] - CHAR_HEIGHT)/2;
 				if(scroll > -1 *viewPos[1])
 					scroll = -1 *viewPos[1];
-				
-				//scroll = -1 * (cursorY+viewPos[1]);
+
 				Log.v(TAG,"SCROLL FIX"+scroll);
 			}						
 				
