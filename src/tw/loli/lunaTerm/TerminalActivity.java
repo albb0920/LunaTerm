@@ -214,9 +214,6 @@ public class TerminalActivity extends Activity {
 				String k = functionBtnList.get(position).getKeys();
 				String v = functionBtnList.get(position).getName();
 
-				Toast.makeText(TerminalActivity.this, v, Toast.LENGTH_SHORT)
-						.show();
-
 				boolean controlPressed = false;
 				for (char c : k.toCharArray()) {
 					if (c == '^') {
