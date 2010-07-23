@@ -491,7 +491,7 @@ public class TerminalActivity extends Activity {
 		}
 
 		if (functionKeyGallery.getVisibility() == View.VISIBLE)
-			functionKeyGallery.setVisibility(View.INVISIBLE);
+			functionKeyGallery.setVisibility(View.GONE);
 		else
 			functionKeyGallery.setVisibility(View.VISIBLE);
 	}
