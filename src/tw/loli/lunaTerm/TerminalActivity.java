@@ -100,7 +100,12 @@ public class TerminalActivity extends Activity {
 		if (!pref.getBoolean(Constants.SETTINGS_SHOW_STATUSBAR, false))
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 					WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+		
+		// Build option flags
+		TerminalView.TermViewOption |= ((pref.getBoolean("settings_enable_magnifier", true))? TerminalView.FLAG_NO_MAGNIFIER:0) | 
+				((pref.getBoolean("settings_longpress_activate", false))? TerminalView.FLLAG_LONG_PRESS_ACTIVATE:0) |
+				((pref.getBoolean("settings_auto_extractui", false))? TerminalView.FLAG_SHOW_EXTRACT_UI:0);		
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.act_terminal);
 		terminalFrame = (FrameLayout) findViewById(R.id.terminalFrame);		
@@ -155,30 +160,7 @@ public class TerminalActivity extends Activity {
 					pressKey(new byte[] { 27, '[','4','~'});					
 				} else if (gesture.equals("R,D,R") || gesture.equals("R,L,R")) {
 					// input helper
-					LayoutInflater factory = LayoutInflater
-							.from(TerminalActivity.this);
-					final View textEntryView = factory.inflate(
-							R.layout.act_input_helper, null);
-					new AlertDialog.Builder(TerminalActivity.this).setTitle(
-							R.string.terminal_inputhelper).setView(
-							textEntryView).setPositiveButton(R.string.ok,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int whichButton) {
-									String text = ((EditText) textEntryView
-											.findViewById(R.id.text)).getText()
-											.toString();
-									if (text != null && text.length() > 0)
-										pressKey(text);
-
-								}
-							}).setNegativeButton(R.string.cancel,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int whichButton) {
-								}
-							}).create().show();
-
+					showInputHelper();
 				}
 			}
 
@@ -314,6 +296,25 @@ public class TerminalActivity extends Activity {
 		return TerminalManager.getInstance().getView(currentViewId);
 	}
 	
+	public void showInputHelper(){
+		LayoutInflater factory = LayoutInflater.from(TerminalActivity.this);
+		final View textEntryView = factory.inflate(R.layout.act_input_helper, null);
+		new AlertDialog.Builder(TerminalActivity.this)
+			.setTitle(R.string.terminal_inputhelper)
+			.setView(textEntryView).setPositiveButton(R.string.ok,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int whichButton) {
+							String text = ((EditText) textEntryView.findViewById(R.id.text)).getText().toString();
+						if (text != null && text.length() > 0)
+							pressKey(text);
+						}})
+			.setNegativeButton(R.string.cancel,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int whichButton) {
+						}
+			}).create().show();
+	}
+	
 	public boolean showUrlDialog(String url) {
 
 		AlertDialog.Builder alert = new AlertDialog.Builder(
@@ -329,19 +330,6 @@ public class TerminalActivity extends Activity {
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				String value = input.getText().toString();
-
-//				TerminalView view = TerminalManager.getInstance().getView(
-//						currentViewId);
-//
-//				if (view != null) {
-//					try {
-//						view.connection.send(value.getBytes(view.host
-//								.getEncoding()));
-//
-//					} catch (Exception e) {
-//					}
-//
-//				}
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(value)));
 			}
 		});

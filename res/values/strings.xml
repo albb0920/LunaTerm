@@ -77,12 +77,21 @@
 	</string>
 	<string name="settings_show_statusbar">Show statusbar</string>
 	<string name="settings_show_statusbar_summary">Show statusbar on Terminal mode</string>
+	<string name="setting_cate_input_assist">Input Assistant</string>
 	<string name="settings_function_button">Function Buttons</string>
 	<string name="settings_function_button_summary">Function Buttons</string>
+	<string name="settings_auto_extractui">Auto show up extract input UI</string>
+	<string name="settings_auto_extractui_summary">(experimental) If you have difficulty showing character picker in your IME, this option is useless for western user.</string>
+	
 	
 	<string name="gesture">Gesture</string>
 	<string name="title_openurl">"Open url in browser"</string>
+	
 
-
+<string name="setting_cate_magnifier">Magnifier</string>
+<string name="settings_enable_magnifier">Enable Magnifier</string>
+<string name="setting_magnifier_option">Magnifier Options</string>
+<string name="settings_longpress_activate">Only activate during long press</string>
+<string name="settings_longpress_activate_summary">If enabled, magnifier will only be activate duing long press.</string>
 </resources>
 

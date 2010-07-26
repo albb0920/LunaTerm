@@ -16,6 +16,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.Bitmap.Config;
 import android.graphics.Region.Op;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.InputType;
 import android.util.AttributeSet;
@@ -25,6 +26,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.BaseInputConnection;
+import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
@@ -53,6 +55,23 @@ public class TerminalView extends View implements VDUDisplay {
 	
 	private int SCREEN_WIDTH;   
 	private int SCREEN_HEIGHT;	
+	
+	public static int TermViewOption = 0;
+	
+	/**
+	 * Disable magnifier.
+	 */	
+	public static final int FLAG_NO_MAGNIFIER = 0x1;
+	
+	/**
+	 * Make long press active magnifier rather than switch it on/off
+	 */
+	public static final int FLLAG_LONG_PRESS_ACTIVATE = 0x2;
+	
+	/**
+	 * Show extract input UI when user is trying to type non ASCII chars.
+	 */
+	public static final int FLAG_SHOW_EXTRACT_UI = 0x4; 
 	
 	
 	private static final int SCROLLBACK = 0;	
@@ -456,7 +475,7 @@ public class TerminalView extends View implements VDUDisplay {
 	@Override
 	public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
 		outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI;
-		outAttrs.inputType = InputType.TYPE_CLASS_TEXT; //albb0920.100706: Without this, HTC_CIME's Chewing KB refuse to work
+		outAttrs.inputType = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS; //albb0920.100706: Without this, HTC_CIME's Chewing KB refuse to work
 		InputConnection ic = new TermInputConnection(this);
 		return ic;
 	}
@@ -485,7 +504,14 @@ public class TerminalView extends View implements VDUDisplay {
 			}
 			return false;
 		}
-
+		public boolean  setComposingText  (CharSequence text, int newCursorPosition){
+			Log.v(TAG,"setComposingText: "+text);
+			if((TermViewOption & FLAG_SHOW_EXTRACT_UI) !=0 && text.length()>0 && text.charAt(0)>128){
+				terminalActivity.showInputHelper();
+				return false;
+			}
+			return super.setComposingText(text, newCursorPosition);
+		}
 	}
 
 	/**

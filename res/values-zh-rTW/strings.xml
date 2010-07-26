@@ -66,17 +66,24 @@
 	<string name="terminal_connectclose">連線已經斷開</string>
 	<string name="terminal_error_unknownhost">找不到站台“%s”，請檢查網路是否正常，或者站台地址是否拼寫錯誤</string>
 	<string name="terminal_error_connect">無法連接到站台“%s”，請檢查網路是否正常，或者或站台目前無法連接</string>
-	<string name="terminal_inputhelper">文本輸入助手</string>
+	<string name="terminal_inputhelper">字串輸入</string>
 
 	<string name="settings_language">語言</string>
 	<string name="settings_language_summary">設定語言，下次啓動時生效</string>
 	<string name="settings_show_statusbar">顯示狀態欄</string>
 	<string name="settings_show_statusbar_summary">設定在Term狀態下是否顯示狀態欄</string>
+	
+	<string name="setting_cate_input_assist">輸入輔助</string>
 	<string name="settings_function_button">功能按鈕</string>
 	<string name="settings_function_button_summary">為了便於操作，可以將一些常用的操作定義為功能按鈕，例如：發表文章等</string>
-    
-	
+    <string name="settings_auto_extractui">嘗試繞過無法選字問題</string>
+	<string name="settings_auto_extractui_summary">(實驗性質) 如果您的輸入法在輸入時無法選字，這個選項也許可以幫助您，如果沒問題的話請不要使用</string>
 
 	<string name="gesture">手勢</string> 
 	<string name="title_openurl">"用瀏覽器開啟連結"</string>
+<string name="setting_cate_magnifier">放大鏡</string>
+<string name="settings_enable_magnifier">啟用放大鏡</string>
+<string name="setting_magnifier_option">放大鏡選項</string>
+<string name="settings_longpress_activate">只在長壓時啟動</string>
+<string name="settings_longpress_activate_summary">啟用這個選項時，放大鏡只會在長壓時顯示，放開即解除</string>
 </resources>

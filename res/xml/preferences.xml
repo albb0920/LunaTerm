@@ -10,9 +10,25 @@
 	<CheckBoxPreference android:key="settings_show_statusbar"
 		android:title="@string/settings_show_statusbar" android:summary="@string/settings_show_statusbar_summary"
 		android:defaultValue="false" />
-		
-	<PreferenceScreen android:key="settings_function_button"
-		android:title="@string/settings_function_button" android:summary="@string/settings_function_button_summary">
-	</PreferenceScreen>
+	
 
+	<PreferenceCategory android:title="@string/setting_cate_input_assist">
+		<PreferenceScreen android:key="settings_function_button"
+		android:title="@string/settings_function_button" android:summary="@string/settings_function_button_summary">
+		</PreferenceScreen>
+		<CheckBoxPreference android:key="settings_auto_extractui"
+		android:title="@string/settings_auto_extractui" android:summary="@string/settings_auto_extractui_summary"
+		android:defaultValue="false" />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/setting_cate_magnifier">
+			<CheckBoxPreference android:key="settings_enable_magnifier"
+			android:title="@string/settings_enable_magnifier"
+			android:defaultValue="true" />
+			<PreferenceScreen android:title="@string/setting_magnifier_option">
+				<CheckBoxPreference android:key="settings_longpress_activate"
+				android:title="@string/settings_longpress_activate"
+				android:summary="@string/settings_longpress_activate_summary"
+				android:defaultValue="false" />
+			</PreferenceScreen>
+	</PreferenceCategory>
 </PreferenceScreen>
