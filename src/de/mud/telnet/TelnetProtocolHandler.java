@@ -233,14 +233,20 @@ public abstract class TelnetProtocolHandler {
     switch (type) {
     case TELOPT_TTYPE:
       if (sbdata.length>0 && sbdata[0]==TELQUAL_SEND) {
-        write(IACSB);write(TELOPT_TTYPE);write(TELQUAL_IS);
+    	break;
+    	// FIXME: albb0920: 
+    	//For some reason, maple3-itoc BBSs misunderstood our reply
+    	// I think is because we replied too slow, since their implement simpilly ignores reply
+    	// No BBS really care our terminal type anyway.. , before we can fix this, do nothing
+    	
+        //write(IACSB);write(TELOPT_TTYPE);write(TELQUAL_IS);
         /* FIXME: need more logic here if we use 
          * more than one terminal type
          */
-        String ttype = getTerminalType();
-        if(ttype == null) ttype = "dumb";
-        write(ttype.getBytes());
-        write(IACSE);
+        //String ttype = getTerminalType();
+        //if(ttype == null) ttype = "dumb";
+        //write(ttype.getBytes());
+        //write(IACSE);
       }
 
     }
