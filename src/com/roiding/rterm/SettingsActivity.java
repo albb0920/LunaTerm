@@ -2,7 +2,6 @@ package com.roiding.rterm;
 
 import tw.loli.lunaTerm.FunctionButtonActivity;
 import tw.loli.lunaTerm.R;
-import tw.loli.lunaTerm.R.xml;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -25,16 +24,10 @@ public class SettingsActivity extends PreferenceActivity {
 			addPreferencesFromResource(R.xml.preferences);
 		}
 
-		for (int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++) {
-			Preference p = getPreferenceScreen().getPreference(i);
-
-			if (p.getKey().equals("settings_function_button")) {
-				PreferenceScreen ps = (PreferenceScreen) p;
-				Intent intent = new Intent();
-				intent.setClass(this, FunctionButtonActivity.class);
-				ps.setIntent(intent);
-			}
-		}
+		PreferenceScreen ps = (PreferenceScreen) getPreferenceScreen().findPreference("settings_function_button");
+		Intent intent = new Intent();
+		intent.setClass(this, FunctionButtonActivity.class);
+		ps.setIntent(intent);
 
 	}
 }
