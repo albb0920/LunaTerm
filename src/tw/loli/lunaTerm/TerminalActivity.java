@@ -32,14 +32,17 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Gallery;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.FrameLayout;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.roiding.rterm.bean.FunctionButton;
 import com.roiding.rterm.bean.Host;
@@ -299,20 +302,39 @@ public class TerminalActivity extends Activity {
 	public void showInputHelper(){
 		LayoutInflater factory = LayoutInflater.from(TerminalActivity.this);
 		final View textEntryView = factory.inflate(R.layout.act_input_helper, null);
-		new AlertDialog.Builder(TerminalActivity.this)
+		final EditText textEdit = (EditText) textEntryView.findViewById(R.id.text);
+
+		final AlertDialog dialog = new AlertDialog.Builder(TerminalActivity.this)
 			.setTitle(R.string.terminal_inputhelper)
 			.setView(textEntryView).setPositiveButton(R.string.ok,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog,int whichButton) {
-							String text = ((EditText) textEntryView.findViewById(R.id.text)).getText().toString();
-						if (text != null && text.length() > 0)
-							pressKey(text);
-						}})
+							textEdit.onEditorAction(EditorInfo.IME_ACTION_DONE);
+						}
+					})					
 			.setNegativeButton(R.string.cancel,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog,int whichButton) {
 						}
-			}).create().show();
+			}).create();
+		textEdit.setOnEditorActionListener(new OnEditorActionListener(){
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event){
+				if(actionId == EditorInfo.IME_ACTION_DONE){
+					String text = v.getText().toString();
+					if (text != null && text.length() > 0){
+						/* replace \n with return*/
+						/* FIXME: This is ridiculous, use vt320.send()? */
+						text = text.replace('\n', '\r');
+						pressKey(text);				
+						/* dismiss dialog*/
+						dialog.dismiss();
+					}
+					return true;
+				}
+				return false;
+			}
+		});
+		dialog.show();
 	}
 	
 	public boolean showUrlDialog(String url) {

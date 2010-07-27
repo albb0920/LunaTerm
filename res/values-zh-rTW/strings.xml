@@ -76,8 +76,8 @@
 	<string name="setting_cate_input_assist">輸入輔助</string>
 	<string name="settings_function_button">功能按鈕</string>
 	<string name="settings_function_button_summary">為了便於操作，可以將一些常用的操作定義為功能按鈕，例如：發表文章等</string>
-    <string name="settings_auto_extractui">嘗試繞過無法選字問題</string>
-	<string name="settings_auto_extractui_summary">(實驗性質) 如果您的輸入法在輸入時無法選字，這個選項也許可以幫助您，如果沒問題的話請不要使用</string>
+    <string name="settings_auto_extractui">繞過無法選字問題</string>
+	<string name="settings_auto_extractui_summary">(實驗性質) 當您嘗試輸入中文時，自動切換到輸入工具</string>
 
 	<string name="gesture">手勢</string> 
 	<string name="title_openurl">"用瀏覽器開啟連結"</string>
