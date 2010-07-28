@@ -62,7 +62,13 @@
 	<string name="editfunctionbtn_sortnumber">排序數值</string>
 	<string name="editfunctionbtn_sortnumber_summary">用來定義功能按鈕的顯示順序，數值小的顯示在前面</string>
 
-	<string name="terminal_disconnect">強制斷開連線</string>
+	<string name="terminal_tools">工具</string>
+	<string name="terminal_share_snap">分享畫面擷圖</string>
+	<string name="terminal_share_compressing">擷圖壓縮中，請稍候</string>
+	
+	<string name="terminal_share_via">分享擷圖至</string>
+	
+	<string name="terminal_disconnect">強制斷線</string>
 	<string name="terminal_connectclose">連線已經斷開</string>
 	<string name="terminal_error_unknownhost">找不到站台“%s”，請檢查網路是否正常，或者站台地址是否拼寫錯誤</string>
 	<string name="terminal_error_connect">無法連接到站台“%s”，請檢查網路是否正常，或者或站台目前無法連接</string>

@@ -64,6 +64,11 @@
 	<string name="editfunctionbtn_sortnumber_summary">Used to define the display order of buttons,small first
 	</string>
 
+	<string name="terminal_tools">Tools</string>
+	<string name="terminal_share_snap">Share Snapshot</string>
+	<string name="terminal_share_compressing">Compressing...</string>
+	<string name="terminal_share_via">Share via...</string>
+	
 	<string name="terminal_disconnect">Forced disconnect</string>
 	<string name="terminal_connectclose">Connection is closed</string>
 	<string name="terminal_error_unknownhost">"Can't find site “%s”，please check the networking

@@ -1,5 +1,9 @@
 package tw.loli.lunaTerm;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -8,6 +12,8 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,6 +27,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -49,6 +56,7 @@ import com.roiding.rterm.bean.Host;
 import com.roiding.rterm.util.Constants;
 import com.roiding.rterm.util.DBUtils;
 import com.roiding.rterm.util.TerminalManager;
+import android.graphics.Bitmap;
 
 public class TerminalActivity extends Activity {
 
@@ -366,20 +374,54 @@ public class TerminalActivity extends Activity {
 		alert.show();
 		return true;
 	}
-
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()){
+		case R.id.terminal_disconnect:
+			close(null);
+			return true;		
+		case R.id.terminal_share_snap:
+			final TerminalView currentView = TerminalManager.getInstance().getView(currentViewId);
+			if(currentView != null){
+				
+				try{					
+					final Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+					shareIntent.setType("image/png");
+					
+					/* We can't trust Images.Media.insertImage() since it compress all bitmap to 50% jpeg */
+					/* So we have to do this ourself */
+					ContentValues values = new ContentValues();
+	                values.put(Images.Media.DISPLAY_NAME, "snap"+System.currentTimeMillis()+".png");
+	                values.put(Images.Media.DESCRIPTION, "");
+	                values.put(Images.Media.MIME_TYPE, "image/png");
+	                ContentResolver cr = getContentResolver();
+	                
+	                Uri url = cr.insert(Images.Media.EXTERNAL_CONTENT_URI, values);
+	                OutputStream  out = cr.openOutputStream(url);
+	                
+					Toast.makeText(this, getText(R.string.terminal_share_compressing), 2000);
+					currentView.bitmap.compress( Bitmap.CompressFormat.PNG, 100, out);
+					out.close();
+	                				
+					shareIntent.putExtra(Intent.EXTRA_STREAM,url);
+					startActivity(Intent.createChooser(shareIntent, getText(R.string.terminal_share_via)));
+				}catch(Exception e){
+					Log.e(TAG,e.getMessage());		
+					e.printStackTrace();								
+				}
+			}
+			return true;
+		default: 
+			return super.onOptionsItemSelected(item);			
+		}
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.terminal_menu, menu);
 		
-		MenuItem disconnect = menu.add(R.string.terminal_disconnect).setIcon(
-				android.R.drawable.ic_menu_close_clear_cancel);
-		disconnect.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			public boolean onMenuItemClick(MenuItem item) {
-				close(null);
-				return true;
-			}
-		});
-
+		/* Dynamic add connection button */
 		TerminalView[] views = TerminalManager.getInstance().getViews();
 		for (final TerminalView view : views) {
 			MenuItem item = menu.add(view.host.getName()).setIcon(
