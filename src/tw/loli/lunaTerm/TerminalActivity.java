@@ -388,23 +388,15 @@ public class TerminalActivity extends Activity {
 				try{					
 					final Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
 					shareIntent.setType("image/png");
-					
-					/* We can't trust Images.Media.insertImage() since it compress all bitmap to 50% jpeg */
-					/* So we have to do this ourself */
-					ContentValues values = new ContentValues();
-	                values.put(Images.Media.DISPLAY_NAME, "snap"+System.currentTimeMillis()+".png");
-	                values.put(Images.Media.DESCRIPTION, "");
-	                values.put(Images.Media.MIME_TYPE, "image/png");
-	                ContentResolver cr = getContentResolver();
-	                
-	                Uri url = cr.insert(Images.Media.EXTERNAL_CONTENT_URI, values);
-	                OutputStream  out = cr.openOutputStream(url);
-	                
-					Toast.makeText(this, getText(R.string.terminal_share_compressing), 2000);
+
+					FileOutputStream out =   openFileOutput("snapshot.png",MODE_WORLD_READABLE);
 					currentView.bitmap.compress( Bitmap.CompressFormat.PNG, 100, out);
 					out.close();
-	                				
+					Uri url = Uri.fromFile(getFileStreamPath("snapshot.png"));
+					
+					Log.v(TAG,"share to: "+url);
 					shareIntent.putExtra(Intent.EXTRA_STREAM,url);
+
 					startActivity(Intent.createChooser(shareIntent, getText(R.string.terminal_share_via)));
 				}catch(Exception e){
 					Log.e(TAG,e.getMessage());		
