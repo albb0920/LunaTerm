@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item	android:icon="@drawable/ic_menu_more"
+			android:title="@string/terminal_tools">
+			<menu>
+			<item	android:title="@string/terminal_share_snap"
+					android:id="@+id/terminal_share_snap" />
+			</menu>
+	</item>
+	<item android:id="@+id/terminal_disconnect" android:icon="@android:drawable/ic_menu_close_clear_cancel" android:title="@string/terminal_disconnect" />
+</menu>
