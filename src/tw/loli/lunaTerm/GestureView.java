@@ -13,15 +13,18 @@ import android.graphics.Typeface;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 
 public class GestureView extends View implements View.OnLongClickListener{
 
 	private final String TAG = "GestureView";
 	
 	private Point lastTouchedPoint;
+	private Point startPoint;
 	
 	private Bitmap footprintBitmap;
 	private final Paint footprintPaint;
@@ -39,12 +42,14 @@ public class GestureView extends View implements View.OnLongClickListener{
 
 	private OnGestureListener mOnGestureListener;
 	
-	private boolean magnifierOn = false;
-	private static final int MAGNIFIER_HEIGHT = 100;
-	private static final int MAGNIFIER_WIDTH = 200;
-	private static final int MAGNIFIER_MARGIN = 50;
-	private static final int MAGNIFIER_FOCUS_HEIGHT = 50;
-	private static final int MAGNIFIER_FOCUS_WIDTH = 100;
+	private boolean magnifierOn = false;	
+	private boolean fingerOnScreen = false;
+	
+	private int MAGNIFIER_HEIGHT = 100;
+	private int MAGNIFIER_WIDTH = 200;
+	private int MAGNIFIER_MARGIN = 50;
+	private int MAGNIFIER_FOCUS_HEIGHT = 50;
+	private int MAGNIFIER_FOCUS_WIDTH = 100;
 	
 	private TerminalActivity terminalActivity;
 
@@ -89,11 +94,26 @@ public class GestureView extends View implements View.OnLongClickListener{
 		textCanvas.setBitmap(textBitmap);
 
 	}
+	
+	
+	public void setMagnifierParms(int fwidth, int fheight, int zoom){
+		// At the time parms set, view is not measured yet
+		final Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay(); 
+		
+		MAGNIFIER_FOCUS_WIDTH =  (int) ((float)fwidth / 100 * display.getWidth());
+		MAGNIFIER_FOCUS_HEIGHT = (int) ((float)fheight / 100 * display.getHeight());
 
+		/* we map zoom value(0~100) to 1x~5x */
+		final float rate = (1 + Math.round(zoom/20));
+		MAGNIFIER_WIDTH = (int)Math.ceil(rate * MAGNIFIER_FOCUS_WIDTH);
+		MAGNIFIER_HEIGHT = (int)Math.ceil(rate * MAGNIFIER_FOCUS_HEIGHT);
+	}
+	
+	
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		if(magnifierOn){
+		if(magnifierOn && fingerOnScreen){
 			Rect magnifier = new Rect();
 			Paint mPaint = new Paint();
 			/* Place magnifier on top on finger if possible */
@@ -142,12 +162,29 @@ public class GestureView extends View implements View.OnLongClickListener{
 		}
 	}
 	
+	
+	private int distance(Point start,Point end){		
+		return (int)Math.pow(Math.pow(start.x-end.x, 2) + Math.pow(start.y-end.y,2),0.5);
+	}
+	
 	public boolean onLongClick(View  v){
+		if(distance(startPoint,lastTouchedPoint) > 50)   /* this is not a long press */
+			return false;
+				
 		// only activate if no gesture inputed
+		if((TerminalActivity.termActFlags & TerminalActivity.FLAG_NO_MAGNIFIER) != 0)
+			return false;
+		if((TerminalActivity.termActFlags & TerminalActivity.FLLAG_LONG_PRESS_ACTIVATE) == 0 && magnifierOn){
+			/* if not long press activate, it's switch, switch to off */
+			magnifierOn = false;
+			Log.v(TAG,"magnifier off");
+			return true;
+		}					
 		if(currentGesture.length()==0){
 			footprintBitmap.eraseColor(0);
 			textBitmap.eraseColor(0);
 			magnifierOn = true;	
+			Log.v(TAG,"magnifier on");
 		}
 		return true;
 	}
@@ -235,7 +272,11 @@ public class GestureView extends View implements View.OnLongClickListener{
 			if (ev.getAction() == MotionEvent.ACTION_UP){
 				footprintBitmap.eraseColor(0);
 				textBitmap.eraseColor(0);
-				magnifierOn = false;				
+				if((TerminalActivity.termActFlags & TerminalActivity.FLLAG_LONG_PRESS_ACTIVATE) != 0){
+					/* deactivate magnifier */
+					magnifierOn = false;
+					Log.v(TAG,"magnifier off");
+				}
 			}
 			invalidate(); //we will paint magnifier in onDraw
 		}else {	
@@ -252,6 +293,12 @@ public class GestureView extends View implements View.OnLongClickListener{
 			if (ev.getAction() == MotionEvent.ACTION_UP) 
 				clear();
 		}
+		
+		if( ev.getAction() == MotionEvent.ACTION_DOWN){
+			startPoint = evPoint; 
+			fingerOnScreen = true;
+		}else if(ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_CANCEL)
+			fingerOnScreen = false;
 		
 		lastTouchedPoint = evPoint;
 		

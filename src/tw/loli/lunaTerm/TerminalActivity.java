@@ -70,6 +70,22 @@ public class TerminalActivity extends Activity {
 	private FrameLayout terminalFrame;
 	private SharedPreferences pref;
 	
+	public static int termActFlags = 0;
+	
+	/**
+	 * Disable magnifier.
+	 */	
+	public static final int FLAG_NO_MAGNIFIER = 0x1;
+	
+	/**
+	 * Make long press active magnifier rather than switch it on/off
+	 */
+	public static final int FLLAG_LONG_PRESS_ACTIVATE = 0x2;
+	
+	/**
+	 * Show extract input UI when user is trying to type non ASCII chars.
+	 */
+	public static final int FLAG_SHOW_EXTRACT_UI = 0x4; 
 	
 	class Gesture {
 		public Gesture(String type, String desc) {
@@ -110,12 +126,7 @@ public class TerminalActivity extends Activity {
 
 		if (!pref.getBoolean(Constants.SETTINGS_SHOW_STATUSBAR, false))
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-					WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		
-		// Build option flags
-		TerminalView.TermViewOption |= ((pref.getBoolean("settings_enable_magnifier", true))? TerminalView.FLAG_NO_MAGNIFIER:0) | 
-				((pref.getBoolean("settings_longpress_activate", false))? TerminalView.FLLAG_LONG_PRESS_ACTIVATE:0) |
-				((pref.getBoolean("settings_auto_extractui", false))? TerminalView.FLAG_SHOW_EXTRACT_UI:0);		
+					WindowManager.LayoutParams.FLAG_FULLSCREEN);	
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.act_terminal);
@@ -137,9 +148,19 @@ public class TerminalActivity extends Activity {
 
 		GestureView mGestureView = (GestureView) findViewById(R.id.gestureView);
 		mGestureView.setTerminalActivity(this);
+		
+		// options
+		termActFlags = ( !(pref.getBoolean("settings_enable_magnifier", true))? FLAG_NO_MAGNIFIER: 0) | 
+				((pref.getBoolean("settings_magnifier_longpress_activate", false))? FLLAG_LONG_PRESS_ACTIVATE:0) |
+				((pref.getBoolean("settings_auto_extractui", false))? FLAG_SHOW_EXTRACT_UI:0);		
+
+		mGestureView.setMagnifierParms(
+				pref.getInt("settings_magnifier_focus_width", 30),
+				pref.getInt("settings_magnifier_focus_height", 15), 
+				pref.getInt("settings_magnifier_zoom", 20));
+		
+		
 		mGestureView.setOnGestureListener(new OnGestureListener() {
-			
-			
 			//TODO: We should make user define this
 			public void onGestureEvent(String gesture) {
 				if (gesture == null || gesture.length() == 0)

@@ -56,24 +56,6 @@ public class TerminalView extends View implements VDUDisplay {
 	private int SCREEN_WIDTH;   
 	private int SCREEN_HEIGHT;	
 	
-	public static int TermViewOption = 0;
-	
-	/**
-	 * Disable magnifier.
-	 */	
-	public static final int FLAG_NO_MAGNIFIER = 0x1;
-	
-	/**
-	 * Make long press active magnifier rather than switch it on/off
-	 */
-	public static final int FLLAG_LONG_PRESS_ACTIVATE = 0x2;
-	
-	/**
-	 * Show extract input UI when user is trying to type non ASCII chars.
-	 */
-	public static final int FLAG_SHOW_EXTRACT_UI = 0x4; 
-	
-	
 	private static final int SCROLLBACK = 0;	
 	private static final int DEFAULT_FG_COLOR = 7;
 	private static final int DEFAULT_BG_COLOR = 0;	
@@ -506,7 +488,7 @@ public class TerminalView extends View implements VDUDisplay {
 		}
 		public boolean  setComposingText  (CharSequence text, int newCursorPosition){
 			Log.v(TAG,"setComposingText: "+text);
-			if((TermViewOption & FLAG_SHOW_EXTRACT_UI) !=0 && text.length()>0 && text.charAt(0)>128){
+			if((TerminalActivity.termActFlags & TerminalActivity.FLAG_SHOW_EXTRACT_UI) !=0 && text.length()>0 && text.charAt(0)>128){
 				terminalActivity.showInputHelper();
 				return false;
 			}
