@@ -383,26 +383,27 @@ public class TerminalActivity extends Activity {
 			return true;		
 		case R.id.terminal_share_snap:
 			final TerminalView currentView = TerminalManager.getInstance().getView(currentViewId);
-			if(currentView != null){
-				
+			if(currentView != null){				
 				try{					
 					final Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
 					shareIntent.setType("image/png");
-
-					FileOutputStream out =   openFileOutput("snapshot.png",MODE_WORLD_READABLE);
+					
+					final String FILENAME = "snapshot.png";
+					FileOutputStream out = openFileOutput(FILENAME,MODE_WORLD_READABLE);
 					currentView.bitmap.compress( Bitmap.CompressFormat.PNG, 100, out);
 					out.close();
-					Uri url = Uri.fromFile(getFileStreamPath("snapshot.png"));
 					
-					Log.v(TAG,"share to: "+url);
+					Uri url = Uri.fromFile(getFileStreamPath(FILENAME));
 					shareIntent.putExtra(Intent.EXTRA_STREAM,url);
 
 					startActivity(Intent.createChooser(shareIntent, getText(R.string.terminal_share_via)));
 				}catch(Exception e){
-					Log.e(TAG,e.getMessage());		
-					e.printStackTrace();								
+					Log.e(TAG,e.getMessage());	 e.printStackTrace();								
 				}
 			}
+			return true;
+		case R.id.terminal_inputhelper:
+			showInputHelper();
 			return true;
 		default: 
 			return super.onOptionsItemSelected(item);			

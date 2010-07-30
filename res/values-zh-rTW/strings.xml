@@ -31,8 +31,8 @@
 	<string name="addressbook_site_ptt">批踢踢</string>
 	<string name="addressbook_site_ptt2">批踢踢兔</string>
 
-	<string name="edithost_done">保存</string>
-	<string name="edithost_revert">放棄修改</string>
+	<string name="edithost_done">儲存</string>
+	<string name="edithost_revert">取消</string>
 	<string name="edithost_name">站台名稱</string>
 	<string name="edithost_name_summary">站台的名稱，便於區別不同的站台</string>
 	<string name="edithost_host">站台地址</string>
@@ -51,16 +51,16 @@
 
 	<string name="functionbtn_empty">還沒有定義任何功能按鈕</string>
 	<string name="editfunctionbtn_add">新增功能按鈕</string>
-	<string name="editfunctionbtn_done">保存</string>
-	<string name="editfunctionbtn_revert">放棄修改</string>
+	<string name="editfunctionbtn_done">儲存</string>
+	<string name="editfunctionbtn_revert">取消</string>
 	<string name="editfunctionbtn_delete">删除</string>
 	<string name="editfunctionbtn_edit">修改</string>
 	<string name="editfunctionbtn_name">功能按鈕名稱</string>
-	<string name="editfunctionbtn_name_summary">功能按鈕的名稱，此文本將會顯示在按鈕上</string>
+	<string name="editfunctionbtn_name_summary">功能按鈕的名稱，將會顯示在按鈕上</string>
 	<string name="editfunctionbtn_keys">按鍵</string>
 	<string name="editfunctionbtn_keys_summary">功能按鈕所對應的批處理按鍵，用^代表ctrl</string>
-	<string name="editfunctionbtn_sortnumber">排序數值</string>
-	<string name="editfunctionbtn_sortnumber_summary">用來定義功能按鈕的顯示順序，數值小的顯示在前面</string>
+	<string name="editfunctionbtn_sortnumber">顯示順序</string>
+	<string name="editfunctionbtn_sortnumber_summary">功能按鈕的顯示順序，數值小的顯示在前面</string>
 
 	<string name="terminal_tools">工具</string>
 	<string name="terminal_share_snap">分享畫面擷圖</string>
@@ -72,7 +72,7 @@
 	<string name="terminal_connectclose">連線已經斷開</string>
 	<string name="terminal_error_unknownhost">找不到站台“%s”，請檢查網路是否正常，或者站台地址是否拼寫錯誤</string>
 	<string name="terminal_error_connect">無法連接到站台“%s”，請檢查網路是否正常，或者或站台目前無法連接</string>
-	<string name="terminal_inputhelper">字串輸入</string>
+	<string name="terminal_inputhelper">字串輸入工具</string>
 
 	<string name="settings_language">語言</string>
 	<string name="settings_language_summary">設定語言，下次啓動時生效</string>
@@ -81,15 +81,18 @@
 	
 	<string name="setting_cate_input_assist">輸入輔助</string>
 	<string name="settings_function_button">功能按鈕</string>
-	<string name="settings_function_button_summary">為了便於操作，可以將一些常用的操作定義為功能按鈕，例如：發表文章等</string>
-    <string name="settings_auto_extractui">繞過無法選字問題</string>
-	<string name="settings_auto_extractui_summary">(實驗性質) 當您嘗試輸入中文時，自動切換到輸入工具</string>
-
+	<string name="settings_function_button_summary">可以自訂功能按鈕(如：發表文章)，並在連線 BBS 時以音量減小鍵叫出</string>
+    <string name="settings_auto_extractui">繞過無法選字問題 </string>
+	<string name="settings_auto_extractui_summary">(實驗性質) 當您嘗試輸入中文時，自動切換到字串輸入工具</string>
+	<string name="setting_cate_magnifier">放大鏡</string>
+	<string name="settings_enable_magnifier">啟用放大鏡</string>
+	<string name="setting_magnifier_option">放大鏡選項</string>
+	<string name="settings_magnifier_longpress_activate">只在長壓時啟動</string>
+	<string name="settings_magnifier_longpress_activate_summary">啟用這個選項時，放大鏡只會在長壓時顯示，放開即解除</string>
+	<string name="settings_magnifier_focus_width">焦點寬度</string>
+	<string name="settings_magnifier_focus_height">焦點高度</string>
+	<string name="settings_magnifier_zoom">放大倍率</string>
 	<string name="gesture">手勢</string> 
 	<string name="title_openurl">"用瀏覽器開啟連結"</string>
-<string name="setting_cate_magnifier">放大鏡</string>
-<string name="settings_enable_magnifier">啟用放大鏡</string>
-<string name="setting_magnifier_option">放大鏡選項</string>
-<string name="settings_longpress_activate">只在長壓時啟動</string>
-<string name="settings_longpress_activate_summary">啟用這個選項時，放大鏡只會在長壓時顯示，放開即解除</string>
+
 </resources>
