@@ -32,7 +32,7 @@ public class SettingsActivity extends PreferenceActivity {
 		
 		/* There is no inversed dependency in Android, so we do it ourself */
 		getPreferenceScreen().findPreference("settings_magnifier_fullscreen").setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
-			@Override
+
 			public boolean onPreferenceChange(Preference preference,
 					Object newValue) {
 					boolean depend = ! (Boolean) newValue;
