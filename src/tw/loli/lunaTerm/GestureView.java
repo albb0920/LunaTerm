@@ -103,8 +103,8 @@ public class GestureView extends View implements View.OnLongClickListener{
 		MAGNIFIER_FOCUS_WIDTH =  (int) ((float)fwidth / 100 * display.getWidth());
 		MAGNIFIER_FOCUS_HEIGHT = (int) ((float)fheight / 100 * display.getHeight());
 
-		/* we map zoom value(0~100) to 1x~5x */
-		final float rate = (1 + Math.round(zoom/20));
+		/* we map zoom value(0~100) to 1x~4x */
+		final float rate = 1 + (zoom/100f)*3;
 		MAGNIFIER_WIDTH = (int)Math.ceil(rate * MAGNIFIER_FOCUS_WIDTH);
 		MAGNIFIER_HEIGHT = (int)Math.ceil(rate * MAGNIFIER_FOCUS_HEIGHT);
 	}
@@ -145,9 +145,25 @@ public class GestureView extends View implements View.OnLongClickListener{
 			canvas.drawRect(magnifier, mPaint);
 			RectF focus = new RectF(	lastTouchedPoint.x -  MAGNIFIER_FOCUS_WIDTH/2,
 										lastTouchedPoint.y - MAGNIFIER_FOCUS_HEIGHT/2,0,0);
-			if(focus.top<0) focus.top =0; if(focus.left<0) focus.left =0;
-			focus.right = focus.left + MAGNIFIER_FOCUS_WIDTH; focus.bottom = focus.top + MAGNIFIER_FOCUS_HEIGHT;
-			
+			focus.right = focus.left + MAGNIFIER_FOCUS_WIDTH;
+			focus.bottom = focus.top + MAGNIFIER_FOCUS_HEIGHT;
+
+			//Check Bounds
+			if(focus.left<0){
+				focus.left =0;
+				focus.right = focus.left + MAGNIFIER_FOCUS_WIDTH;
+			}else if(focus.right > getWidth()){
+				focus.right = getWidth();
+				focus.left = focus.right - MAGNIFIER_FOCUS_WIDTH;
+			}
+			if(focus.top<0){
+				focus.top = 0;
+				focus.bottom = focus.top + MAGNIFIER_FOCUS_HEIGHT;
+			}else if(focus.bottom > getHeight()){
+				focus.bottom = getHeight();
+				focus.top = focus.bottom - MAGNIFIER_FOCUS_HEIGHT;
+			}
+				
 			///////////////////////////
 			// Uncomment these to debug focus area
 			// Paint testPaint = new Paint();testPaint.setStyle(Style.STROKE); testPaint.setColor(Color.BLUE);

@@ -89,7 +89,8 @@
 	<string name="settings_auto_extractui_summary">(experimental) If you have difficulty showing character picker in your IME, this option is useless for western user.</string>
 	<string name="settings_magnifier_focus_width">Focus Width</string>
 	<string name="settings_magnifier_focus_height">Focus Height</string>
-	
+	<string name="setting_cate_magnifier_size">Magnifier Size</string>
+	<string name="settings_magnifier_fullscreen">Magnify to full screen</string>
 	<string name="gesture">Gesture</string>
 	<string name="title_openurl">"Open url in browser"</string>
 	

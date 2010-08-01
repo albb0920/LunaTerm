@@ -8,6 +8,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.util.Log;
 
 public class SettingsActivity extends PreferenceActivity {
@@ -28,6 +29,17 @@ public class SettingsActivity extends PreferenceActivity {
 		Intent intent = new Intent();
 		intent.setClass(this, FunctionButtonActivity.class);
 		ps.setIntent(intent);
-
+		
+		/* There is no inversed dependency in Android, so we do it ourself */
+		getPreferenceScreen().findPreference("settings_magnifier_fullscreen").setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+					boolean depend = ! (Boolean) newValue;
+					getPreferenceScreen().findPreference("settings_magnifier_focus_width").setEnabled(depend);
+					getPreferenceScreen().findPreference("settings_magnifier_focus_height").setEnabled(depend);
+				return true;
+			}
+		});
 	}
 }

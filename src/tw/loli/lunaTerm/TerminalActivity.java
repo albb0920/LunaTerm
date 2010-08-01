@@ -87,6 +87,11 @@ public class TerminalActivity extends Activity {
 	 */
 	public static final int FLAG_SHOW_EXTRACT_UI = 0x4; 
 	
+	/**
+	 * Use full screen as magnifier display area
+	 */
+	public static final int FLAG_MAGNIFIER_FULLSCREEN = 0x8;
+	
 	class Gesture {
 		public Gesture(String type, String desc) {
 			this.type = type;
@@ -151,7 +156,7 @@ public class TerminalActivity extends Activity {
 		
 		// options
 		termActFlags = ( !(pref.getBoolean("settings_enable_magnifier", true))? FLAG_NO_MAGNIFIER: 0) | 
-				((pref.getBoolean("settings_magnifier_longpress_activate", false))? FLLAG_LONG_PRESS_ACTIVATE:0) |
+				((pref.getBoolean("settings_magnifier_longpress_activate", true))? FLLAG_LONG_PRESS_ACTIVATE:0) |
 				((pref.getBoolean("settings_auto_extractui", false))? FLAG_SHOW_EXTRACT_UI:0);		
 
 		mGestureView.setMagnifierParms(

@@ -89,9 +89,11 @@
 	<string name="setting_magnifier_option">放大鏡選項</string>
 	<string name="settings_magnifier_longpress_activate">只在長壓時啟動</string>
 	<string name="settings_magnifier_longpress_activate_summary">啟用這個選項時，放大鏡只會在長壓時顯示，放開即解除</string>
+	<string name="setting_cate_magnifier_size">放大鏡尺寸</string>
 	<string name="settings_magnifier_focus_width">焦點寬度</string>
 	<string name="settings_magnifier_focus_height">焦點高度</string>
 	<string name="settings_magnifier_zoom">放大倍率</string>
+	<string name="settings_magnifier_fullscreen">放大至全螢幕</string>
 	<string name="gesture">手勢</string> 
 	<string name="title_openurl">"用瀏覽器開啟連結"</string>
 

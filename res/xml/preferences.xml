@@ -29,19 +29,26 @@
 				<CheckBoxPreference android:key="settings_magnifier_longpress_activate"
 				android:title="@string/settings_magnifier_longpress_activate"
 				android:summary="@string/settings_magnifier_longpress_activate_summary"
-				android:defaultValue="false" />
-				<tw.loli.lunaTerm.widgets.SeekBarPreference
-				android:key="settings_magnifier_focus_width"
-				android:defaultValue="30"
-				android:title="@string/settings_magnifier_focus_width"/>
-				<tw.loli.lunaTerm.widgets.SeekBarPreference
-				android:key="settings_magnifier_focus_height"
-				android:defaultValue="15"
-				android:title="@string/settings_magnifier_focus_height"/>
-				<tw.loli.lunaTerm.widgets.SeekBarPreference
-				android:key="settings_magnifier_zoom"
-				android:defaultValue="20"
-				android:title="@string/settings_magnifier_zoom"/>
+				android:defaultValue="true" />
+				<PreferenceCategory android:title="@string/setting_cate_magnifier_size">
+					<CheckBoxPreference android:key="settings_magnifier_fullscreen"
+							android:title="@string/settings_magnifier_fullscreen"
+							android:defaultValue="true" />
+					<tw.loli.lunaTerm.widgets.SeekBarPreference
+					android:key="settings_magnifier_focus_width"
+					android:defaultValue="30"
+					android:enabled="false"
+					android:title="@string/settings_magnifier_focus_width"/>
+					<tw.loli.lunaTerm.widgets.SeekBarPreference
+					android:key="settings_magnifier_focus_height"
+					android:defaultValue="15"
+					android:enabled="false"
+					android:title="@string/settings_magnifier_focus_height"/>
+					<tw.loli.lunaTerm.widgets.SeekBarPreference
+					android:key="settings_magnifier_zoom"
+					android:defaultValue="20"
+					android:title="@string/settings_magnifier_zoom"/>
+				</PreferenceCategory>
 			</PreferenceScreen>
 	</PreferenceCategory>
 </PreferenceScreen>

@@ -6,48 +6,62 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.preference.Preference;
+import android.preference.DialogPreference;
+
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 
-public class SeekBarPreference extends Preference implements OnSeekBarChangeListener {
+
+
+
+
+import android.widget.ProgressBar;
+import android.widget.SeekBar;
+
+public class SeekBarPreference extends DialogPreference {
+	private SeekBar mSeekBar;
+
 	private int mValue;
 	
 	public SeekBarPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		setWidgetLayoutResource(R.layout.pref_seekbar);	
+		setDialogLayoutResource(R.layout.pref_seekbar_dialog);
+		setDialogTitle(getTitle());
 	}
 	
 	public SeekBarPreference(Context context) 	{
 		this(context, null);
 	}
-	
-	
-	protected void onBindView(View view) {
-					
+		
+	protected void onBindView(View view) {				
 		super.onBindView(view);
 		
-		SeekBar seekbar = (SeekBar) view.findViewById(R.id.pref_seekbar);
-		if(seekbar != null){
-			seekbar.setMax(100);
-			seekbar.setProgress(mValue);
-			seekbar.setOnSeekBarChangeListener(this);
+		ProgressBar valuedisp = (ProgressBar) view.findViewById(R.id.pref_valuedisp);
+		if(valuedisp != null){
+			valuedisp.setMax(100);
+			valuedisp.setProgress(mValue);
 		}
 	}
-
-	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-		int newValue = progress;
-		
-        if (!callChangeListener(newValue)){
-        	seekBar.setProgress(mValue);
-            return;
-        }
+	
+    @Override
+    protected void onBindDialogView(View view) {
+        super.onBindDialogView(view);
+        mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
+        mSeekBar.setProgress(mValue);      
+    }
+    
+    @Override
+    protected void onDialogClosed(boolean positiveResult) {
+        super.onDialogClosed(positiveResult);
         
-        setValue(progress);
-	}
+        if (positiveResult) {
+            int value = mSeekBar.getProgress();
+            if (callChangeListener(value)) {
+            	setValue(value);
+            }
+        }
+    }
 	
 	public void setValue(int value){
 		mValue = value;
@@ -91,12 +105,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
         super.onRestoreInstanceState(myState.getSuperState());
         setValue(myState.value);
     }
-    
-	@Override
-	public void onStartTrackingTouch(SeekBar seekBar) {}
 
-	@Override
-	public void onStopTrackingTouch(SeekBar seekBar) {}
 	
     private static class SavedState extends BaseSavedState {
         int value;
