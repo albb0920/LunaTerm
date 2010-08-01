@@ -100,13 +100,22 @@ public class GestureView extends View implements View.OnLongClickListener{
 		// At the time parms set, view is not measured yet
 		final Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay(); 
 		
-		MAGNIFIER_FOCUS_WIDTH =  (int) ((float)fwidth / 100 * display.getWidth());
-		MAGNIFIER_FOCUS_HEIGHT = (int) ((float)fheight / 100 * display.getHeight());
-
 		/* we map zoom value(0~100) to 1x~4x */
 		final float rate = 1 + (zoom/100f)*3;
-		MAGNIFIER_WIDTH = (int)Math.ceil(rate * MAGNIFIER_FOCUS_WIDTH);
-		MAGNIFIER_HEIGHT = (int)Math.ceil(rate * MAGNIFIER_FOCUS_HEIGHT);
+		
+		if((TerminalActivity.termActFlags & TerminalActivity.FLAG_MAGNIFIER_FULLSCREEN) !=0){
+			MAGNIFIER_WIDTH = display.getWidth();
+			MAGNIFIER_HEIGHT = display.getHeight();
+			
+			MAGNIFIER_FOCUS_WIDTH = Math.round(MAGNIFIER_WIDTH / rate);
+			MAGNIFIER_FOCUS_HEIGHT = Math.round(MAGNIFIER_HEIGHT / rate);
+		}else{		
+			MAGNIFIER_FOCUS_WIDTH =  (int) ((float)fwidth / 100 * display.getWidth());
+			MAGNIFIER_FOCUS_HEIGHT = (int) ((float)fheight / 100 * display.getHeight());	
+	
+			MAGNIFIER_WIDTH = (int)Math.ceil(rate * MAGNIFIER_FOCUS_WIDTH);
+			MAGNIFIER_HEIGHT = (int)Math.ceil(rate * MAGNIFIER_FOCUS_HEIGHT);
+		}
 	}
 	
 	
@@ -116,33 +125,39 @@ public class GestureView extends View implements View.OnLongClickListener{
 		if(magnifierOn && fingerOnScreen){
 			Rect magnifier = new Rect();
 			Paint mPaint = new Paint();
-			/* Place magnifier on top on finger if possible */
-			magnifier.top = lastTouchedPoint.y - MAGNIFIER_HEIGHT - MAGNIFIER_MARGIN;
-			magnifier.left = lastTouchedPoint.x - MAGNIFIER_WIDTH/2;
-		
-			if(magnifier.top<0){
-				/* if no space left on top, place it right */
-				magnifier.top = lastTouchedPoint.y - MAGNIFIER_HEIGHT/2;
-				if(magnifier.top<0)
-					magnifier.top = 0;
-				magnifier.left = lastTouchedPoint.x + MAGNIFIER_MARGIN;
-				/* if no place at right, put it left */
-				if(magnifier.left+MAGNIFIER_WIDTH>getWidth())
-					magnifier.left = lastTouchedPoint.x - MAGNIFIER_WIDTH - MAGNIFIER_MARGIN;				 
-			}
-			if(magnifier.left < 0)
-				magnifier.left = 0;	
+			if((TerminalActivity.termActFlags & TerminalActivity.FLAG_MAGNIFIER_FULLSCREEN) !=0){
+				magnifier.set(0, 0, MAGNIFIER_WIDTH, MAGNIFIER_HEIGHT);				
+			}else{
+				/* Place magnifier on top on finger if possible */
+				magnifier.top = lastTouchedPoint.y - MAGNIFIER_HEIGHT - MAGNIFIER_MARGIN;
+				magnifier.left = lastTouchedPoint.x - MAGNIFIER_WIDTH/2;
 			
-			magnifier.right = magnifier.left + MAGNIFIER_WIDTH;
-			magnifier.bottom = magnifier.top + MAGNIFIER_HEIGHT;
-			
-			if(magnifier.right > getWidth())
-				magnifier.right = getWidth();			
+				if(magnifier.top<0){
+					/* if no space left on top, place it right */
+					magnifier.top = lastTouchedPoint.y - MAGNIFIER_HEIGHT/2;
+					if(magnifier.top<0)
+						magnifier.top = 0;
+					magnifier.left = lastTouchedPoint.x + MAGNIFIER_MARGIN;
+					/* if no place at right, put it left */
+					if(magnifier.left+MAGNIFIER_WIDTH>getWidth())
+						magnifier.left = lastTouchedPoint.x - MAGNIFIER_WIDTH - MAGNIFIER_MARGIN;				 
+				}
+				if(magnifier.left < 0)
+					magnifier.left = 0;	
 				
-			mPaint.setColor(Color.WHITE);
-			canvas.drawRect(magnifier.left - 1, magnifier.top -1, magnifier.right+1, magnifier.bottom +1, mPaint); //Draw border
+				magnifier.right = magnifier.left + MAGNIFIER_WIDTH;
+				magnifier.bottom = magnifier.top + MAGNIFIER_HEIGHT;
+				
+				if(magnifier.right > getWidth())
+					magnifier.right = getWidth();			
+					
+				mPaint.setColor(Color.WHITE);
+				canvas.drawRect(magnifier.left - 1, magnifier.top -1, magnifier.right+1, magnifier.bottom +1, mPaint); //Draw border			
+			}
+			/* clean magnifier area */
 			mPaint.setColor(Color.BLACK);
 			canvas.drawRect(magnifier, mPaint);
+			
 			RectF focus = new RectF(	lastTouchedPoint.x -  MAGNIFIER_FOCUS_WIDTH/2,
 										lastTouchedPoint.y - MAGNIFIER_FOCUS_HEIGHT/2,0,0);
 			focus.right = focus.left + MAGNIFIER_FOCUS_WIDTH;

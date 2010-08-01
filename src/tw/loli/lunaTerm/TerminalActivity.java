@@ -155,10 +155,12 @@ public class TerminalActivity extends Activity {
 		mGestureView.setTerminalActivity(this);
 		
 		// options
-		termActFlags = ( !(pref.getBoolean("settings_enable_magnifier", true))? FLAG_NO_MAGNIFIER: 0) | 
-				((pref.getBoolean("settings_magnifier_longpress_activate", true))? FLLAG_LONG_PRESS_ACTIVATE:0) |
-				((pref.getBoolean("settings_auto_extractui", false))? FLAG_SHOW_EXTRACT_UI:0);		
+		termActFlags = (!pref.getBoolean("settings_enable_magnifier", true)? FLAG_NO_MAGNIFIER: 0) | 
+				(pref.getBoolean("settings_magnifier_longpress_activate", true)? FLLAG_LONG_PRESS_ACTIVATE:0) |
+				(pref.getBoolean("settings_auto_extractui", false)? FLAG_SHOW_EXTRACT_UI:0) | 
+				(pref.getBoolean("settings_magnifier_fullscreen",true)?FLAG_MAGNIFIER_FULLSCREEN:0);		
 
+		//This must be AFTER flags are set.
 		mGestureView.setMagnifierParms(
 				pref.getInt("settings_magnifier_focus_width", 30),
 				pref.getInt("settings_magnifier_focus_height", 15), 
