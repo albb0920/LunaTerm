@@ -31,8 +31,12 @@ public class SettingsActivity extends PreferenceActivity {
 		ps.setIntent(intent);
 		
 		/* There is no inversed dependency in Android, so we do it ourself */
+		if(!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("settings_magnifier_fullscreen", true)){
+			getPreferenceScreen().findPreference("settings_magnifier_focus_width").setEnabled(true);
+			getPreferenceScreen().findPreference("settings_magnifier_focus_height").setEnabled(true);
+		}
+			
 		getPreferenceScreen().findPreference("settings_magnifier_fullscreen").setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
-
 			public boolean onPreferenceChange(Preference preference,
 					Object newValue) {
 					boolean depend = ! (Boolean) newValue;
