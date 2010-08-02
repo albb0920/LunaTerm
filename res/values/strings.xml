@@ -78,28 +78,27 @@
 	<string name="terminal_inputhelper">Input Helper</string>
 
 	<string name="settings_language">Language</string>
-	<string name="settings_language_summary">Select the your default language, restart needed
-	</string>
+	<string name="settings_language_summary">Select the your default language, restart needed</string>
 	<string name="settings_show_statusbar">Show statusbar</string>
 	<string name="settings_show_statusbar_summary">Show statusbar on Terminal mode</string>
-	<string name="setting_cate_input_assist">Input Assistant</string>
+	<string name="settings_cate_input_assist">Input Assistant</string>
 	<string name="settings_function_button">Function Buttons</string>
 	<string name="settings_function_button_summary">Function Buttons</string>
 	<string name="settings_auto_extractui">Auto show up extract input UI</string>
 	<string name="settings_auto_extractui_summary">(experimental) If you have difficulty showing character picker in your IME, this option is useless for western user.</string>
+	<string name="settings_cate_magnifier">Magnifier</string>
+	<string name="settings_enable_magnifier">Enable Magnifier</string>
+	<string name="setting_magnifier_option">Magnifier Options</string>
+	
+	<string name="settings_magnifier_behavior">Magnifier behavior</string>
+	<string name="settings_magnifier_behavior_summary">When do you wish magnifier to show up?</string>
+	<string name="settings_magnifier_fullscreen">Magnify to full screen</string>
 	<string name="settings_magnifier_focus_width">Focus Width</string>
 	<string name="settings_magnifier_focus_height">Focus Height</string>
-	<string name="setting_cate_magnifier_size">Magnifier Size</string>
-	<string name="settings_magnifier_fullscreen">Magnify to full screen</string>
+	<string name="settings_cate_magnifier_size">Magnifier Size</string>
+	<string name="settings_magnifier_zoom">Zoom Rate</string>
+	
 	<string name="gesture">Gesture</string>
 	<string name="title_openurl">"Open url in browser"</string>
-	
-
-<string name="setting_cate_magnifier">Magnifier</string>
-<string name="settings_enable_magnifier">Enable Magnifier</string>
-<string name="setting_magnifier_option">Magnifier Options</string>
-<string name="settings_magnifier_longpress_activate">Only activate during long press</string>
-<string name="settings_magnifier_longpress_activate_summary">If enabled, magnifier will only be activate duing long press.</string>
-<string name="settings_magnifier_zoom">Zoom Rate</string>
 </resources>
 

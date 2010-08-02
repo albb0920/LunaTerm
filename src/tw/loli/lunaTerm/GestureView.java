@@ -122,7 +122,7 @@ public class GestureView extends View implements View.OnLongClickListener{
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		if(magnifierOn && fingerOnScreen){
+		if(magnifierOn && (fingerOnScreen || (TerminalActivity.termActFlags & TerminalActivity.FLLAG_LONG_PRESS_ACTIVATE) !=0)){
 			Rect magnifier = new Rect();
 			Paint mPaint = new Paint();
 			if((TerminalActivity.termActFlags & TerminalActivity.FLAG_MAGNIFIER_FULLSCREEN) !=0){
@@ -199,16 +199,22 @@ public class GestureView extends View implements View.OnLongClickListener{
 	}
 	
 	public boolean onLongClick(View  v){
-		if(distance(startPoint,lastTouchedPoint) > 50)   /* this is not a long press */
+		if(distance(startPoint,lastTouchedPoint) > minGestureDistance)   /* this is not a long press */
 			return false;
 				
-		// only activate if no gesture inputed
+		/* long press actions:
+		 * FLAG_NO_MAGNIFIER:				do nothing
+		 * FLLAG_LONG_PRESS_ACTIVATE:		enable/disable magnifier
+		 * FLLAG_LONG_PRESS_MODE_SWITCH:	enable/disable magnifier
+		 * FLLAG_LONG_PRESS_SHOW:			enable magnifier
+		 */
+		
 		if((TerminalActivity.termActFlags & TerminalActivity.FLAG_NO_MAGNIFIER) != 0)
 			return false;
-		if((TerminalActivity.termActFlags & TerminalActivity.FLLAG_LONG_PRESS_ACTIVATE) == 0 && magnifierOn){
-			/* if not long press activate, it's switch, switch to off */
+
+		if((TerminalActivity.termActFlags & 
+				(TerminalActivity.FLLAG_LONG_PRESS_MODE_SWITCH | TerminalActivity.FLLAG_LONG_PRESS_ACTIVATE)) != 0 && magnifierOn){
 			magnifierOn = false;
-			Log.v(TAG,"magnifier off");
 			return true;
 		}					
 		if(currentGesture.length()==0){
@@ -301,9 +307,8 @@ public class GestureView extends View implements View.OnLongClickListener{
 		
 		if(magnifierOn){
 			if (ev.getAction() == MotionEvent.ACTION_UP){
-				footprintBitmap.eraseColor(0);
-				textBitmap.eraseColor(0);
-				if((TerminalActivity.termActFlags & TerminalActivity.FLLAG_LONG_PRESS_ACTIVATE) != 0){
+
+				if((TerminalActivity.termActFlags & TerminalActivity.FLLAG_LONG_PRESS_SHOW) != 0){
 					/* deactivate magnifier */
 					magnifierOn = false;
 					Log.v(TAG,"magnifier off");

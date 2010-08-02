@@ -78,19 +78,29 @@ public class TerminalActivity extends Activity {
 	public static final int FLAG_NO_MAGNIFIER = 0x1;
 	
 	/**
-	 * Make long press active magnifier rather than switch it on/off
+	 * Magnifier show during long press
 	 */
-	public static final int FLLAG_LONG_PRESS_ACTIVATE = 0x2;
+	public static final int FLLAG_LONG_PRESS_SHOW = 0x2;
+	
+	/**
+	 * Long press switch Magnifier/Gesture  
+	 */
+	public static final int FLLAG_LONG_PRESS_MODE_SWITCH = 0x4;
+	
+	/**
+	 * Long press activate/deactivate magnifier
+	 */
+	public static final int FLLAG_LONG_PRESS_ACTIVATE = 0x8;
 	
 	/**
 	 * Show extract input UI when user is trying to type non ASCII chars.
 	 */
-	public static final int FLAG_SHOW_EXTRACT_UI = 0x4; 
+	public static final int FLAG_SHOW_EXTRACT_UI = 0x10; 
 	
 	/**
 	 * Use full screen as magnifier display area
 	 */
-	public static final int FLAG_MAGNIFIER_FULLSCREEN = 0x8;
+	public static final int FLAG_MAGNIFIER_FULLSCREEN = 0x20;
 	
 	class Gesture {
 		public Gesture(String type, String desc) {
@@ -155,9 +165,9 @@ public class TerminalActivity extends Activity {
 		mGestureView.setTerminalActivity(this);
 		
 		// options
-		termActFlags = (!pref.getBoolean("settings_enable_magnifier", true)? FLAG_NO_MAGNIFIER: 0) | 
-				(pref.getBoolean("settings_magnifier_longpress_activate", true)? FLLAG_LONG_PRESS_ACTIVATE:0) |
+		termActFlags = (!pref.getBoolean("settings_enable_magnifier", true)? FLAG_NO_MAGNIFIER: 0) |
 				(pref.getBoolean("settings_auto_extractui", false)? FLAG_SHOW_EXTRACT_UI:0) | 
+				Integer.parseInt(pref.getString("settings_magnifier_behavior", "8")) | 
 				(pref.getBoolean("settings_magnifier_fullscreen",true)?FLAG_MAGNIFIER_FULLSCREEN:0);		
 
 		//This must be AFTER flags are set.

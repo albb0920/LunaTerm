@@ -84,12 +84,13 @@
 	<string name="settings_function_button_summary">可以自訂功能按鈕(如：發表文章)，並在連線 BBS 時以音量減小鍵叫出</string>
     <string name="settings_auto_extractui">繞過無法選字問題 </string>
 	<string name="settings_auto_extractui_summary">(實驗性質) 當您嘗試輸入中文時，自動切換到字串輸入工具</string>
-	<string name="setting_cate_magnifier">放大鏡</string>
+	<string name="settings_cate_magnifier">放大鏡</string>
 	<string name="settings_enable_magnifier">啟用放大鏡</string>
 	<string name="setting_magnifier_option">放大鏡選項</string>
-	<string name="settings_magnifier_longpress_activate">只在長壓時啟動</string>
-	<string name="settings_magnifier_longpress_activate_summary">啟用這個選項時，放大鏡只會在長壓時顯示，放開即解除</string>
-	<string name="setting_cate_magnifier_size">放大鏡尺寸</string>
+
+	<string name="settings_magnifier_behavior">放大鏡顯示條件</string>
+	<string name="settings_magnifier_behavior_summary">您希望放大鏡在什麼樣的情形下顯示?</string>
+	<string name="settings_cate_magnifier_size">放大鏡尺寸</string>
 	<string name="settings_magnifier_focus_width">焦點寬度</string>
 	<string name="settings_magnifier_focus_height">焦點高度</string>
 	<string name="settings_magnifier_zoom">放大倍率</string>

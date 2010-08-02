@@ -62,4 +62,14 @@
 		<item>/ 搜尋</item>
 		<item>s 移到看板</item>
 	</string-array>
+	<string-array name="settings_magnifier_behavior">
+		<item>Only display during long-press</item>
+		<item>Long-press switch finger move default action</item>
+		<item>Long-press display magnifier until another long-press</item>
+	</string-array>
+	<string-array name="settings_magnifier_behavior_value">
+		<item>2</item>
+		<item>4</item>
+		<item>8</item>
+	</string-array>
 </resources>

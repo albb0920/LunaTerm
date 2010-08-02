@@ -20,17 +20,19 @@
 		android:title="@string/settings_auto_extractui" android:summary="@string/settings_auto_extractui_summary"
 		android:defaultValue="false" />
 	</PreferenceCategory>
-	<PreferenceCategory android:title="@string/setting_cate_magnifier">
+	<PreferenceCategory android:title="@string/settings_cate_magnifier">
 			<CheckBoxPreference android:key="settings_enable_magnifier"
 			android:title="@string/settings_enable_magnifier"
 			android:defaultValue="true" />
 			<PreferenceScreen android:title="@string/setting_magnifier_option"
 				android:dependency="settings_enable_magnifier">
-				<CheckBoxPreference android:key="settings_magnifier_longpress_activate"
-				android:title="@string/settings_magnifier_longpress_activate"
-				android:summary="@string/settings_magnifier_longpress_activate_summary"
-				android:defaultValue="true" />
-				<PreferenceCategory android:title="@string/setting_cate_magnifier_size">
+				<ListPreference android:key="settings_magnifier_behavior" 
+				android:title="@string/settings_magnifier_behavior"
+				android:summary="@string/settings_magnifier_behavior_summary"
+				android:entries="@array/settings_magnifier_behavior"
+				android:entryValues="@array/settings_magnifier_behavior_value"
+				android:defaultValue="8" />
+				<PreferenceCategory android:title="@string/settings_cate_magnifier_size">
 					<CheckBoxPreference android:key="settings_magnifier_fullscreen"
 							android:title="@string/settings_magnifier_fullscreen"
 							android:defaultValue="true" />

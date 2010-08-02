@@ -5,4 +5,9 @@
 		<item>"簡體中文"</item>
 		<item>"正體中文"</item>
 	</string-array>
+	<string-array name="settings_magnifier_behavior">
+		<item>只在長壓時顯示</item>
+		<item>長壓切換手勢與放大鏡</item>
+		<item>長壓顯示放大鏡，直到再次長壓關閉</item>
+	</string-array>
 </resources>

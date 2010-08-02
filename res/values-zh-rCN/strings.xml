@@ -61,8 +61,22 @@
 	<string name="settings_language_summary">设置界面显示语言，下次启动时生效</string>
 	<string name="settings_show_statusbar">显示状态栏</string>
 	<string name="settings_show_statusbar_summary">设置在Terminal状态下是否显示状态栏</string>
+	<string name="settings_cate_input_assist">输入辅助</string>
 	<string name="settings_function_button">功能按钮</string>
 	<string name="settings_function_button_summary">为了便于操作，可以将一些常用的操作定义为功能按钮，例如：发表文章等</string>
+    <string name="settings_auto_extractui">绕过无法选字问题 </string>
+	<string name="settings_auto_extractui_summary">(实验性质) 当您尝试输入中文时，自动切换到字符串输入工具</string>
+	<string name="settings_cate_magnifier">放大镜</string>
+	<string name="settings_enable_magnifier">启用放大镜</string>
+	<string name="setting_magnifier_option">放大镜选项</string>
+	
+    <string name="settings_magnifier_behavior">放大镜显示条件</string>
+	<string name="settings_magnifier_behavior_summary">您希望放大镜在什么样的情形下显示?</string>
+	<string name="settings_cate_magnifier_size">放大镜尺寸</string>
+	<string name="settings_magnifier_focus_width">焦点宽度</string>
+	<string name="settings_magnifier_focus_height">焦点高度</string>
+	<string name="settings_magnifier_zoom">放大倍率</string>
+	<string name="settings_magnifier_fullscreen">放大至全屏幕</string>
     
 	
 	
