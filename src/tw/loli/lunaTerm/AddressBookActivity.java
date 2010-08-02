@@ -44,7 +44,7 @@ import com.roiding.rterm.util.TerminalManager;
 public class AddressBookActivity extends ListActivity {
 	private static final String TAG = "AddressBook";
 	private static List<Host> hosts;
-	private static List<Host> quickConnectHosts;
+	private static List<Host> quickConnectHosts = new ArrayList<Host>();
 	private DBUtils dbUtils;
 	private SharedPreferences prefs;
 	
@@ -73,9 +73,6 @@ public class AddressBookActivity extends ListActivity {
 //		getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
 				
 		setContentView(R.layout.act_addressbook);
-		
-		//Quick connect
-		quickConnectHosts = new ArrayList<Host>();
 		
 		((TextView)findViewById(R.id.quickConnect)).setOnEditorActionListener(
 				new OnEditorActionListener(){
@@ -108,7 +105,8 @@ public class AddressBookActivity extends ListActivity {
 		host.setEncoding("Big5"); //TODO:make this determine by preference
 		host.setProtocal("Telnet");
 		host.setName("("+hostname+":"+port+")");
-		host.setId(-1*(quickConnectHosts.size()+1)); // use negative id to cheat DBtools
+		host.setId(-1*(quickConnectHosts.size()+2)); // use negative id to cheat DBtools, it's below -2 because -1 is magic number 
+
 		quickConnectHosts.add(host);
 		connect(host);
 	}
@@ -407,6 +405,7 @@ public class AddressBookActivity extends ListActivity {
 			else if(list.indexOf(h)!=-1)
 				map.put("icon", String.valueOf(R.drawable.offline));
 			else{
+				Log.i(TAG,"Quick connect: "+h.getName()+" removed from list");
 				quickConnectHosts.remove(h);
 				continue;
 			}
