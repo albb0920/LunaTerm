@@ -9,9 +9,10 @@
 		margin:5px;
 		border-bottom:1px solid gray;
 		font-weight:600;
+		line-height:50px;
 	    }
 	    h1 img{
-		vertical-align:bottom;
+		vertical-align:top;		
 	    }
 	    div#index a{
 		display:block;
@@ -23,6 +24,12 @@
 		color:black;
 		margin-bottom:1.5%;
 	    }
+	    span.inlbox{
+		display:inline-block;
+		width:90%;
+		vertical-align:top;
+	    }
+
 	    a{
 		text-decoration:none;
 	    }
@@ -61,30 +68,41 @@
     </head> 
     <body> 
 	<h1> 
-	<img src="data:image/png;base64,
-	    iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAEw0lEQVR4Xu3aW2xURRzH8e/spdvLtnSL
-	    rbQFpTTQ0EqxgEpjlBBjJBoQxBAk4aJtYtQ3EC/EFwMSQhQTND4YQYgEMHiJqFES0GgUqSBSsJZbW0pa
-	    2cSwBfba3XNmNJucZHPSbXfLaU+JfpJ5mIfN7C/z/89s9hyhlOJW5sBe/wdwkZl7gVlAOSMvCpwDvgeu
-	    MTjPUAGagLVALfbYCWwCuhhYv4OB5QAfAx8AtdjnGeAPYHm2JfQV8LAxCUUlv3dq+PskkX7FSHE5BePy
-	    BTUTnUytMIqDfGAfSezPJMBbqV/+YEuMAz/HiGuC0TStwsHzj+ZRXuJKLacWczmZ74FaoM2Y7Doc5usT
-	    cexSmAebVxUywWeEYAfQPNgOrDImp7viHDwWRQiBXa6H4N2DITatLk49VF4ErqXbgZNAA8Ab+/s4cSFB
-	    OjMmu2mc7uHOMhcOh8Af0DlzKc53rTGs9mZTMdUVOcZ0KfBZugAxwAOwYoufcD8Deu6xIhbMyWcgpzr6
-	    2f7Fda4GJVZpfsTLwrleY/oysDVdCXkwti+iD1g+y+d50355gLurPTz7b8CNewNYJRiVpPBmdBMrqVAo
-	    zBbNLcDQE1V0x0GX4HNAXSHJcrqvJpfZ1TkcPx/DClIqUsiMAkgpMZs+KYeifCcAwbjiyw7QlEBLgNsN
-	    WqmiYQJJtXe4aTkbwQqmMmfYAYq9DgxXghC4IdB1kjQJHQ6MAJQUOpFS2hhAl5iplFDGrgoBSiUHqR+R
-	    SiF1iwLIYQTQpY6ZVDKrbdeljhWkktaUkJKKLBLYVULpA0ilsll0TPZAdgF0GwPoN7sDgD7mSkjaVkIW
-	    NbGSt1AT67oFPaBbeQ/YfwrZ38TSniaWthyjUiH1MdfE2eyA4tWVkxlKXzBBW2eIH071jcZNLMnUkgdv
-	    JxutF27w+s6LtHWFrOoBPaNQBgH4fAzbzKlFvLe+jic3/IY/0G8KIK3qAUU6bhcc64Sy8Qo9QUacAnIV
-	    VBeA2ymYUOJh1YJKtnx00byu9T0gAPMx7/UKjnaSFU2HSbmKJdNImj97PJt3nx+ZHvBfjWIoK4BIVOHx
-	    CJwOUApC4eTIiiYhoGEEoNTnMda2/tfoybN9RPt18jxOfHmC+lKNX3uduF0CIRgWqWCSVwJOAMIRzVjb
-	    +otMl7D30GWaFlUBsKLBRVVxgpO9CQJhSUJXZEPIBBNLcllc78Fw9MxVY+2bu8icDkVCU5ht3NFO44zx
-	    1FYVAdBY5U4Oq+z5pttcQuS4RMYBrgDlAFMq8mi/FMQsHNV56rVf2L6ugXmzyrDSS++0cvT035hVVxaQ
-	    wj9YgBZgMcDieZW0dfzJQHr8YZ5Y/xPz55SxoLGc2inj8BW6yZYQgr4bcU60B9h3qJtz3UHMxnldyXVS
-	    HB/s7/XVwC6AcDTBA82H6forjJ3eXtvAmoXVxvQMUJ8ugOE0MAOgszfI0vU/0tFrRwjFhqfreGXNXeZH
-	    Th8OFeAh4LAxicQSvP/pBT45cpmOnhDBiDaSj5iS98D9M0t5YVkN99TdRooDwDKA9AHMpTR2fAs8DsQz
-	    PUZ3Az3ANqAee20D1g3nSf0RYCawEvgcuMLoiAGtwFagDlh3s0/q9yTH6HAA8lZ+V0L+5172+AceD3xN
-	    p2PIcgAAAABJRU5ErkJggg=="> 
-	    LunaTerm 1.0</h1> 
+	    <img src="data:image/png;base64,
+	    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
+	    AAAAAElFTkSuQmCC"> 
+	    LunaTerm 1.1</h1> 
 	<div id="index"> 
 	    <a href="#changelog">更新摘要</a> 
 	    <a href="#quick-guide">快速上手</a> 
@@ -96,9 +114,30 @@
 <div id="changelog" class="block"> 
     <div class="block-title">更新摘要</div> 
     <div class="block-content"> 
-	<ul> 
+	<ul>
+	    <li>v1.1<br>
+		<ol>
+		    <li>新增 分享擷圖功能 (連線畫面-MENU-工具)</li>
+		    <li>新增 放大鏡 全螢幕模式</li>
+		    <li>新增 繞過無法選字問題選項</li>
+		    <li>改善 放大鏡選項可自訂</li>
+		    <li>改善 遮蔽站台密碼</li>
+		    <li>改善 游標改為半透明綠色，連結底線改為藍色</li>
+		    <li>改善 ANSI 顯示，現在特殊符號不使用內建字型繪圖</li>
+		    <li>改善 ANSI 顯示，移除行肩髒線 (暫解)</li>
+		    <li>改善 網址簿啟動時不顯示軟體鍵盤</li>
+		    <li>改善 字串輸入工具(輸入助手)介面，可輸入、傳送多行文字</li>
+		    <li>改善 幫圖示加上陰影</li>
+		    <li>修正 Maple3-itoc 系統站台未成功忽略 negotiation(暫解)</li>		    
+		    <li>修正 連線畫面下部觸控無效問題</li>
+		    <li>修正 快速連線自網址簿消失問題(暫解)</li>
+		    <li>修正 斷線時連線未立即中斷</li>
+		    <li>移除 功能鍵的 Toast</li>
+		    <li>修正 UI 文字錯誤</li>
+		</ol>
+	    </li>
 	    <li>v1.0<br> 
-	    <ol> 
+		<ol> 
 		    <li>修正 亮色字不亮，套用 PCMan/Windows 色盤</li> 
 		    <li>修正 一些小問題</li> 
 		    <li>改善 軟體鍵盤遮住畫面問題</li> 
@@ -106,7 +145,8 @@
 		    <li>新增 HOME、END 手勢</li> 
 		    <li>(理論上) 支援所有解析度，不需要設定 "高解析度"</li> 
 		    <li>新增 放大鏡 功能</li> 
-	    </ol> 
+		</ol> 
+	    </li>
 	    <li>(第二次釋出)<br> 
 		<ol> 
 		    <li>修正 無法輸入中文</li> 
@@ -129,7 +169,7 @@
     <div class="block-content"> 
     <ul> 
 	<li>Ctrl 組合鍵:<br> 
-	    按一下壓軌跡球 (某些手機為 OK 健) 再按下鍵盤按鍵	    
+	    按一下壓軌跡球 (某些手機為 OK 鍵或中心鍵) 再按下鍵盤按鍵	    
 	</li> 
 	<li>可自訂功能按鈕:<br> 
 	    連線時按下 音量升高鍵 叫出，可在設定中增加
@@ -150,7 +190,7 @@
 		<tr><td>Space</td><td>DRU</td></tr> 
 		<tr><td>HOME</td><td>LU</td></tr> 
 		<tr><td>END</td><td>LD</td></tr> 
-		<tr><td>輸入助手</td><td>RDR or<br>RLR</td></tr> 
+		<tr><td>字串輸入工具</td><td>RDR or<br>RLR</td></tr> 
 	    </table> 
 	</li> 
     </ul> 
@@ -159,8 +199,10 @@
 <div id="faq" class="block"> 
     <div class="block-title">常見問題</div> 
     <div class="block-content"> 
+	Q: 我要怎們輸入帳號密碼<br>
+	A: <span class="inlbox">連線時以音量減低鍵叫出虛擬鍵盤輸入，或者於站台列表長壓編輯設定</span><br>
 	Q: 使用 Wi-Fi 時，閒置會自動中斷<br> 
-	A: 請檢查 Wi-Fi 閒置設定
+	A: <span class="iblbox">請檢查 Wi-Fi 閒置設定</span>
     </div> 
 </div> 
 <div id="about" class="block"> 
