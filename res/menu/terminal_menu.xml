@@ -6,6 +6,8 @@
 					android:id="@+id/terminal_share_snap" />
 			<item	android:title="@string/terminal_inputhelper"
 					android:id="@+id/terminal_inputhelper" />
+			<item   android:title="@string/terminal_help"
+					android:id="@+id/terminal_help" />
 			</menu>
 	</item>
 	<item android:id="@+id/terminal_disconnect" android:icon="@android:drawable/ic_menu_close_clear_cancel" android:title="@string/terminal_disconnect" />

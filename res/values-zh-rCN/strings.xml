@@ -56,7 +56,8 @@
 	<string name="terminal_error_unknownhost">找不到站点“%s”，请检查网络是否正常，或者站点地址是否拼写错误</string>
 	<string name="terminal_error_connect">无法连接到站点“%s”，请检查网络是否正常，或者或站点目前无法连接</string>
 	<string name="terminal_inputhelper">文本输入助手</string>
-
+	<string name="terminal_help">帮助</string>
+	
 	<string name="settings_language">界面语言</string>
 	<string name="settings_language_summary">设置界面显示语言，下次启动时生效</string>
 	<string name="settings_show_statusbar">显示状态栏</string>

@@ -443,6 +443,11 @@ public class TerminalActivity extends Activity {
 		case R.id.terminal_inputhelper:
 			showInputHelper();
 			return true;
+		case R.id.terminal_help:
+			Intent helpIntent = new Intent();
+			helpIntent.setClass(this,  HelpActivity.class);
+			this.startActivity(helpIntent);
+			return true;
 		default: 
 			return super.onOptionsItemSelected(item);			
 		}
@@ -537,8 +542,8 @@ public class TerminalActivity extends Activity {
 
 		try {
 			currentView.connection.disconnect();
-		} catch (Exception _e) {
-		}
+		} catch (Exception _e) {}
+		
 
 		if (e != null) {
 			String msg = e.getLocalizedMessage();
@@ -592,10 +597,6 @@ public class TerminalActivity extends Activity {
 		if (currentViewId == -1) {
 			Toast.makeText(this, R.string.terminal_connectclose,
 					Toast.LENGTH_SHORT).show();
-		} else {
-			// disable this toast
-			// Toast.makeText(this,
-			// R.string.terminal_connectsave,Toast.LENGTH_SHORT).show();
 		}
 	}
 

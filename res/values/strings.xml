@@ -76,6 +76,7 @@
 	<string name="terminal_error_connect">"Can't connect to '%s'，please check the
 		networking，or the site is can't connected now"</string>
 	<string name="terminal_inputhelper">Input Helper</string>
+	<string name="terminal_help">Help</string>
 
 	<string name="settings_language">Language</string>
 	<string name="settings_language_summary">Select the your default language, restart needed</string>
