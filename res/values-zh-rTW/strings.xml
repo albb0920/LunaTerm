@@ -73,7 +73,9 @@
 	<string name="terminal_error_unknownhost">找不到站台“%s”，請檢查網路是否正常，或者站台地址是否拼寫錯誤</string>
 	<string name="terminal_error_connect">無法連接到站台“%s”，請檢查網路是否正常，或者或站台目前無法連接</string>
 	<string name="terminal_inputhelper">字串輸入工具</string>
+	<string name="terminal_switch_ime">切換輸入法</string>
 	<string name="terminal_help">說明</string>
+	
 	
 	<string name="settings_language">語言</string>
 	<string name="settings_language_summary">設定語言，下次啓動時生效</string>

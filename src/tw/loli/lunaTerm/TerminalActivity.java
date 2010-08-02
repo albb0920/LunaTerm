@@ -40,6 +40,7 @@ import android.view.WindowManager;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -447,6 +448,10 @@ public class TerminalActivity extends Activity {
 			Intent helpIntent = new Intent();
 			helpIntent.setClass(this,  HelpActivity.class);
 			this.startActivity(helpIntent);
+			return true;
+		case R.id.terminal_switch_ime:
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.showInputMethodPicker();
 			return true;
 		default: 
 			return super.onOptionsItemSelected(item);			
