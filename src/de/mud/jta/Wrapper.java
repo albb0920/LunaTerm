@@ -97,8 +97,11 @@ public class Wrapper {
 	public void disconnect() throws IOException {
 		if (debug > 0)
 			System.err.println("Wrapper: disconnect()");
-		if (socket != null)
-			socket.close();
+		
+		/* we need to shut down io or close() will wait for it */
+		socket.shutdownInput();
+		socket.shutdownOutput();
+		socket.close();		
 	}
 
 	/**
