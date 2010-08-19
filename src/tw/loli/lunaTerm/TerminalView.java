@@ -331,8 +331,8 @@ public class TerminalView extends View implements VDUDisplay {
 					colCount++;					
 				}
 				int lastColor[] = getColor(buffer.charAttributes[buffer.windowBase + r][c+ptr-1]);
-				if(!Arrays.equals(color,lastColor)){ 
-					localRect.left = localRect.right - charWidth; 
+				if(!Arrays.equals(color,lastColor) && ch != null){  /* null happens */
+					localRect.left = localRect.right - charWidth;
 					color = getColor( buffer.charAttributes[buffer.windowBase + r][c+ptr-1]);
 					canvas.clipRect(localRect, Op.REPLACE);
 					paint.setColor(color[1]);
