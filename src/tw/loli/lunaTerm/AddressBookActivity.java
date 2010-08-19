@@ -92,9 +92,17 @@ public class AddressBookActivity extends ListActivity {
 	private void quickConnect(){
 		String hostname = ((TextView)findViewById(R.id.quickConnect)).getText().toString();
 		int port = 23,pos;
+		/* ignore protocol */
+		if((pos = hostname.indexOf("://")) !=-1)
+			hostname = hostname.substring(pos+3);			
+		
 		if((pos = hostname.indexOf(":"))!=-1){ //extract port number
-			port = Integer.parseInt(hostname.substring(pos+1));
-			hostname = hostname.substring(0, pos);
+			try{
+				port = Integer.parseInt(hostname.substring(pos+1));
+				hostname = hostname.substring(0, pos);
+			}catch (Exception e){
+				Toast.makeText(this, R.string.addressbook_quick_connect_failed_parse, 1000);
+			}
 		}
 		if(hostname.indexOf(".")==-1) //If it's not a domain name, assume it's twbbs prefix
 			hostname += ".twbbs.org"; 
