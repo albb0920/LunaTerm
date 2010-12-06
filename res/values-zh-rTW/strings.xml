@@ -8,7 +8,9 @@
 	<string name="addressbook_help">說明</string>
 	<string name="addressbook_settings">設定</string>
 	<string name="addressbook_add_host">新增站台</string>
-	<string name="addressbook_connect_host">連接</string>
+	<string name="addressbook_connect_host">連線</string>
+	<string name="addressbook_disconnect_host">斷線</string>
+	<string name="addressbook_disconnect_msg">已斷線</string>
 	<string name="addressbook_edit_host">修改</string>
 	<string name="addressbook_delete_host">刪除</string> 
 

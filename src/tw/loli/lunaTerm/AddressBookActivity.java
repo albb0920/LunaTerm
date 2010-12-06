@@ -1,5 +1,6 @@
 package tw.loli.lunaTerm;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -289,6 +290,20 @@ public class AddressBookActivity extends ListActivity {
 		AddressBookActivity.this.startActivity(intent);
 	}
 
+	private void disconnect(Host host) throws IOException {		
+		TerminalView tv = TerminalManager.getInstance().getView(host.getId());
+		if (tv == null)
+			return;
+		else
+		{
+			tv.connection.disconnect();
+			Log.v(TAG,"close "+host.getId());
+			Toast.makeText(AddressBookActivity.this
+					, host.getName()+getText(R.string.addressbook_disconnect_msg).toString()
+					, Toast.LENGTH_SHORT).show();
+		}
+	}
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.i(TAG, "onActivityResult");
@@ -348,13 +363,28 @@ public class AddressBookActivity extends ListActivity {
 
 		menu.setHeaderTitle(host.getName());
 
-		MenuItem connect = menu.add(R.string.addressbook_connect_host);
-		connect.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			public boolean onMenuItemClick(MenuItem item) {
-				connect(host);
-				return true;
-			}
-		});
+		if (TerminalManager.getInstance().getView(host.getId()) == null) {
+			MenuItem connect = menu.add(R.string.addressbook_connect_host);
+			connect.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+				public boolean onMenuItemClick(MenuItem item) {
+					connect(host);
+					return true;
+				}
+			});
+		}
+		else {
+			MenuItem disconnect = menu.add(R.string.addressbook_disconnect_host);
+			disconnect.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+				public boolean onMenuItemClick(MenuItem item) {
+					try {
+						disconnect(host);
+					} catch (Exception e) {}
+					update();
+					return true;
+				}
+			});
+		}
+
 
 		if(hosts.indexOf(host)!=-1){ // not implemented for quick connect
 			MenuItem edit = menu.add(R.string.addressbook_edit_host);

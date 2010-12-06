@@ -9,8 +9,12 @@
 	<string name="addressbook_settings">设置</string>
 	<string name="addressbook_add_host">新增站点</string>
 	<string name="addressbook_connect_host">连接</string>
+	<string name="addressbook_disconnect_host">断开连接</string>
+	<string name="addressbook_disconnect_msg">已断开连接</string>
 	<string name="addressbook_edit_host">修改</string>
 	<string name="addressbook_delete_host">删除</string>
+	
+	
 
 	<string name="addressbook_locale_chooser">选择预设语言及站台</string>
 	<string name="addressbook_locale_chooser_desc">您希望使用哪种语言站台？</string>
