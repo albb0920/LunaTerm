@@ -82,6 +82,7 @@ public class Wrapper {
 		if (debug > 0)
 			System.err.println("Wrapper: connect(" + host + "," + port + ")");
 		try {
+			this.host = host;
 			socket = new java.net.Socket(host, port);
 			socket.setTrafficClass(0x10); 
 			in = socket.getInputStream();

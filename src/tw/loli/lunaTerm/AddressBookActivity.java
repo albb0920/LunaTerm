@@ -290,18 +290,13 @@ public class AddressBookActivity extends ListActivity {
 		AddressBookActivity.this.startActivity(intent);
 	}
 
-	private void disconnect(Host host) throws IOException {		
-		TerminalView tv = TerminalManager.getInstance().getView(host.getId());
-		if (tv == null)
-			return;
-		else
-		{
+	private void disconnect(Host host, TerminalView tv) throws IOException {
+			Log.v(TAG,"close "+ tv.host.getId());
 			tv.connection.disconnect();
-			Log.v(TAG,"close "+host.getId());
+			TerminalManager.getInstance().removeView(tv.host.getId());
 			Toast.makeText(AddressBookActivity.this
 					, host.getName()+getText(R.string.addressbook_disconnect_msg).toString()
 					, Toast.LENGTH_SHORT).show();
-		}
 	}
 	
 	@Override
@@ -360,10 +355,10 @@ public class AddressBookActivity extends ListActivity {
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 		final Host host = getRealHost(info.position);
-
+		final TerminalView tv = TerminalManager.getInstance().getView(host.getId());
 		menu.setHeaderTitle(host.getName());
-
-		if (TerminalManager.getInstance().getView(host.getId()) == null) {
+		
+		if (tv == null) {
 			MenuItem connect = menu.add(R.string.addressbook_connect_host);
 			connect.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 				public boolean onMenuItemClick(MenuItem item) {
@@ -377,7 +372,7 @@ public class AddressBookActivity extends ListActivity {
 			disconnect.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 				public boolean onMenuItemClick(MenuItem item) {
 					try {
-						disconnect(host);
+						disconnect(host, tv);
 					} catch (Exception e) {}
 					update();
 					return true;
