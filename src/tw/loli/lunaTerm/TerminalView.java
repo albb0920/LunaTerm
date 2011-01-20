@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.InputType;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
@@ -79,7 +80,8 @@ public class TerminalView extends View implements VDUDisplay {
 	private boolean ctrlPressed;
 	private boolean altPressed;
 	private boolean shiftPressed;
-
+	private final float xdpi, ydpi; 
+	
 	public Wrapper connection;
 	public TerminalActivity terminalActivity;
 	public Host host;
@@ -91,6 +93,10 @@ public class TerminalView extends View implements VDUDisplay {
 		this.terminalActivity = context;
 		setFocusable(true);
 		setFocusableInTouchMode(true);
+		DisplayMetrics metrics = new DisplayMetrics();
+		context.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		xdpi = metrics.xdpi;
+		ydpi = metrics.ydpi;
 		init();		
 	}
 
@@ -534,18 +540,37 @@ public class TerminalView extends View implements VDUDisplay {
 		switch (eventaction) {
 
 		case MotionEvent.ACTION_DOWN: // touch down so check if the
-
+			Log.v(TAG, "Got touch ev when url is "+urls.length);
 			int y = (int) event.getRawY();
 			int x = (int) event.getRawX();
 			int l = (int) (y / CHAR_HEIGHT);
 			int w = (int) (x / CHAR_WIDTH);
-
-			if (urls[l] != null) {
-				for (Url url : urls[l]) {
-					if (url.pointIn(w, l))
+			float lastDiff = 0f;
+			Url lastUrl = null;
+			for(ArrayList<Url> lineUrls : urls){
+				for(Url url : lineUrls){
+					if (l == url.y && w >= url.startX && w <= url.endX){				
 						terminalActivity.showUrlDialog(url.url.trim());
+						return true;						
+					}else{
+						float diff = (l == url.y)? 0 : 
+										(l < url.y) ? url.y * CHAR_HEIGHT - y : y - (url.y+1) * CHAR_HEIGHT;
+						diff /= ydpi;
+						if(w < url.startX)
+							diff += (url.startX * CHAR_WIDTH - x) / xdpi;
+						else if(w > url.endX)
+							diff += (x - url.endX * CHAR_WIDTH)/ xdpi;
+						if(lastDiff == 0 || diff < lastDiff ){
+							lastDiff = diff;
+							lastUrl = url;
+						}
 					}
 				}
+			}
+			if(lastDiff > 0 && lastDiff <= 0.0787 ){ // accept 0.2cm difference				
+				terminalActivity.showUrlDialog(lastUrl.url.trim());
+				return true;						
+			}	
 			Log.d(TAG, "onTouchEvent:" + y + "/" + CHAR_HEIGHT + "=" + l);
 			return true;
 
@@ -880,10 +905,6 @@ public class TerminalView extends View implements VDUDisplay {
 		    this.endX = endX;
 		    this.y = y;
 		    this.url = url;
-		}
-		
-	    public boolean pointIn(int x, int y) {
-		    return (this.y == y && x >= startX && x <= endX);
 		}
 	}
 }
