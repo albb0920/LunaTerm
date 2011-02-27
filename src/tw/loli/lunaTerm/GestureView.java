@@ -12,6 +12,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -31,6 +32,7 @@ public class GestureView extends View implements View.OnLongClickListener{
 	private Canvas footprintCanvas;
 	private int footprintColor = Color.RED;
 	private int footprintWidth = 5;
+	private int sideScrollWidth = 0;
 
 	private Bitmap textBitmap;
 	private final Paint textPaint;
@@ -45,6 +47,7 @@ public class GestureView extends View implements View.OnLongClickListener{
 	private boolean magnifierOn = false;	
 	private boolean fingerOnScreen = false;
 	
+	private float totalScroll = 0;
 	private int MAGNIFIER_HEIGHT = 100;
 	private int MAGNIFIER_WIDTH = 200;
 	private int MAGNIFIER_MARGIN = 50;
@@ -78,6 +81,10 @@ public class GestureView extends View implements View.OnLongClickListener{
 		textPaint.setAntiAlias(true);
 		textPaint.setTextSize(15);
 		textPaint.setTypeface(Typeface.MONOSPACE);
+		DisplayMetrics dm = new DisplayMetrics();
+		((TerminalActivity)c).getWindowManager().getDefaultDisplay().getMetrics(dm);
+		sideScrollWidth = (int)(dm.xdpi * 0.157); 
+		
 		setOnLongClickListener(this);  
 	}
 
@@ -92,7 +99,6 @@ public class GestureView extends View implements View.OnLongClickListener{
 		textBitmap = Bitmap.createBitmap(w, 20, Bitmap.Config.ARGB_4444);
 		textCanvas = new Canvas();
 		textCanvas.setBitmap(textBitmap);
-
 	}
 	
 	
@@ -373,7 +379,13 @@ public class GestureView extends View implements View.OnLongClickListener{
 							else
 								g = GESTURE_UP;
 						}
-
+						// Check if it's side scroll 
+						if(currentGesture.length() == 0 && e1.getX() >= getWidth() - sideScrollWidth && g != GESTURE_LEFT && g != GESTURE_RIGHT){
+							// Handle scroll
+							totalScroll += dy;
+							return true;
+						}
+							
 						recognize(g);
 						dx = dy = 0;
 					} else {
