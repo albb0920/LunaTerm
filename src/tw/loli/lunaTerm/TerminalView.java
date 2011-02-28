@@ -316,7 +316,9 @@ public class TerminalView extends View implements VDUDisplay {
 				for(int pos = 0; pos < string.length(); pos++){
 					ch = string.substring(pos, pos+1);
 					chDecent = decent;
-					if( colCount+1 < ptr && ((chars[colCount] == 0xA1 && chars[colCount+1] >= 0x41) || 
+					/* hrs.110301: fix decent bug - use special chars [dirty] */
+					if( (chars[colCount] >= 0x21 && chars[colCount] <= 0x7E) ||
+						colCount+1 < ptr && ((chars[colCount] == 0xA1 && chars[colCount+1] >= 0x41) || 
 						(chars[colCount] == 0xA2 && (
 							  chars[colCount+1] < 0x49 ||
 							 (chars[colCount+1] > 0x62 && chars[colCount+1]< 0xAE))))){
