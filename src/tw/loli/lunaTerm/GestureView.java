@@ -16,6 +16,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -47,7 +48,7 @@ public class GestureView extends View implements View.OnLongClickListener{
 	private boolean magnifierOn = false;	
 	private boolean fingerOnScreen = false;
 	
-	private float totalScroll = 0;
+	private float accSideScroll = 0;
 	private int MAGNIFIER_HEIGHT = 100;
 	private int MAGNIFIER_WIDTH = 200;
 	private int MAGNIFIER_MARGIN = 50;
@@ -83,7 +84,7 @@ public class GestureView extends View implements View.OnLongClickListener{
 		textPaint.setTypeface(Typeface.MONOSPACE);
 		DisplayMetrics dm = new DisplayMetrics();
 		((TerminalActivity)c).getWindowManager().getDefaultDisplay().getMetrics(dm);
-		sideScrollWidth = (int)(dm.xdpi * 0.157); 
+		sideScrollWidth = (int)(dm.xdpi * 0.4); 
 		
 		setOnLongClickListener(this);  
 	}
@@ -308,7 +309,7 @@ public class GestureView extends View implements View.OnLongClickListener{
 
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {		
-		Log.v(TAG, "onTouchEvent...action=" + ev.getAction());
+		//Log.v(TAG, "onTouchEvent...action=" + ev.getAction());
 		Point evPoint = new Point((int) ev.getX(),(int) ev.getY());
 		
 		if(magnifierOn){
@@ -365,7 +366,27 @@ public class GestureView extends View implements View.OnLongClickListener{
 				public boolean onScroll(MotionEvent e1, MotionEvent e2,
 						float distanceX, float distanceY) {
 					Log.d("Gesture", "onScroll:" + distanceX + "," + distanceY);
-
+					
+					// Check if it's side scroll 
+					if(currentGesture.length() == 0 &&
+						e1.getX() >= getWidth() - sideScrollWidth &&
+						e2.getX() >= getWidth() - sideScrollWidth){
+						accSideScroll += distanceY;
+						int sLines = (int) (accSideScroll / (getHeight() / 24)); 
+						do{
+							if(sLines < 0){
+								terminalActivity.pressKey(KeyEvent.KEYCODE_DPAD_DOWN);							
+								sLines++;
+							}else{
+								terminalActivity.pressKey(KeyEvent.KEYCODE_DPAD_UP);										
+								sLines--;
+							}
+						}while(sLines !=0 );
+						accSideScroll = accSideScroll % (getHeight() / 24);
+						return true;
+					}else
+						accSideScroll = 0;
+					
 					if (Math.max(Math.abs(dx), Math.abs(dy)) >= minGestureDistance) {
 						char g = GESTURE_LEFT;
 						if (Math.abs(dx) > Math.abs(dy)) {
@@ -378,13 +399,7 @@ public class GestureView extends View implements View.OnLongClickListener{
 								g = GESTURE_DOWN;
 							else
 								g = GESTURE_UP;
-						}
-						// Check if it's side scroll 
-						if(currentGesture.length() == 0 && e1.getX() >= getWidth() - sideScrollWidth && g != GESTURE_LEFT && g != GESTURE_RIGHT){
-							// Handle scroll
-							totalScroll += dy;
-							return true;
-						}
+						}					
 							
 						recognize(g);
 						dx = dy = 0;
