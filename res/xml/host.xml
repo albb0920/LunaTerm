@@ -9,7 +9,7 @@
 		android:singleLine="true" />
 	<EditTextPreference android:key="port"
 		android:title="@string/edithost_port" android:summary="@string/edithost_port_summary"
-		android:singleLine="true" android:defaultValue="23" />
+		android:singleLine="true" android:defaultValue="23" android:inputType="number" />
 	<ListPreference android:key="protocal" android:title="@string/edithost_protocal"
 		android:summary="@string/edithost_protocal_summary" android:entries="@array/protocals"
 		android:entryValues="@array/protocals" android:defaultValue="telnet" />
