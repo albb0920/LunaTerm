@@ -186,7 +186,11 @@ public class GestureView extends View implements View.OnLongClickListener{
 			///////////////////////////
 			
 			TerminalView view = terminalActivity.getCurrentTerminalView();
-			view.renderMagnifier(canvas, magnifier, focus);
+			
+			//FIXME: User FC at here, but there seems no reason for this to be null....? 
+			//		 Needs double check!!
+			if(view != null)
+				view.renderMagnifier(canvas, magnifier, focus);
 		}else{
 			canvas.drawBitmap(footprintBitmap, 0, 0, null);
 			canvas.drawBitmap(textBitmap, 0, 0, null);
