@@ -50,7 +50,7 @@
 	<string name="editfunctionbtn_sortnumber">排序数值</string>
 	<string name="editfunctionbtn_sortnumber_summary">用来定义功能按钮的显示顺序，数值小的显示在前面</string>
 
-
+	<string name="terminal_paste">貼上</string>
 	<string name="terminal_disconnect">强制断开连接</string>
 	<string name="terminal_connectclose">连接已经断开</string>
 	<string name="terminal_error_unknownhost">找不到站点“%s”，请检查网络是否正常，或者站点地址是否拼写错误</string>

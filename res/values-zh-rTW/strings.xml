@@ -63,6 +63,7 @@
 	<string name="editfunctionbtn_sortnumber_summary">功能按鈕的顯示順序，數值小的顯示在前面</string>
 
 	<string name="terminal_tools">工具</string>
+	<string name="terminal_paste">貼上</string>
 	<string name="terminal_share_snap">分享畫面擷圖</string>
 	<string name="terminal_share_compressing">擷圖壓縮中，請稍候</string>
 	

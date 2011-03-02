@@ -66,6 +66,7 @@
 	</string>
 
 	<string name="terminal_tools">Tools</string>
+	<string name="terminal_paste">Paste from clipboard</string>
 	<string name="terminal_share_snap">Share Snapshot</string>
 	<string name="terminal_share_compressing">Compressing...</string>
 	<string name="terminal_share_via">Share via...</string>
