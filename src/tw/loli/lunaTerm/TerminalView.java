@@ -94,11 +94,7 @@ public class TerminalView extends View implements VDUDisplay {
 		context.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		xdpi = metrics.xdpi;
 		ydpi = metrics.ydpi;
-		init();		
-	}
 
-	
-	public void init() {
 		resetColors();
 		
 		buffer = new vt320() {
