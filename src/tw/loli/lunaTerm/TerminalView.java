@@ -317,11 +317,11 @@ public class TerminalView extends View implements VDUDisplay {
 					ch = string.substring(pos, pos+1);
 					chDecent = decent;
 					/* hrs.110301: fix decent bug - use special chars [dirty] */
-					if( (chars[colCount] >= 0x21 && chars[colCount] <= 0x7E) ||
-						colCount+1 < ptr && ((chars[colCount] == 0xA1 && chars[colCount+1] >= 0x41) || 
+					if( (colCount < ptr && chars[colCount] >= 0x21 && chars[colCount] <= 0x7E) ||
+						(colCount+1 < ptr && ((chars[colCount] == 0xA1 && chars[colCount+1] >= 0x41) || 
 						(chars[colCount] == 0xA2 && (
 							  chars[colCount+1] < 0x49 ||
-							 (chars[colCount+1] > 0x62 && chars[colCount+1]< 0xAE))))){
+							 (chars[colCount+1] > 0x62 && chars[colCount+1]< 0xAE)))))){
 						paint.setTypeface(specialTypeface);
 						chDecent = sp_decent;
 					}else{
