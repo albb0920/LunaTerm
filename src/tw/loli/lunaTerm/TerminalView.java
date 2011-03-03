@@ -676,6 +676,9 @@ public class TerminalView extends View implements VDUDisplay {
 		case KeyEvent.KEYCODE_DPAD_RIGHT:
 			((vt320) buffer).keyPressed(vt320.KEY_RIGHT, ' ', mState);
 			return true;
+		case KeyEvent.KEYCODE_TAB:
+			((vt320) buffer).keyPressed(vt320.KEY_TAB, ' ', mState);
+			return true;
 		case KeyEvent.KEYCODE_SEARCH:
 		case KeyEvent.KEYCODE_DPAD_CENTER:
 			// TODO: Add some visual indication of Ctrl state
