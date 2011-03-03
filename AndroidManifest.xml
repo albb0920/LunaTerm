@@ -12,7 +12,9 @@
 			</intent-filter>
 		</activity>
 		<activity android:name=".TerminalActivity"
-			android:screenOrientation="landscape" android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="landscape" 
+			android:configChanges="keyboardHidden|orientation"
+			android:theme="@style/Theme.NoTitleBarAndShadow"
 			android:windowSoftInputMode="stateVisible|adjustPan" />
 		<activity android:name="com.roiding.rterm.EditHostActivity" />
 		<activity android:name="com.roiding.rterm.SettingsActivity" />
