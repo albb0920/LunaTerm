@@ -16,7 +16,6 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.Bitmap.Config;
 import android.graphics.Region.Op;
-import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.InputType;
 import android.text.method.MetaKeyKeyListener;
@@ -28,7 +27,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.BaseInputConnection;
-import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
@@ -37,7 +35,6 @@ import com.roiding.rterm.bean.Host;
 import com.roiding.rterm.util.ChineseUtils;
 
 import de.mud.jta.Wrapper;
-import de.mud.ssh.SshWrapper;
 import de.mud.telnet.TelnetWrapper;
 import de.mud.terminal.VDUBuffer;
 import de.mud.terminal.VDUDisplay;
@@ -835,13 +832,13 @@ public class TerminalView extends View implements VDUDisplay {
 							connection.send(hostPass + "\n");
 						}
 
-					} else if ("ssh".equalsIgnoreCase(hostProtocal)) {
+					}/* else if ("ssh".equalsIgnoreCase(hostProtocal)) {
 						connection = new SshWrapper();
 						connection.connect(hostHost, hostPort);
 						connection.login(hostUser, hostPass);
 						connection.send("" + "\n");
 
-					}
+					}*/
 
 					connected = true;
 					while (true) {
