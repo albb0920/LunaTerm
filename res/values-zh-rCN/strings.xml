@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">rTerm</string>
+	<string name="app_name">LunaTerm</string>
 	<string name="ok">确定</string>
 	<string name="cancel">取消</string>
 
@@ -17,10 +17,14 @@
 	
 	<string name="locale_en">英文</string>
     <string name="locale_zh_cn">简体中文</string>
-    <string name="locale_zh_tw">繁体中文</string>
+    <string name="locale_zh_tw">正体中文</string>
+    
+    <string name="addressbook_quick_connect">如: ptt 或 ptt2.cc:23 </string>
+	<string name="addressbook_quick_connect_button">快速联机</string>
     
 	<string name="edithost_done">保存</string>
 	<string name="edithost_revert">放弃修改</string>
+	<string name="edithost_options">站点设定</string>
 	<string name="edithost_name">站点名称</string>
 	<string name="edithost_name_summary">站点的名称，便于区别不同的站点</string>
 	<string name="edithost_host">站点地址</string>
@@ -36,6 +40,10 @@
 	<string name="edithost_user_summary">用于自动登录的用户</string>
 	<string name="edithost_pass">密码</string>
 	<string name="edithost_pass_summary">用于自动登录的用户的密码</string>
+	<string name="edithost_exit_title">确认</string>
+	<string name="edithost_exit_confirm_message">是否要储存此站点？</string>
+	<string name="edithost_exit_confirm">确定</string>
+	<string name="edithost_exit_cancel">取消</string>
 
 	<string name="functionbtn_empty">还没有定义任何功能按钮</string>
 	<string name="editfunctionbtn_add">新增功能按钮</string>
@@ -50,7 +58,13 @@
 	<string name="editfunctionbtn_sortnumber">排序数值</string>
 	<string name="editfunctionbtn_sortnumber_summary">用来定义功能按钮的显示顺序，数值小的显示在前面</string>
 
-	<string name="terminal_paste">貼上</string>
+	<string name="terminal_tools">工具</string>
+	<string name="terminal_paste">贴上</string>
+	<string name="terminal_share_snap">分享画面撷图</string>
+	<string name="terminal_share_compressing">撷图压缩中，请稍候</string>
+	
+	<string name="terminal_share_via">分享擷圖至</string>
+
 	<string name="terminal_disconnect">强制断开连接</string>
 	<string name="terminal_connectclose">连接已经断开</string>
 	<string name="terminal_error_unknownhost">找不到站点“%s”，请检查网络是否正常，或者站点地址是否拼写错误</string>
@@ -59,8 +73,9 @@
 	<string name="terminal_help">帮助</string>
 	<string name="terminal_switch_ime">切换输入法</string>
 	
-	<string name="settings_language">界面语言</string>
-	<string name="settings_language_summary">设置界面显示语言，下次启动时生效</string>
+	<!--<string name="settings_language">界面语言</string>
+	<string name="settings_language_summary">设置界面显示语言，下次启动时生效</string>-->
+	<string name="settings_display_option">显示设置</string>
 	<string name="settings_show_statusbar">显示状态栏</string>
 	<string name="settings_show_statusbar_summary">设置在Terminal状态下是否显示状态栏</string>
 	<string name="settings_cate_input_assist">输入辅助</string>

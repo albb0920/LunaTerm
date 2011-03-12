@@ -2,11 +2,10 @@ package com.roiding.rterm;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import tw.loli.lunaTerm.R;
-import tw.loli.lunaTerm.R.string;
-import tw.loli.lunaTerm.R.xml;
-
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -15,6 +14,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -36,7 +36,7 @@ public class EditHostActivity extends PreferenceActivity {
 		valuesMap.put("host", "");
 		valuesMap.put("port", "23");
 		valuesMap.put("protocal", "Telnet");
-		valuesMap.put("encoding", "BIG5");
+		valuesMap.put("encoding", "Big5");
 		valuesMap.put("user", "");
 		valuesMap.put("pass", "");
 
@@ -74,6 +74,9 @@ public class EditHostActivity extends PreferenceActivity {
 						.setOnPreferenceChangeListener(listener);
 			}
 		}
+		
+
+
 	}
 
 	private void extractValuesFromHost(Host host) {
@@ -121,7 +124,7 @@ public class EditHostActivity extends PreferenceActivity {
 
 		save.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem item) {
-				autoSave = true;
+				save();
 				finish();
 				return true;
 			}
@@ -131,7 +134,6 @@ public class EditHostActivity extends PreferenceActivity {
 
 		cancel.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem item) {
-				autoSave = false;
 				finish();
 				return true;
 			}
@@ -142,7 +144,6 @@ public class EditHostActivity extends PreferenceActivity {
 
 		delete.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem item) {
-				autoSave = false;
 				delete();
 				finish();
 				return true;
@@ -152,20 +153,32 @@ public class EditHostActivity extends PreferenceActivity {
 		return true;
 	}
 
-	private boolean autoSave = true;
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		autoSave = true;
+	public void onConfigurationChanged(Configuration newConfig){
+		super.onConfigurationChanged(newConfig);
 	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		if (autoSave)
-			save();
-	}
+	
+	public boolean onKeyDown(int keyCode, KeyEvent event){ 
+        if (keyCode!=KeyEvent.KEYCODE_BACK)
+        	return false;
+        else{ 
+            new AlertDialog 
+            .Builder(this) 
+            .setTitle(R.string.edithost_exit_title) 
+            .setMessage(R.string.edithost_exit_confirm_message) 
+            .setPositiveButton(R.string.edithost_exit_confirm, new DialogInterface.OnClickListener(){  
+                public void onClick(DialogInterface arg0, int arg1){  
+                    save();
+                    finish();
+                } 
+            }).setNegativeButton(R.string.edithost_exit_cancel, new DialogInterface.OnClickListener(){  
+            		public void onClick(DialogInterface arg0, int arg1){  
+            			finish(); 
+            		} 
+               }).setIcon(android.R.drawable.ic_dialog_alert)
+               .show();
+        } 
+        return true; 
+    }
 
 	private void delete() {
 

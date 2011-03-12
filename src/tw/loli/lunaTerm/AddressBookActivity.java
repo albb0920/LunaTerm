@@ -13,7 +13,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.res.Configuration;
+//import android.content.res.Configuration;
+//import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -47,30 +48,34 @@ public class AddressBookActivity extends ListActivity {
 	private static List<Host> quickConnectHosts = new ArrayList<Host>();
 	private DBUtils dbUtils;
 	private SharedPreferences prefs;
+	//private String languageToLoad;
+	//private Resources res;
+	//private Configuration conf;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Log.i(TAG, "onCreate");
+		//Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 
-		SharedPreferences pref = PreferenceManager
+		/*SharedPreferences pref = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		String languageToLoad = pref.getString(Constants.SETTINGS_LANGUAGE,
-				"en");
+		languageToLoad = pref.getString(Constants.SETTINGS_LANGUAGE,"en");
 
-		Log.i(TAG, languageToLoad);
+		//Log.i(TAG, languageToLoad);
 
 		String[] localeStr = new String[] { languageToLoad, "" };
 		if (languageToLoad.indexOf("_") > 0)
 			localeStr = languageToLoad.split("_");
 		Locale locale = new Locale(localeStr[0], localeStr[1]);
+		
+		//Log.i(TAG, languageToLoad);
 
 		Locale.setDefault(locale);
 		Configuration config = new Configuration();
 		config.locale = locale;
 		
-		//FIXME: albb0920.100714: Why is this line comment out?
-//		getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
+		FIXME: albb0920.100714: Why is this line comment out?
+		//getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());*/
 				
 		setContentView(R.layout.act_addressbook);
 		
@@ -110,7 +115,15 @@ public class AddressBookActivity extends ListActivity {
 		Host host = new Host();
 		host.setHost(hostname);
 		host.setPort(port);
-		host.setEncoding("Big5"); //TODO:make this determine by preference
+
+		String lang = Locale.getDefault().getCountry();
+		
+		if("CN".equals(lang)){
+			host.setEncoding("GBK");
+		}
+		else{
+			host.setEncoding("Big5");
+		}
 		host.setProtocal("Telnet");
 		host.setName("("+hostname+":"+port+")");
 		host.setId(-1*(quickConnectHosts.size()+2)); // use negative id to cheat DBtools, it's below -2 because -1 is magic number 
@@ -131,7 +144,7 @@ public class AddressBookActivity extends ListActivity {
 						new DialogInterface.OnClickListener() {
 							public void onClick(
 									DialogInterface dialoginterface, int i) {
-								Locale locale = new Locale("en", "");
+								//Locale locale = new Locale("en", "");
 
 								RadioGroup rg = (RadioGroup) m_chooser
 										.findViewById(R.id.options);
@@ -142,20 +155,20 @@ public class AddressBookActivity extends ListActivity {
 									initZhCnHost();
 									initZhTwHost();
 								} else if (nID == R.id.locale_zh_rCN) {
-									locale = new Locale("zh", "CN");
+									//locale = new Locale("zh", "CN");
 									initZhCnHost();
 								} else if (nID == R.id.locale_zh_rTW) {
-									locale = new Locale("zh", "TW");
+									//locale = new Locale("zh", "TW");
 									initZhTwHost();
 								}
 
-								Editor pref = PreferenceManager
+								/*Editor pref = PreferenceManager
 										.getDefaultSharedPreferences(
 												AddressBookActivity.this)
 										.edit();
 								pref.putString(Constants.SETTINGS_LANGUAGE,
 										locale.toString());
-								pref.commit();
+								pref.commit();*/
 
 								update();
 							}

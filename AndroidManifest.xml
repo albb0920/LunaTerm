@@ -5,7 +5,8 @@
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
 		<activity android:name=".AddressBookActivity" 
 			android:label="@string/app_name"
-			android:windowSoftInputMode="stateAlwaysHidden">
+			android:windowSoftInputMode="stateAlwaysHidden"
+			android:configChanges="keyboardHidden|orientation">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -13,10 +14,10 @@
 		</activity>
 		<activity android:name=".TerminalActivity"
 			android:screenOrientation="landscape" 
-			android:configChanges="keyboardHidden|orientation"
+			android:configChanges="keyboardHidden|orientation|"
 			android:theme="@style/Theme.NoTitleBarAndShadow"
 			android:windowSoftInputMode="stateVisible|adjustPan" />
-		<activity android:name="com.roiding.rterm.EditHostActivity" />
+		<activity android:name="com.roiding.rterm.EditHostActivity"  android:configChanges="keyboardHidden|orientation"/>
 		<activity android:name="com.roiding.rterm.SettingsActivity" />
 		<activity android:name=".FunctionButtonActivity" />
 		<activity android:name="com.roiding.rterm.EditFunctionButtonActivity" />
