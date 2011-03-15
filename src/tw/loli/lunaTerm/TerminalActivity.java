@@ -403,14 +403,14 @@ public class TerminalActivity extends Activity {
 		input.setText(url);
 		alert.setView(input);
 
-		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				String value = input.getText().toString();
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(value)));
 			}
 		});
 
-		alert.setNegativeButton("Cancel",
+		alert.setNegativeButton(R.string.cancel,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						// Canceled.

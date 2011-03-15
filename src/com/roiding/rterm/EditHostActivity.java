@@ -2,11 +2,10 @@ package com.roiding.rterm;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import tw.loli.lunaTerm.R;
-import tw.loli.lunaTerm.R.string;
-import tw.loli.lunaTerm.R.xml;
-
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -15,6 +14,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -36,9 +36,10 @@ public class EditHostActivity extends PreferenceActivity {
 		valuesMap.put("host", "");
 		valuesMap.put("port", "23");
 		valuesMap.put("protocal", "Telnet");
-		valuesMap.put("encoding", "BIG5");
+		valuesMap.put("encoding", "Big5");
 		valuesMap.put("user", "");
 		valuesMap.put("pass", "");
+		valuesMap.put("autodelay", "0");
 
 		h = (Host) getIntent().getSerializableExtra("host");
 
@@ -74,6 +75,9 @@ public class EditHostActivity extends PreferenceActivity {
 						.setOnPreferenceChangeListener(listener);
 			}
 		}
+		
+
+
 	}
 
 	private void extractValuesFromHost(Host host) {
@@ -85,6 +89,7 @@ public class EditHostActivity extends PreferenceActivity {
 		m.put("encoding", host.getEncoding());
 		m.put("user", host.getUser());
 		m.put("pass", host.getPass());
+		m.put("autodelay", String.valueOf(host.getAutodelay()));
 	}
 
 	private void updatePreferenceDisplay() {
@@ -121,7 +126,7 @@ public class EditHostActivity extends PreferenceActivity {
 
 		save.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem item) {
-				autoSave = true;
+				save();
 				finish();
 				return true;
 			}
@@ -131,7 +136,6 @@ public class EditHostActivity extends PreferenceActivity {
 
 		cancel.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem item) {
-				autoSave = false;
 				finish();
 				return true;
 			}
@@ -142,7 +146,6 @@ public class EditHostActivity extends PreferenceActivity {
 
 		delete.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem item) {
-				autoSave = false;
 				delete();
 				finish();
 				return true;
@@ -152,20 +155,32 @@ public class EditHostActivity extends PreferenceActivity {
 		return true;
 	}
 
-	private boolean autoSave = true;
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		autoSave = true;
+	public void onConfigurationChanged(Configuration newConfig){
+		super.onConfigurationChanged(newConfig);
 	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		if (autoSave)
-			save();
-	}
+	
+	public boolean onKeyDown(int keyCode, KeyEvent event){ 
+        if (keyCode!=KeyEvent.KEYCODE_BACK)
+        	return false;
+        else{ 
+            new AlertDialog 
+            .Builder(this) 
+            .setTitle(R.string.edithost_exit_title) 
+            .setMessage(R.string.edithost_exit_confirm_message) 
+            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener(){  
+                public void onClick(DialogInterface arg0, int arg1){  
+                    save();
+                    finish();
+                } 
+            }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){  
+            		public void onClick(DialogInterface arg0, int arg1){  
+            			finish(); 
+            		} 
+               }).setIcon(android.R.drawable.ic_dialog_alert)
+               .show();
+        } 
+        return true; 
+    }
 
 	private void delete() {
 
@@ -186,6 +201,7 @@ public class EditHostActivity extends PreferenceActivity {
 		String hostEncoding = valuesMap.get("encoding");
 		String hostUser = valuesMap.get("user");
 		String hostPass = valuesMap.get("pass");
+		String autodelay = valuesMap.get("autodelay");
 
 		if (h != null) {
 			h.setName(hostName);
@@ -194,6 +210,7 @@ public class EditHostActivity extends PreferenceActivity {
 			h.setEncoding(hostEncoding);
 			h.setUser(hostUser);
 			h.setPass(hostPass);
+			h.setAutodelay(Integer.parseInt(autodelay));
 
 			try {
 				h.setPort(Integer.parseInt(hostPort));
@@ -214,6 +231,7 @@ public class EditHostActivity extends PreferenceActivity {
 			h.setEncoding(hostEncoding);
 			h.setUser(hostUser);
 			h.setPass(hostPass);
+			h.setAutodelay(Integer.parseInt(autodelay));
 
 			try {
 				h.setPort(Integer.parseInt(hostPort));

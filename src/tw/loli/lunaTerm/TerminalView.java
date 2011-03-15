@@ -5,8 +5,8 @@ import java.lang.reflect.Array;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -17,6 +17,7 @@ import android.graphics.Typeface;
 import android.graphics.Bitmap.Config;
 import android.graphics.Region.Op;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.text.method.MetaKeyKeyListener;
 import android.util.AttributeSet;
@@ -94,6 +95,7 @@ public class TerminalView extends View implements VDUDisplay {
 		context.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		xdpi = metrics.xdpi;
 		ydpi = metrics.ydpi;
+		
 
 		resetColors();
 		
@@ -810,34 +812,53 @@ public class TerminalView extends View implements VDUDisplay {
 
 		new Thread(new Runnable() {
 			public void run() {
+			
 				byte[] b = new byte[4096];
+				int delay = host.getAutodelay()*1000;
 
 				try {
 					String hostProtocal = host.getProtocal();
 					String hostHost = host.getHost();
-					String hostUser = host.getUser();
-					String hostPass = host.getPass();
-
 					int hostPort = host.getPort();
-
+					
 					if ("telnet".equalsIgnoreCase(hostProtocal)) {
 						connection = new TelnetWrapper();
 						connection.connect(hostHost, hostPort);
-
-						if (hostUser != null && hostPass != null
-								&& hostUser.length() > 0
-								&& hostPass.length() > 0) {
-							connection.send(hostUser + "\n");
-							connection.send(hostPass + "\n");
-						}
-
-					}/* else if ("ssh".equalsIgnoreCase(hostProtocal)) {
+					}  /* else if ("ssh".equalsIgnoreCase(hostProtocal)) {
 						connection = new SshWrapper();
 						connection.connect(hostHost, hostPort);
-						connection.login(hostUser, hostPass);
-						connection.send("" + "\n");
-
-					}*/
+					} */
+					
+					TerminalView.this.postDelayed(new Runnable() {
+						public void run() {
+							try {
+								String hostUser = host.getUser();
+								String hostPass = host.getPass();
+				
+								String hostProtocal = host.getProtocal();
+								
+								if ("telnet".equalsIgnoreCase(hostProtocal)) {
+				
+									if (hostUser != null && hostPass != null
+											&& hostUser.length() > 0
+											&& hostPass.length() > 0) {
+										connection.send(hostUser + "\r");
+										
+										connection.send(hostPass + "\r");
+									}
+				
+								} else if ("ssh".equalsIgnoreCase(hostProtocal)) {
+				
+									connection.login(hostUser, hostPass);
+									connection.send("" + "\r");
+				
+								}			
+							} catch (Exception e) {
+								e.printStackTrace();
+								nodifyParent(e);
+							}
+						}
+					}, delay);
 
 					connected = true;
 					while (true) {

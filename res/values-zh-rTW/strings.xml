@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">LunaTerm</string>
-	<string name="ok">OK</string>
-	<string name="cancel">Cancel</string>
+	<string name="ok">確定</string>
+	<string name="cancel">取消</string>
 
 	<string name="addressbook_empty">列表中沒有任何站台</string>
 	<string name="addressbook_help">說明</string>
@@ -19,36 +19,35 @@
     <string name="locale_zh_cn">簡體中文</string>
     <string name="locale_zh_tw">正體中文</string>
     
-    
     <string name="addressbook_quick_connect">如: ptt 或 ptt2.cc:23 </string>
 	<string name="addressbook_quick_connect_button">快速連線</string>
     
-  
-    
-	<string name="addressbook_site_lilacbbs">紫丁香社區</string>
-	<string name="addressbook_site_newsmth">水木社區</string>
-	<string name="addressbook_site_lqqm">兩全其美</string>
 	<string name="addressbook_site_ptt">批踢踢</string>
 	<string name="addressbook_site_ptt2">批踢踢兔</string>
 
 	<string name="edithost_done">儲存</string>
-	<string name="edithost_revert">取消</string>
+	<string name="edithost_revert">放棄修改</string>
+	<string name="edithost_options">站台設定</string>
 	<string name="edithost_name">站台名稱</string>
 	<string name="edithost_name_summary">站台的名稱，便於區別不同的站台</string>
 	<string name="edithost_host">站台地址</string>
-	<string name="edithost_host_summary">站台的訪問地址，可以是域名地址或者IP地址</string>
+	<string name="edithost_host_summary">站台的位址，可以是主機位址或IP位址</string>
 	<string name="edithost_protocal">連接方式</string>
 	<string name="edithost_protocal_summary">站台的連接方式，是使用Telnet協定還是SSH協定</string>
-	<string name="edithost_port">端口</string>
-	<string name="edithost_port_summary">站台的訪問端口，一般Telnet的端口是23，SSH的端口是22</string>
+	<string name="edithost_port">連接埠</string>
+	<string name="edithost_port_summary">站台的連接埠，一般Telnet的連接埠是23，SSH的連接埠是22</string>
 	<string name="edithost_encoding">編碼</string>
-	<string name="edithost_encoding_summary">簡體中文的網站選擇GBK，正體中文的網站請選擇Big5</string>
+	<string name="edithost_encoding_summary">簡體中文的站台選擇GBK，正體中文的站台請選擇Big5</string>
 	<string name="edithost_setting_autologin">自動登錄設定</string>
 	<string name="edithost_user">帳號</string>
 	<string name="edithost_user_summary">用於自動登錄的帳號</string>
 	<string name="edithost_pass">密碼</string>
 	<string name="edithost_pass_summary">用於自動登錄的帳號的密碼</string>
-
+	<string name="edithost_autologin_wait">延遲自動登入時間</string>
+	<string name="edithost_autologin_wait_summary">(實驗性質) 設定延遲自動登入時間，調長數秒可以改進部分站台無法自動登入的問題</string>	
+	<string name="edithost_exit_title">確認</string>
+	<string name="edithost_exit_confirm_message">是否要儲存此站台？</string>
+	
 	<string name="functionbtn_empty">還沒有定義任何功能按鈕</string>
 	<string name="editfunctionbtn_add">新增功能按鈕</string>
 	<string name="editfunctionbtn_done">儲存</string>
@@ -71,19 +70,18 @@
 	
 	<string name="terminal_disconnect">強制斷線</string>
 	<string name="terminal_connectclose">連線已經斷開</string>
-	<string name="terminal_error_unknownhost">找不到站台“%s”，請檢查網路是否正常，或者站台地址是否拼寫錯誤</string>
+	<string name="terminal_error_unknownhost">找不到站台“%s”，請檢查網路是否正常，或者站台位址是否拼寫錯誤</string>
 	<string name="terminal_error_connect">無法連接到站台“%s”，請檢查網路是否正常，或者或站台目前無法連接</string>
 	<string name="terminal_inputhelper">字串輸入工具</string>
 	<string name="terminal_switch_ime">切換輸入法</string>
 	<string name="terminal_help">說明</string>
 	
-	
-	<string name="settings_language">語言</string>
-	<string name="settings_language_summary">設定語言，下次啓動時生效</string>
+	<!--<string name="settings_language">語言</string>
+	<string name="settings_language_summary">設定語言，下次啓動時生效</string>-->
+	<string name="settings_display_option">顯示設定</string>
 	<string name="settings_show_statusbar">顯示狀態欄</string>
 	<string name="settings_show_statusbar_summary">設定在Term狀態下是否顯示狀態欄</string>
-	
-	<string name="setting_cate_input_assist">輸入輔助</string>
+	<string name="settings_cate_input_assist">輸入輔助</string>
 	<string name="settings_function_button">功能按鈕</string>
 	<string name="settings_function_button_summary">可以自訂功能按鈕(如：發表文章)，並在連線 BBS 時以音量減小鍵叫出</string>
     <string name="settings_auto_extractui">繞過無法選字問題 </string>
@@ -91,6 +89,8 @@
 	<string name="settings_cate_magnifier">放大鏡</string>
 	<string name="settings_enable_magnifier">啟用放大鏡</string>
 	<string name="setting_magnifier_option">放大鏡選項</string>
+	<string name="setting_import">匯入設定及書籤</string>
+	<string name="setting_export">匯出設定及書籤</string>
 
 	<string name="settings_magnifier_behavior">放大鏡顯示條件</string>
 	<string name="settings_magnifier_behavior_summary">您希望放大鏡在什麼樣的情形下顯示?</string>
