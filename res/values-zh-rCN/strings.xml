@@ -34,12 +34,14 @@
 	<string name="edithost_port">站点端口</string>
 	<string name="edithost_port_summary">站点的访问端口，一般Telnet的端口是23，SSH的端口是22</string>
 	<string name="edithost_encoding">站点编码</string>
-	<string name="edithost_encoding_summary">简体中文的网站选择GBK，繁体中文的网站请选择Big5</string>
+	<string name="edithost_encoding_summary">简体中文的站点选择GBK，繁体中文的站点请选择Big5</string>
 	<string name="edithost_setting_autologin">自动登录设置</string>
 	<string name="edithost_user">用户</string>
 	<string name="edithost_user_summary">用于自动登录的用户</string>
 	<string name="edithost_pass">密码</string>
 	<string name="edithost_pass_summary">用于自动登录的用户的密码</string>
+	<string name="edithost_autologin_wait">延迟自动登入时间</string>
+	<string name="edithost_autologin_wait_summary">(实验性质) 设定延迟自动登入时间，调长数秒可以改进部分站点无法自动登入的问题</string>	
 	<string name="edithost_exit_title">确认</string>
 	<string name="edithost_exit_confirm_message">是否要储存此站点？</string>
 

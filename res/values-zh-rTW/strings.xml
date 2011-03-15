@@ -43,6 +43,8 @@
 	<string name="edithost_user_summary">用於自動登錄的帳號</string>
 	<string name="edithost_pass">密碼</string>
 	<string name="edithost_pass_summary">用於自動登錄的帳號的密碼</string>
+	<string name="edithost_autologin_wait">延遲自動登入時間</string>
+	<string name="edithost_autologin_wait_summary">(實驗性質) 設定延遲自動登入時間，調長數秒可以改進部分站台無法自動登入的問題</string>	
 	<string name="edithost_exit_title">確認</string>
 	<string name="edithost_exit_confirm_message">是否要儲存此站台？</string>
 	

@@ -50,6 +50,8 @@
 	<string name="edithost_user_summary">The username Used to auto login</string>
 	<string name="edithost_pass">Password</string>
 	<string name="edithost_pass_summary">The password of auto login user</string>
+	<string name="edithost_autologin_wait">Auto Delay Login Time</string>
+	<string name="edithost_autologin_wait_summary">(experimental) Setting auto delay login time, more delay time may work for some sites</string>	
 	<string name="edithost_exit_title">Confirm</string>
 	<string name="edithost_exit_confirm_message">Save this site?</string>
 

@@ -39,6 +39,7 @@ public class EditHostActivity extends PreferenceActivity {
 		valuesMap.put("encoding", "Big5");
 		valuesMap.put("user", "");
 		valuesMap.put("pass", "");
+		valuesMap.put("autodelay", "0");
 
 		h = (Host) getIntent().getSerializableExtra("host");
 
@@ -88,6 +89,7 @@ public class EditHostActivity extends PreferenceActivity {
 		m.put("encoding", host.getEncoding());
 		m.put("user", host.getUser());
 		m.put("pass", host.getPass());
+		m.put("autodelay", String.valueOf(host.getAutodelay()));
 	}
 
 	private void updatePreferenceDisplay() {
@@ -199,6 +201,7 @@ public class EditHostActivity extends PreferenceActivity {
 		String hostEncoding = valuesMap.get("encoding");
 		String hostUser = valuesMap.get("user");
 		String hostPass = valuesMap.get("pass");
+		String autodelay = valuesMap.get("autodelay");
 
 		if (h != null) {
 			h.setName(hostName);
@@ -207,6 +210,7 @@ public class EditHostActivity extends PreferenceActivity {
 			h.setEncoding(hostEncoding);
 			h.setUser(hostUser);
 			h.setPass(hostPass);
+			h.setAutodelay(Integer.parseInt(autodelay));
 
 			try {
 				h.setPort(Integer.parseInt(hostPort));
@@ -227,6 +231,7 @@ public class EditHostActivity extends PreferenceActivity {
 			h.setEncoding(hostEncoding);
 			h.setUser(hostUser);
 			h.setPass(hostPass);
+			h.setAutodelay(Integer.parseInt(autodelay));
 
 			try {
 				h.setPort(Integer.parseInt(hostPort));

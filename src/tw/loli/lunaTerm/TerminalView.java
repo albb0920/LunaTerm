@@ -814,7 +814,7 @@ public class TerminalView extends View implements VDUDisplay {
 			public void run() {
 			
 				byte[] b = new byte[4096];
-				int delay = 2000;
+				int delay = host.getAutodelay()*1000;
 
 				try {
 					String hostProtocal = host.getProtocal();
