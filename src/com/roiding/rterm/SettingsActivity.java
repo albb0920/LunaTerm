@@ -49,28 +49,4 @@ public class SettingsActivity extends PreferenceActivity {
 			}
 		});
 	}
-	
-	@Override
-	
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-
-		MenuItem import_option = menu.add(R.string.setting_import);
-
-		import_option.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			public boolean onMenuItemClick(MenuItem item) {
-				return true;
-			}
-		});
-		MenuItem export_option = menu.add(R.string.setting_export);
-
-		export_option.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			public boolean onMenuItemClick(MenuItem item) {
-				return true;
-			}
-		});
-
-		return true;
-	}
-	
 }
