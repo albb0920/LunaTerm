@@ -42,8 +42,6 @@
 	<string name="edithost_pass_summary">用于自动登录的用户的密码</string>
 	<string name="edithost_exit_title">确认</string>
 	<string name="edithost_exit_confirm_message">是否要储存此站点？</string>
-	<string name="edithost_exit_confirm">确定</string>
-	<string name="edithost_exit_cancel">取消</string>
 
 	<string name="functionbtn_empty">还没有定义任何功能按钮</string>
 	<string name="editfunctionbtn_add">新增功能按钮</string>
@@ -86,6 +84,8 @@
 	<string name="settings_cate_magnifier">放大镜</string>
 	<string name="settings_enable_magnifier">启用放大镜</string>
 	<string name="setting_magnifier_option">放大镜选项</string>
+	<string name="setting_import">导入设定及书签</string>
+	<string name="setting_export">导出设定及书签</string>
 	
     <string name="settings_magnifier_behavior">放大镜显示条件</string>
 	<string name="settings_magnifier_behavior_summary">您希望放大镜在什么样的情形下显示?</string>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">LunaTerm</string>
-	<string name="ok">OK</string>
-	<string name="cancel">Cancel</string>
+	<string name="ok">確定</string>
+	<string name="cancel">取消</string>
 
 	<string name="addressbook_empty">列表中沒有任何站台</string>
 	<string name="addressbook_help">說明</string>
@@ -45,8 +45,6 @@
 	<string name="edithost_pass_summary">用於自動登錄的帳號的密碼</string>
 	<string name="edithost_exit_title">確認</string>
 	<string name="edithost_exit_confirm_message">是否要儲存此站台？</string>
-	<string name="edithost_exit_confirm">確定</string>
-	<string name="edithost_exit_cancel">取消</string>
 	
 	<string name="functionbtn_empty">還沒有定義任何功能按鈕</string>
 	<string name="editfunctionbtn_add">新增功能按鈕</string>
@@ -89,6 +87,8 @@
 	<string name="settings_cate_magnifier">放大鏡</string>
 	<string name="settings_enable_magnifier">啟用放大鏡</string>
 	<string name="setting_magnifier_option">放大鏡選項</string>
+	<string name="setting_import">匯入設定及書籤</string>
+	<string name="setting_export">匯出設定及書籤</string>
 
 	<string name="settings_magnifier_behavior">放大鏡顯示條件</string>
 	<string name="settings_magnifier_behavior_summary">您希望放大鏡在什麼樣的情形下顯示?</string>

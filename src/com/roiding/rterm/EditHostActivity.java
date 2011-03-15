@@ -165,12 +165,12 @@ public class EditHostActivity extends PreferenceActivity {
             .Builder(this) 
             .setTitle(R.string.edithost_exit_title) 
             .setMessage(R.string.edithost_exit_confirm_message) 
-            .setPositiveButton(R.string.edithost_exit_confirm, new DialogInterface.OnClickListener(){  
+            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener(){  
                 public void onClick(DialogInterface arg0, int arg1){  
                     save();
                     finish();
                 } 
-            }).setNegativeButton(R.string.edithost_exit_cancel, new DialogInterface.OnClickListener(){  
+            }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){  
             		public void onClick(DialogInterface arg0, int arg1){  
             			finish(); 
             		} 

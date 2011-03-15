@@ -52,8 +52,6 @@
 	<string name="edithost_pass_summary">The password of auto login user</string>
 	<string name="edithost_exit_title">Confirm</string>
 	<string name="edithost_exit_confirm_message">Save this site?</string>
-	<string name="edithost_exit_confirm">OK</string>
-	<string name="edithost_exit_cancel">Cancel</string>
 
 	<string name="functionbtn_empty">No function button found, please add first</string>
 	<string name="editfunctionbtn_add">Add</string>
@@ -99,6 +97,8 @@
 	<string name="settings_cate_magnifier">Magnifier</string>
 	<string name="settings_enable_magnifier">Enable Magnifier</string>
 	<string name="setting_magnifier_option">Magnifier Options</string>
+	<string name="setting_import">import</string>
+	<string name="setting_export">export</string>
 	
 	<string name="settings_magnifier_behavior">Magnifier behavior</string>
 	<string name="settings_magnifier_behavior_summary">When do you wish magnifier to show up?</string>
