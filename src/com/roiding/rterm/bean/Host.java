@@ -27,7 +27,6 @@ public class Host implements Serializable {
 	private String pass;
 	private String host;
 	private int port;
-	private int autodelay;
 
 	public long getId() {
 		return id;
@@ -64,7 +63,7 @@ public class Host implements Serializable {
 	public String getPass() {
 		return pass;
 	}
-	
+
 	public void setPass(String pass) {
 		this.pass = pass;
 	}
@@ -84,14 +83,6 @@ public class Host implements Serializable {
 	public void setPort(int port) {
 		this.port = port;
 	}
-	
-	public int getAutodelay() {
-		return autodelay;
-	}
-
-	public void setAutodelay(int autodelay) {
-		this.autodelay = autodelay;
-	}
 
 	public ContentValues getValues() {
 		ContentValues values = new ContentValues();
@@ -103,7 +94,6 @@ public class Host implements Serializable {
 		values.put(DBUtils.FIELD_HOSTS_PASS, pass);
 		values.put(DBUtils.FIELD_HOSTS_HOST, host);
 		values.put(DBUtils.FIELD_HOSTS_PORT, port);
-		values.put(DBUtils.FIELD_HOSTS_AUTODELAY, autodelay);
 
 		return values;
 	}

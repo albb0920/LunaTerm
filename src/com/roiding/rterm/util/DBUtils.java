@@ -30,7 +30,6 @@ public class DBUtils extends SQLiteOpenHelper {
 	public final static String FIELD_HOSTS_PASS = "pass";
 	public final static String FIELD_HOSTS_HOST = "host";
 	public final static String FIELD_HOSTS_PORT = "port";
-	public final static String FIELD_HOSTS_AUTODELAY = "autodelay";
 
 	public final static String TABLE_FUNCBTNS = "functionbtns";
 	public final static String FIELD_FUNCBTNS_ID = "_id";
@@ -46,7 +45,7 @@ public class DBUtils extends SQLiteOpenHelper {
 				+ FIELD_HOSTS_PROTOCAL + " TEXT, " + FIELD_HOSTS_ENCODING
 				+ " TEXT DEFAULT 'GBK'," + FIELD_HOSTS_USER + " TEXT, "
 				+ FIELD_HOSTS_PASS + " TEXT, " + FIELD_HOSTS_HOST + " TEXT, "
-				+ FIELD_HOSTS_PORT + " INTEGER, " + FIELD_HOSTS_AUTODELAY + " INTEGER )");
+				+ FIELD_HOSTS_PORT + " INTEGER)");
 
 		db.execSQL("CREATE TABLE " + TABLE_FUNCBTNS
 				+ " (_id INTEGER PRIMARY KEY, " + FIELD_FUNCBTNS_NAME
@@ -131,8 +130,6 @@ public class DBUtils extends SQLiteOpenHelper {
 						.getColumnIndexOrThrow(FIELD_HOSTS_HOST)));
 				host.setPort(c
 						.getInt(c.getColumnIndexOrThrow(FIELD_HOSTS_PORT)));
-				host.setAutodelay(c
-						.getInt(c.getColumnIndexOrThrow(FIELD_HOSTS_AUTODELAY)));
 
 				hosts.add(host);
 			}

@@ -28,9 +28,6 @@
 			android:title="@string/edithost_pass" android:summary="@string/edithost_pass_summary"
 			android:password="true"
 			android:singleLine="true" />
-		<EditTextPreference android:key="autodelay"
-			android:title="@string/edithost_autologin_wait" android:summary="@string/edithost_autologin_wait_summary"
-			android:singleLine="true" android:defaultValue="0" android:inputType="number" />
 	</PreferenceCategory>
 
 </PreferenceScreen>

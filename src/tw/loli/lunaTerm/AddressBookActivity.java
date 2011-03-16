@@ -115,7 +115,6 @@ public class AddressBookActivity extends ListActivity {
 		Host host = new Host();
 		host.setHost(hostname);
 		host.setPort(port);
-		host.setAutodelay(0);
 
 		String lang = Locale.getDefault().getCountry();
 		
@@ -202,7 +201,6 @@ public class AddressBookActivity extends ListActivity {
 		h1.setEncoding("GBK");
 		h1.setHost("lilacbbs.com");
 		h1.setPort(23);
-		h1.setAutodelay(0);
 		dbUtils.hostDelegate.insert(h1);
 
 		Host h2 = new Host();
@@ -211,7 +209,6 @@ public class AddressBookActivity extends ListActivity {
 		h2.setEncoding("GBK");
 		h2.setHost("newsmth.net");
 		h2.setPort(23);
-		h2.setAutodelay(0);
 		dbUtils.hostDelegate.insert(h2);
 
 		Host h3 = new Host();
@@ -220,7 +217,6 @@ public class AddressBookActivity extends ListActivity {
 		h3.setEncoding("GBK");
 		h3.setHost("lqqm.net");
 		h3.setPort(23);
-		h3.setAutodelay(0);
 		dbUtils.hostDelegate.insert(h3);
 
 	}
@@ -235,7 +231,6 @@ public class AddressBookActivity extends ListActivity {
 		h4.setEncoding("Big5");
 		h4.setHost("ptt.cc");
 		h4.setPort(23);
-		h4.setAutodelay(0);
 		dbUtils.hostDelegate.insert(h4);
 
 		Host h5 = new Host();
@@ -244,7 +239,6 @@ public class AddressBookActivity extends ListActivity {
 		h5.setEncoding("Big5");
 		h5.setHost("ptt2.twbbs.org");
 		h5.setPort(23);
-		h5.setAutodelay(0);
 		dbUtils.hostDelegate.insert(h5);
 	}
 
