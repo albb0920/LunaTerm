@@ -678,7 +678,8 @@ public abstract class vt320 extends VDUBuffer implements VDUInput {
 	public final static int KEY_DECIMAL = 41;
 	public final static int KEY_ADD = 42;
 	public final static int KEY_ESCAPE = 43;
-
+	public final static int KEY_TAB = 44;
+	
 	/*
 	 * The graphics charsets B - default ASCII A - ISO Latin 1 0 - DEC SPECIAL <
 	 * - User defined ....
@@ -965,6 +966,9 @@ public abstract class vt320 extends VDUBuffer implements VDUInput {
 			}
 			if (!control)
 				numlock = !numlock;
+			break;
+		case KEY_TAB:
+			writeSpecial(TabKey[xind]);
 			break;
 		case KEY_CAPS_LOCK:
 			capslock = !capslock;

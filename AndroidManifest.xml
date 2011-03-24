@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="tw.loli.lunaTerm" android:versionCode="2"
-	android:versionName="1.1">
+	package="tw.loli.lunaTerm" android:versionCode="4"
+	android:versionName="1.2">
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
 		<activity android:name=".AddressBookActivity" 
 			android:label="@string/app_name"
-			android:windowSoftInputMode="stateAlwaysHidden">
+			android:windowSoftInputMode="stateAlwaysHidden"
+			android:configChanges="keyboardHidden|orientation">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
 		<activity android:name=".TerminalActivity"
-			android:screenOrientation="landscape" android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="landscape" 
+			android:configChanges="keyboardHidden"
+			android:theme="@style/Theme.NoTitleBarAndShadow"
 			android:windowSoftInputMode="stateVisible|adjustPan" />
-		<activity android:name="com.roiding.rterm.EditHostActivity" />
+		<activity android:name="com.roiding.rterm.EditHostActivity"  android:configChanges="keyboardHidden|orientation"/>
 		<activity android:name="com.roiding.rterm.SettingsActivity" />
 		<activity android:name=".FunctionButtonActivity" />
 		<activity android:name="com.roiding.rterm.EditFunctionButtonActivity" />
@@ -24,7 +27,7 @@
 	<supports-screens android:largeScreens="true"
 		android:normalScreens="true"
 		android:smallScreens="true"
-		android:anyDensity="false" />
+		android:anyDensity="true" />
 
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />

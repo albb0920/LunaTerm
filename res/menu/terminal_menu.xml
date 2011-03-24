@@ -2,6 +2,8 @@
 	<item	android:icon="@drawable/ic_menu_more"
 			android:title="@string/terminal_tools">
 			<menu>
+			<item	android:title="@string/terminal_paste"
+					android:id="@+id/terminal_paste" />
 			<item	android:title="@string/terminal_switch_ime"
 					android:id="@+id/terminal_switch_ime" />
 			<item	android:title="@string/terminal_share_snap"

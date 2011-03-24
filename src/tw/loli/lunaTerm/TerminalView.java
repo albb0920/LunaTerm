@@ -5,8 +5,8 @@ import java.lang.reflect.Array;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,17 +16,18 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.Bitmap.Config;
 import android.graphics.Region.Op;
-import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.text.InputType;
+import android.text.method.MetaKeyKeyListener;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.BaseInputConnection;
-import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
@@ -35,7 +36,6 @@ import com.roiding.rterm.bean.Host;
 import com.roiding.rterm.util.ChineseUtils;
 
 import de.mud.jta.Wrapper;
-import de.mud.ssh.SshWrapper;
 import de.mud.telnet.TelnetWrapper;
 import de.mud.terminal.VDUBuffer;
 import de.mud.terminal.VDUDisplay;
@@ -77,9 +77,9 @@ public class TerminalView extends View implements VDUDisplay {
 	
 	private final Canvas canvas = new Canvas();
 	private boolean ctrlPressed;
-	private boolean altPressed;
-	private boolean shiftPressed;
-
+	private long metaState = 0;
+	private final float xdpi, ydpi; 
+	
 	public Wrapper connection;
 	public TerminalActivity terminalActivity;
 	public Host host;
@@ -91,11 +91,12 @@ public class TerminalView extends View implements VDUDisplay {
 		this.terminalActivity = context;
 		setFocusable(true);
 		setFocusableInTouchMode(true);
-		init();		
-	}
+		DisplayMetrics metrics = new DisplayMetrics();
+		context.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		xdpi = metrics.xdpi;
+		ydpi = metrics.ydpi;
+		
 
-	
-	public void init() {
 		resetColors();
 		
 		buffer = new vt320() {
@@ -310,10 +311,12 @@ public class TerminalView extends View implements VDUDisplay {
 				for(int pos = 0; pos < string.length(); pos++){
 					ch = string.substring(pos, pos+1);
 					chDecent = decent;
-					if( colCount+1 < ptr && ((chars[colCount] == 0xA1 && chars[colCount+1] >= 0x41) || 
+					/* hrs.110301: fix decent bug - use special chars [dirty] */
+					if( (colCount < ptr && chars[colCount] >= 0x21 && chars[colCount] <= 0x7E) ||
+						(colCount+1 < ptr && ((chars[colCount] == 0xA1 && chars[colCount+1] >= 0x41) || 
 						(chars[colCount] == 0xA2 && (
 							  chars[colCount+1] < 0x49 ||
-							 (chars[colCount+1] > 0x62 && chars[colCount+1]< 0xAE))))){
+							 (chars[colCount+1] > 0x62 && chars[colCount+1]< 0xAE)))))){
 						paint.setTypeface(specialTypeface);
 						chDecent = sp_decent;
 					}else{
@@ -492,6 +495,7 @@ public class TerminalView extends View implements VDUDisplay {
 				terminalActivity.showInputHelper();
 				return false;
 			}
+			Log.v(TAG,"onCommit: "+text);
 			return super.setComposingText(text, newCursorPosition);
 		}
 	}
@@ -534,18 +538,37 @@ public class TerminalView extends View implements VDUDisplay {
 		switch (eventaction) {
 
 		case MotionEvent.ACTION_DOWN: // touch down so check if the
-
+			Log.v(TAG, "Got touch ev when url is "+urls.length);
 			int y = (int) event.getRawY();
 			int x = (int) event.getRawX();
 			int l = (int) (y / CHAR_HEIGHT);
 			int w = (int) (x / CHAR_WIDTH);
-
-			if (urls[l] != null) {
-				for (Url url : urls[l]) {
-					if (url.pointIn(w, l))
+			float lastDiff = 0f;
+			Url lastUrl = null;
+			for(ArrayList<Url> lineUrls : urls){
+				for(Url url : lineUrls){
+					if (l == url.y && w >= url.startX && w <= url.endX){				
 						terminalActivity.showUrlDialog(url.url.trim());
+						return true;						
+					}else{
+						float diff = (l == url.y)? 0 : 
+										(l < url.y) ? url.y * CHAR_HEIGHT - y : y - (url.y+1) * CHAR_HEIGHT;
+						diff /= ydpi;
+						if(w < url.startX)
+							diff += (url.startX * CHAR_WIDTH - x) / xdpi;
+						else if(w > url.endX)
+							diff += (x - url.endX * CHAR_WIDTH)/ xdpi;
+						if(lastDiff == 0 || diff < lastDiff ){
+							lastDiff = diff;
+							lastUrl = url;
+						}
 					}
 				}
+			}
+			if(lastDiff > 0 && lastDiff <= 0.0787 ){ // accept 0.2cm difference				
+				terminalActivity.showUrlDialog(lastUrl.url.trim());
+				return true;						
+			}	
 			Log.d(TAG, "onTouchEvent:" + y + "/" + CHAR_HEIGHT + "=" + l);
 			return true;
 
@@ -562,19 +585,15 @@ public class TerminalView extends View implements VDUDisplay {
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		metaState = MetaKeyKeyListener.handleKeyUp(metaState, keyCode, event);
 		return super.onKeyUp(keyCode, event);
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
+	public boolean onKeyDown(int keyCode, KeyEvent event) {		
 		if (connection == null)
 			return false;
-
-		int metaState = event.getMetaState();
-
-		Log.i(TAG, "onKeyDown:" + keyCode + ",metaState=" + metaState);
-
+		
 		try {
 			if (event.getAction() == KeyEvent.ACTION_UP) {
 				return false;
@@ -589,11 +608,14 @@ public class TerminalView extends View implements VDUDisplay {
 						InputMethodManager.SHOW_FORCED, 0);
 				return true;
 			}
+			
+			if(metaState == (metaState = MetaKeyKeyListener.handleKeyDown(metaState, keyCode, event))){
+				boolean result = processSpecialChar(keyCode,MetaKeyKeyListener.getMetaState(metaState));
+				metaState = MetaKeyKeyListener.adjustMetaAfterKeypress(metaState);
+				if(result)
+					return true;
+			}
 
-			// look for special chars
-			boolean result = processSpecialChar(keyCode, metaState);
-			if (result)
-				return result;
 		} catch (SocketException e) {
 			e.printStackTrace();
 			nodifyParent(e);
@@ -615,24 +637,11 @@ public class TerminalView extends View implements VDUDisplay {
 	public void write(byte[] b) throws IOException {
 		connection.write(b);
 	}
-
-	public boolean processSpecialChar(int keyCode, int metaState)
-			throws IOException {
+	
+	public boolean processSpecialChar(int keyCode, int mState) throws IOException{
 		boolean printing = (DEFAULT_KEYMAP.isPrintingKey(keyCode) || keyCode == KeyEvent.KEYCODE_SPACE);
-
-		if (printing) {
-			if (shiftPressed) {
-				metaState |= KeyEvent.META_SHIFT_ON;
-				shiftPressed = false;
-			}
-
-			if (altPressed) {
-				metaState |= KeyEvent.META_ALT_ON;
-				altPressed = false;
-			}
-
-			int key = DEFAULT_KEYMAP.get(keyCode, metaState);
-
+		if (printing) {			
+			int key = DEFAULT_KEYMAP.get(keyCode, mState);
 			if (ctrlPressed) {
 				// Support CTRL-a through CTRL-z
 				if (key >= 0x61 && key <= 0x7A)
@@ -648,35 +657,29 @@ public class TerminalView extends View implements VDUDisplay {
 			connection.write(key);
 			return true;
 		}
-
 		switch (keyCode) {
-		case KeyEvent.KEYCODE_SHIFT_LEFT:
-		case KeyEvent.KEYCODE_SHIFT_RIGHT:
-			shiftPressed = true;
-			return true;
-		case KeyEvent.KEYCODE_ALT_LEFT:
-		case KeyEvent.KEYCODE_ALT_RIGHT:
-			altPressed = true;
-			return true;
 		case KeyEvent.KEYCODE_DEL:
 			connection.write(0x08);
 			return true;
 		case KeyEvent.KEYCODE_ENTER:
-			((vt320) buffer).keyTyped(vt320.KEY_ENTER, ' ', metaState);
+			((vt320) buffer).keyTyped(vt320.KEY_ENTER, ' ', mState);
 			return true;
 		case KeyEvent.KEYCODE_DPAD_LEFT:
-			((vt320) buffer).keyPressed(vt320.KEY_LEFT, ' ', metaState);
+			((vt320) buffer).keyPressed(vt320.KEY_LEFT, ' ', mState);
 			return true;
 		case KeyEvent.KEYCODE_DPAD_UP:
-			((vt320) buffer).keyPressed(vt320.KEY_UP, ' ', metaState);
+			((vt320) buffer).keyPressed(vt320.KEY_UP, ' ', mState);
 			invalidate();
 			return true;
 		case KeyEvent.KEYCODE_DPAD_DOWN:
-			((vt320) buffer).keyPressed(vt320.KEY_DOWN, ' ', metaState);
+			((vt320) buffer).keyPressed(vt320.KEY_DOWN, ' ', mState);
 			invalidate();
 			return true;
 		case KeyEvent.KEYCODE_DPAD_RIGHT:
-			((vt320) buffer).keyPressed(vt320.KEY_RIGHT, ' ', metaState);
+			((vt320) buffer).keyPressed(vt320.KEY_RIGHT, ' ', mState);
+			return true;
+		case KeyEvent.KEYCODE_TAB:
+			((vt320) buffer).keyPressed(vt320.KEY_TAB, ' ', mState);
 			return true;
 		case KeyEvent.KEYCODE_SEARCH:
 		case KeyEvent.KEYCODE_DPAD_CENTER:
@@ -809,34 +812,53 @@ public class TerminalView extends View implements VDUDisplay {
 
 		new Thread(new Runnable() {
 			public void run() {
+			
 				byte[] b = new byte[4096];
+				int delay = 2000;
 
 				try {
 					String hostProtocal = host.getProtocal();
 					String hostHost = host.getHost();
-					String hostUser = host.getUser();
-					String hostPass = host.getPass();
-
 					int hostPort = host.getPort();
-
+					
 					if ("telnet".equalsIgnoreCase(hostProtocal)) {
 						connection = new TelnetWrapper();
 						connection.connect(hostHost, hostPort);
-
-						if (hostUser != null && hostPass != null
-								&& hostUser.length() > 0
-								&& hostPass.length() > 0) {
-							connection.send(hostUser + "\n");
-							connection.send(hostPass + "\n");
-						}
-
-					} else if ("ssh".equalsIgnoreCase(hostProtocal)) {
+					}  /* else if ("ssh".equalsIgnoreCase(hostProtocal)) {
 						connection = new SshWrapper();
 						connection.connect(hostHost, hostPort);
-						connection.login(hostUser, hostPass);
-						connection.send("" + "\n");
-
-					}
+					} */
+					
+					TerminalView.this.postDelayed(new Runnable() {
+						public void run() {
+							try {
+								String hostUser = host.getUser();
+								String hostPass = host.getPass();
+				
+								String hostProtocal = host.getProtocal();
+								
+								if ("telnet".equalsIgnoreCase(hostProtocal)) {
+				
+									if (hostUser != null && hostPass != null
+											&& hostUser.length() > 0
+											&& hostPass.length() > 0) {
+										connection.send(hostUser + "\r");
+										
+										connection.send(hostPass + "\r");
+									}
+				
+								} else if ("ssh".equalsIgnoreCase(hostProtocal)) {
+				
+									connection.login(hostUser, hostPass);
+									connection.send("" + "\r");
+				
+								}			
+							} catch (Exception e) {
+								e.printStackTrace();
+								nodifyParent(e);
+							}
+						}
+					}, delay);
 
 					connected = true;
 					while (true) {
@@ -880,10 +902,6 @@ public class TerminalView extends View implements VDUDisplay {
 		    this.endX = endX;
 		    this.y = y;
 		    this.url = url;
-		}
-		
-	    public boolean pointIn(int x, int y) {
-		    return (this.y == y && x >= startX && x <= endX);
 		}
 	}
 }

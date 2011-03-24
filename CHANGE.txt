@@ -1,7 +1,0 @@
-Launch v1.0
-* Support screen with any size . (preference "High resolution" is now droped)
-* Implement bold (actually means bright in color terminal)  render.
-
-Features:
-* UAO  support
-* Dual color text support.

@@ -31,7 +31,8 @@
 	<string name="locale_zh_tw">Traditional Chinese</string>
 
 	<string name="edithost_done">Done</string>
-	<string name="edithost_revert">Revert</string>
+	<string name="edithost_revert">Cancel</string>
+	<string name="edithost_options">Site Settings</string>
 	<string name="edithost_name">Name</string>
 	<string name="edithost_name_summary">The name of this site, easy to distinguish between
 		different sites</string>
@@ -51,6 +52,8 @@
 	<string name="edithost_user_summary">The username Used to auto login</string>
 	<string name="edithost_pass">Password</string>
 	<string name="edithost_pass_summary">The password of auto login user</string>
+	<string name="edithost_exit_title">Confirm</string>
+	<string name="edithost_exit_confirm_message">Save this site?</string>
 
 	<string name="functionbtn_empty">No function button found, please add first</string>
 	<string name="editfunctionbtn_add">Add</string>
@@ -68,6 +71,7 @@
 	</string>
 
 	<string name="terminal_tools">Tools</string>
+	<string name="terminal_paste">Paste from clipboard</string>
 	<string name="terminal_share_snap">Share Snapshot</string>
 	<string name="terminal_share_compressing">Compressing...</string>
 	<string name="terminal_share_via">Share via...</string>
@@ -82,8 +86,9 @@
 	<string name="terminal_switch_ime">Switch input method</string>
 	<string name="terminal_help">Help</string>
 
-	<string name="settings_language">Language</string>
-	<string name="settings_language_summary">Select the your default language, restart needed</string>
+	<!--<string name="settings_language">Language</string>
+	<string name="settings_language_summary">Select the your default language, restart needed</string>-->
+	<string name="settings_display_option">Display Settings</string>
 	<string name="settings_show_statusbar">Show statusbar</string>
 	<string name="settings_show_statusbar_summary">Show statusbar on Terminal mode</string>
 	<string name="settings_cate_input_assist">Input Assistant</string>
@@ -94,6 +99,8 @@
 	<string name="settings_cate_magnifier">Magnifier</string>
 	<string name="settings_enable_magnifier">Enable Magnifier</string>
 	<string name="setting_magnifier_option">Magnifier Options</string>
+	<string name="setting_import">import</string>
+	<string name="setting_export">export</string>
 	
 	<string name="settings_magnifier_behavior">Magnifier behavior</string>
 	<string name="settings_magnifier_behavior_summary">When do you wish magnifier to show up?</string>
