@@ -1,5 +1,6 @@
 package tw.loli.lunaTerm;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -115,7 +116,6 @@ public class AddressBookActivity extends ListActivity {
 		Host host = new Host();
 		host.setHost(hostname);
 		host.setPort(port);
-		host.setAutodelay(0);
 
 		String lang = Locale.getDefault().getCountry();
 		
@@ -202,7 +202,6 @@ public class AddressBookActivity extends ListActivity {
 		h1.setEncoding("GBK");
 		h1.setHost("lilacbbs.com");
 		h1.setPort(23);
-		h1.setAutodelay(0);
 		dbUtils.hostDelegate.insert(h1);
 
 		Host h2 = new Host();
@@ -211,7 +210,6 @@ public class AddressBookActivity extends ListActivity {
 		h2.setEncoding("GBK");
 		h2.setHost("newsmth.net");
 		h2.setPort(23);
-		h2.setAutodelay(0);
 		dbUtils.hostDelegate.insert(h2);
 
 		Host h3 = new Host();
@@ -220,7 +218,6 @@ public class AddressBookActivity extends ListActivity {
 		h3.setEncoding("GBK");
 		h3.setHost("lqqm.net");
 		h3.setPort(23);
-		h3.setAutodelay(0);
 		dbUtils.hostDelegate.insert(h3);
 
 	}
@@ -235,7 +232,6 @@ public class AddressBookActivity extends ListActivity {
 		h4.setEncoding("Big5");
 		h4.setHost("ptt.cc");
 		h4.setPort(23);
-		h4.setAutodelay(0);
 		dbUtils.hostDelegate.insert(h4);
 
 		Host h5 = new Host();
@@ -244,7 +240,6 @@ public class AddressBookActivity extends ListActivity {
 		h5.setEncoding("Big5");
 		h5.setHost("ptt2.twbbs.org");
 		h5.setPort(23);
-		h5.setAutodelay(0);
 		dbUtils.hostDelegate.insert(h5);
 	}
 
@@ -308,6 +303,15 @@ public class AddressBookActivity extends ListActivity {
 		AddressBookActivity.this.startActivity(intent);
 	}
 
+	private void disconnect(Host host, TerminalView tv) throws IOException {
+			Log.v(TAG,"close "+ tv.host.getId());
+			tv.connection.disconnect();
+			TerminalManager.getInstance().removeView(tv.host.getId());
+			Toast.makeText(AddressBookActivity.this
+					, host.getName()+getText(R.string.addressbook_disconnect_msg).toString()
+					, Toast.LENGTH_SHORT).show();
+	}
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.i(TAG, "onActivityResult");
@@ -364,16 +368,31 @@ public class AddressBookActivity extends ListActivity {
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 		final Host host = getRealHost(info.position);
-
+		final TerminalView tv = TerminalManager.getInstance().getView(host.getId());
 		menu.setHeaderTitle(host.getName());
+		
+		if (tv == null) {
+			MenuItem connect = menu.add(R.string.addressbook_connect_host);
+			connect.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+				public boolean onMenuItemClick(MenuItem item) {
+					connect(host);
+					return true;
+				}
+			});
+		}
+		else {
+			MenuItem disconnect = menu.add(R.string.addressbook_disconnect_host);
+			disconnect.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+				public boolean onMenuItemClick(MenuItem item) {
+					try {
+						disconnect(host, tv);
+					} catch (Exception e) {}
+					update();
+					return true;
+				}
+			});
+		}
 
-		MenuItem connect = menu.add(R.string.addressbook_connect_host);
-		connect.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			public boolean onMenuItemClick(MenuItem item) {
-				connect(host);
-				return true;
-			}
-		});
 
 		if(hosts.indexOf(host)!=-1){ // not implemented for quick connect
 			MenuItem edit = menu.add(R.string.addressbook_edit_host);

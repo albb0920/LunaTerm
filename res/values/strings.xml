@@ -10,6 +10,8 @@
 
 	<string name="addressbook_add_host">Add Site</string>
 	<string name="addressbook_connect_host">Connect</string>
+	<string name="addressbook_disconnect_host">Disconnect</string>
+	<string name="addressbook_disconnect_msg">has been disconnected</string>
 	<string name="addressbook_edit_host">Modify</string>
 	<string name="addressbook_delete_host">Delete</string>
 
@@ -50,8 +52,6 @@
 	<string name="edithost_user_summary">The username Used to auto login</string>
 	<string name="edithost_pass">Password</string>
 	<string name="edithost_pass_summary">The password of auto login user</string>
-	<string name="edithost_autologin_wait">Auto Delay Login Time</string>
-	<string name="edithost_autologin_wait_summary">(experimental) Setting auto delay login time, more delay time may work for some sites</string>	
 	<string name="edithost_exit_title">Confirm</string>
 	<string name="edithost_exit_confirm_message">Save this site?</string>
 
