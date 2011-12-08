@@ -62,6 +62,7 @@
 
 	<string name="terminal_tools">工具</string>
 	<string name="terminal_paste">贴上</string>
+	<string name="terminal_paste_fail_convert">错误: 无法将剪贴簿的内容转换为纯文本</string>
 	<string name="terminal_share_snap">分享画面撷图</string>
 	<string name="terminal_share_compressing">撷图压缩中，请稍候</string>
 	

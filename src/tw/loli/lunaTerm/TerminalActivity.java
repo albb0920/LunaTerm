@@ -461,7 +461,10 @@ public class TerminalActivity extends Activity {
 			imm.showInputMethodPicker();
 			return true;
 		case R.id.terminal_paste:
-			sendString(cm.getText().toString());
+			if(cm.getText() != null)
+				sendString(cm.getText().toString());
+			else
+				Toast.makeText(TerminalActivity.this, getString(R.string.terminal_paste_fail_convert), Toast.LENGTH_LONG).show();
 			return true;
 		default: 
 			return super.onOptionsItemSelected(item);			
