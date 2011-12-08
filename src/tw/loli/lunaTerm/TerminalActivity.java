@@ -406,7 +406,7 @@ public class TerminalActivity extends Activity {
 		alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				String value = input.getText().toString();
-				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(value)));
+				startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, Uri.parse(value)), getString(R.string.title_openurl)));
 			}
 		});
 
