@@ -84,7 +84,6 @@ public class Wrapper {
 		try {
 			this.host = host;
 			socket = new java.net.Socket(host, port);
-			socket.setTrafficClass(0x10); 
 			in = socket.getInputStream();
 			out = socket.getOutputStream();
 		} catch (Exception e) {
