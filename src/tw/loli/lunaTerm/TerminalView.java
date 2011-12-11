@@ -600,9 +600,6 @@ public class TerminalView extends View implements VDUDisplay {
 			return false;
 		
 		try {
-			if (event.getAction() == KeyEvent.ACTION_UP) {
-				return false;
-			}
 			if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
 				terminalActivity.changeFunctionKeyGalleryDisplay();
 				return true;
