@@ -459,7 +459,12 @@ public class TerminalView extends View implements VDUDisplay {
 	 */
 	@Override
 	public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-		outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI;
+		// We need this private flag to make candidate selection for IME usable.
+		// This is the value for API level between 5 and 11, value has changed since then.
+		// It seems that after lv11, setting this flag(0x2000000) is no longer necessary.
+		final int IME_FLAG_NO_FULLSCREEN = 0x80000000;
+		
+		outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI | IME_FLAG_NO_FULLSCREEN; 
 		outAttrs.inputType = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS; //albb0920.100706: Without this, HTC_CIME's Chewing KB refuse to work
 		InputConnection ic = new TermInputConnection(this);
 		return ic;
