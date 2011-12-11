@@ -544,8 +544,8 @@ public class TerminalView extends View implements VDUDisplay {
 
 		case MotionEvent.ACTION_DOWN: // touch down so check if the
 			Log.v(TAG, "Got touch ev when url is "+urls.length);
-			int y = (int) event.getRawY();
-			int x = (int) event.getRawX();
+			int y = (int) event.getY();
+			int x = (int) event.getX();
 			int l = (int) (y / CHAR_HEIGHT);
 			int w = (int) (x / CHAR_WIDTH);
 			float lastDiff = 0f;
