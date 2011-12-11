@@ -339,7 +339,7 @@ public class TerminalActivity extends Activity {
 			terminalFrame.removeAllViews();			
 			terminalFrame.addView(view,LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT);
 			terminalFrame.addView(osd);
-			
+			view.requestFocus();
 			currentViewId = id;
 			
 		}
