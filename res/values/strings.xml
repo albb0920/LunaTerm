@@ -72,6 +72,9 @@
 
 	<string name="terminal_tools">Tools</string>
 	<string name="terminal_paste">Paste from clipboard</string>
+	<string name="terminal_paste_short_url">Paste shorten url</string>
+	<string name="terminal_short_url_processing">Making short url</string>
+	<string name="terminal_short_url_failed">Error: Failed creating short url</string>
 	<string name="terminal_paste_fail_convert">Error: Can\'t convert clipboard content to text</string>
 	<string name="terminal_share_snap">Share Snapshot</string>
 	<string name="terminal_share_compressing">Compressing...</string>

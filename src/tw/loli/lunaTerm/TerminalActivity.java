@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import tw.loli.lunaTerm.TinyUrlizeTask.OnShortUrlCreatedListener;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
@@ -34,6 +36,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -466,13 +469,25 @@ public class TerminalActivity extends Activity {
 			else
 				Toast.makeText(TerminalActivity.this, getString(R.string.terminal_paste_fail_convert), Toast.LENGTH_LONG).show();
 			return true;
+		case R.id.terminal_paste_short_url:
+			new TinyUrlizeTask(TerminalActivity.this, new OnShortUrlCreatedListener() {
+				
+				@Override
+				public void onShortUrlCreated(String shortUrl) {
+					if(shortUrl != null)
+						sendString(shortUrl);
+					else
+						Toast.makeText(TerminalActivity.this, getString(R.string.terminal_short_url_failed), Toast.LENGTH_LONG).show();
+				}
+			}).execute(cm.getText().toString());
 		default: 
 			return super.onOptionsItemSelected(item);			
 		}
 	}
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.clear();
 		getMenuInflater().inflate(R.menu.terminal_menu, menu);
 		
 		/* Dynamic add connection button */
@@ -489,9 +504,14 @@ public class TerminalActivity extends Activity {
 				});
 		}
 		
+		SubMenu toolsMenu = menu.findItem(R.id.terminal_menu_tools).getSubMenu(); 
 		/* if no clipboard content, no paste operation */
-		if(!cm.hasText())
-			menu.removeItem(R.id.terminal_paste);
+		if(!cm.hasText()){
+			toolsMenu.removeItem(R.id.terminal_paste);
+			toolsMenu.removeItem(R.id.terminal_paste_short_url);
+		}else if(cm.getText().length() < 27 && !cm.getText().toString().matches("\\w+:.+")) // tinyurl is 27 chars long
+			toolsMenu.removeItem(R.id.terminal_paste_short_url);
+		
 		return true;
 	}
 

@@ -1,17 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<item	android:icon="@drawable/ic_menu_more"
-			android:title="@string/terminal_tools">
+			android:title="@string/terminal_tools"
+			android:id="@+id/terminal_menu_tools">
 			<menu>
-			<item	android:title="@string/terminal_paste"
-					android:id="@+id/terminal_paste" />
-			<item	android:title="@string/terminal_switch_ime"
-					android:id="@+id/terminal_switch_ime" />
-			<item	android:title="@string/terminal_share_snap"
-					android:id="@+id/terminal_share_snap" />
-			<item	android:title="@string/terminal_inputhelper"
-					android:id="@+id/terminal_inputhelper" />
-			<item   android:title="@string/terminal_help"
-					android:id="@+id/terminal_help" />
+				<item	android:title="@string/terminal_paste"
+						android:id="@+id/terminal_paste" />
+				<item	android:title="@string/terminal_paste_short_url"
+						android:id="@+id/terminal_paste_short_url" />
+				<item	android:title="@string/terminal_switch_ime"
+						android:id="@+id/terminal_switch_ime" />
+				<item	android:title="@string/terminal_share_snap"
+						android:id="@+id/terminal_share_snap" />
+				<item	android:title="@string/terminal_inputhelper"
+						android:id="@+id/terminal_inputhelper" />
+				<item   android:title="@string/terminal_help"
+						android:id="@+id/terminal_help" />
 			</menu>
 	</item>
 	<item android:id="@+id/terminal_disconnect" android:icon="@android:drawable/ic_menu_close_clear_cancel" android:title="@string/terminal_disconnect" />

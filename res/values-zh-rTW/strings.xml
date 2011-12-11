@@ -63,6 +63,9 @@
 
 	<string name="terminal_tools">工具</string>
 	<string name="terminal_paste">貼上</string>
+	<string name="terminal_paste_short_url">貼上縮址</string>
+	<string name="terminal_short_url_processing">縮址建立中，請稍候</string>
+	<string name="terminal_short_url_failed">錯誤: 無法建立縮址</string>
 	<string name="terminal_paste_fail_convert">錯誤: 無法將剪貼簿的內容轉換為純文字</string>
 	<string name="terminal_share_snap">分享畫面擷圖</string>
 	<string name="terminal_share_compressing">擷圖壓縮中，請稍候</string>
