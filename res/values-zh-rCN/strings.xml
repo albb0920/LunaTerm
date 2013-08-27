@@ -84,6 +84,8 @@
 	<string name="settings_display_option">显示设置</string>
 	<string name="settings_show_statusbar">显示状态栏</string>
 	<string name="settings_show_statusbar_summary">设置在Terminal状态下是否显示状态栏</string>
+	<string name="settings_custom_font">使用自订字型</string>
+    <string name="settings_custom_font_summary">请放置于 /sdcard/lunaterm/font.ttf，重新连线后生效\n注意：开启此功能将使 ANSI art 色块修正失效</string>
 	<string name="settings_cate_input_assist">输入辅助</string>
 	<string name="settings_function_button">功能按钮</string>
 	<string name="settings_function_button_summary">为了便于操作，可以将一些常用的操作定义为功能按钮，例如：发表文章等</string>

@@ -1,10 +1,12 @@
-﻿package tw.loli.lunaTerm;
+package tw.loli.lunaTerm;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -16,6 +18,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.Bitmap.Config;
 import android.graphics.Region.Op;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.text.InputType;
@@ -72,7 +75,9 @@ public class TerminalView extends View implements VDUDisplay {
 	private final Paint defaultPaint = new Paint();
 	private final Paint cursorPaint = new Paint();
 	
-	private Typeface specialTypeface;
+	private Typeface defaultTypeface;
+    private Typeface specialTypeface;
+    private Typeface userDefinedTypeface;
 	private float specialDecent; 
 	
 	private final Canvas canvas = new Canvas();
@@ -83,12 +88,18 @@ public class TerminalView extends View implements VDUDisplay {
 	public Wrapper connection;
 	public TerminalActivity terminalActivity;
 	public Host host;
+    private SharedPreferences pref ;
+
 
 	public boolean debug = false;
 	
 	public TerminalView(TerminalActivity context, AttributeSet attrs) {		
 		super(context, attrs);
 		this.terminalActivity = context;
+
+        pref = PreferenceManager
+                .getDefaultSharedPreferences(this.terminalActivity);
+
 		setFocusable(true);
 		setFocusableInTouchMode(true);
 		DisplayMetrics metrics = new DisplayMetrics();
@@ -118,10 +129,26 @@ public class TerminalView extends View implements VDUDisplay {
 		buffer.setScreenSize(TERM_WIDTH, TERM_HEIGHT, true);
 
 		defaultPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
-		defaultPaint.setTypeface(Typeface.MONOSPACE);				
-		
-		specialTypeface = Typeface.createFromAsset(this.getResources().getAssets(), "SpecialChar.ttf");
-		
+        defaultTypeface = Typeface.MONOSPACE;
+        defaultPaint.setTypeface(defaultTypeface);
+        
+        specialTypeface = Typeface.createFromAsset(this.getResources().getAssets(), "SpecialChar.ttf");
+
+        if (pref.getBoolean("settings_custom_font", false)) {
+        	try {
+        		File vSDCard = null;
+        		String state = Environment.getExternalStorageState();
+        		if (Environment.MEDIA_MOUNTED.equals(state)) {
+        			vSDCard = Environment.getExternalStorageDirectory();
+        			userDefinedTypeface = Typeface.createFromFile(vSDCard.getParent() + "/" + vSDCard.getName() + "/lunaterm/font.ttf");
+        		}
+        		defaultPaint.setTypeface(userDefinedTypeface);
+        		specialTypeface = userDefinedTypeface;
+        	} catch (Exception e){
+        		Log.e("Typeface", "Could not get typeface because " + e.getMessage());
+        	}
+        }
+
 		// Workaround to create array of ArrayList generic type.
 		urls = (ArrayList<Url>[]) Array.newInstance(ArrayList.class, TERM_HEIGHT);
 	}
@@ -308,6 +335,7 @@ public class TerminalView extends View implements VDUDisplay {
 				int colCount = 0;
 				String ch = null;
 				float chDecent = decent;
+
 				for(int pos = 0; pos < string.length(); pos++){
 					ch = string.substring(pos, pos+1);
 					chDecent = decent;
@@ -318,11 +346,13 @@ public class TerminalView extends View implements VDUDisplay {
 							  chars[colCount+1] < 0x49 ||
 							 (chars[colCount+1] > 0x62 && chars[colCount+1]< 0xAE)))))){
 						paint.setTypeface(specialTypeface);
+                        //paint.setTypeface(userDefinedTypeface);
 						chDecent = sp_decent;
 					}else{
-						paint.setTypeface(Typeface.MONOSPACE);
+                        //paint.setTypeface(Typeface.MONOSPACE);
+                        paint.setTypeface(defaultTypeface);
 					}
-						
+
 					
 					canvas.drawText(
 						ch,

@@ -11,6 +11,9 @@
 		<CheckBoxPreference android:key="settings_show_statusbar"
 			android:title="@string/settings_show_statusbar" android:summary="@string/settings_show_statusbar_summary"
 			android:defaultValue="false" />
+        <CheckBoxPreference android:key="settings_custom_font"
+            android:title="@string/settings_custom_font" android:summary="@string/settings_custom_font_summary"
+            android:defaultValue="false" />
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/settings_cate_input_assist">
 		<PreferenceScreen android:key="settings_function_button"

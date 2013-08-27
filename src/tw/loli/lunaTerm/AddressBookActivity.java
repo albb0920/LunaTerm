@@ -1,5 +1,6 @@
 package tw.loli.lunaTerm;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import android.content.SharedPreferences.Editor;
 //import android.content.res.Configuration;
 //import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -175,6 +177,17 @@ public class AddressBookActivity extends ListActivity {
 							}
 						}).show();
 	}
+	
+	private void initFolder() {
+		File vSDCard = null;
+		String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state)) {
+			vSDCard = Environment.getExternalStorageDirectory();
+            File vPath = new File(vSDCard.getParent() + "/" + vSDCard.getName() + "/lunaterm");
+            if( !vPath.exists() )
+               vPath.mkdirs();
+		}
+	}
 
 	private void initFunctionBtns() {
 		String[] functionBtnKey = getResources().getStringArray(
@@ -268,6 +281,7 @@ public class AddressBookActivity extends ListActivity {
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		if (!prefs.getBoolean("INITIALIZED", false)) {
 			initHost();
+			initFolder();
 			initFunctionBtns();
 			Editor editor = prefs.edit();
 			editor.putBoolean("INITIALIZED", true);

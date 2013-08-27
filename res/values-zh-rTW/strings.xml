@@ -85,7 +85,9 @@
 	<string name="settings_display_option">顯示設定</string>
 	<string name="settings_show_statusbar">顯示狀態欄</string>
 	<string name="settings_show_statusbar_summary">設定在Term狀態下是否顯示狀態欄</string>
-	<string name="settings_cate_input_assist">輸入輔助</string>
+	<string name="settings_custom_font">使用自訂字型</string>
+    <string name="settings_custom_font_summary">請放置於 /sdcard/lunaterm/font.ttf，重新連線後生效\n注意：開啟此功能將使 ANSI art 色塊修正失效</string>
+    <string name="settings_cate_input_assist">輸入輔助</string>
 	<string name="settings_function_button">功能按鈕</string>
 	<string name="settings_function_button_summary">可以自訂功能按鈕(如：發表文章)，並在連線 BBS 時以音量減小鍵叫出</string>
     <string name="settings_auto_extractui">繞過無法選字問題 </string>

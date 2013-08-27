@@ -95,7 +95,9 @@
 	<string name="settings_display_option">Display Settings</string>
 	<string name="settings_show_statusbar">Show statusbar</string>
 	<string name="settings_show_statusbar_summary">Show statusbar on Terminal mode</string>
-	<string name="settings_cate_input_assist">Input Assistant</string>
+	<string name="settings_custom_font">Use custom font</string>
+    <string name="settings_custom_font_summary">Please place it in /sdcard/lunaterm/font.ttf\nChanges take effect after reconnection.\nATTENTION: ANSI Art fixes will be gone!</string>
+    <string name="settings_cate_input_assist">Input Assistant</string>
 	<string name="settings_function_button">Function Buttons</string>
 	<string name="settings_function_button_summary">Function Buttons</string>
 	<string name="settings_auto_extractui">Auto show up extract input UI</string>
